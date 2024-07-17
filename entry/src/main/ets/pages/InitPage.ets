@@ -1,6 +1,6 @@
 @Component
-@Entry
-struct InitPage {
+
+export default struct InitPage {
   build() {
     Column() {
       Image($r('app.media.cover')).width(291).margin({ top: 128 })
@@ -15,7 +15,7 @@ struct InitPage {
 
       Text('不积跬步，无以至千里；不积小流，无以成江海;').fontSize(14).fontColor('#2C406E').margin({ top: 16 })
 
-      Button('登录', { type: ButtonType.Normal})
+      Button('登录', { type: ButtonType.Normal })
         .borderRadius(14)
         .margin({ top: 65 })
         .width(304)
