@@ -13,8 +13,19 @@ struct InitPage {
         Circle({ width: 6, height: 6 }).fill('#FD7694').margin({ left: 3 })
       }.margin({ top: 75 })
 
+      Text('不积跬步，无以至千里；不积小流，无以成江海;').fontSize(14).fontColor('#2C406E').margin({ top: 16 })
+
+      Button('登录', { type: ButtonType.Normal})
+        .borderRadius(14)
+        .margin({ top: 65 })
+        .width(304)
+        .backgroundColor('#5B67CA')
+        .fontSize(16)
+        .fontWeight(500)
+        .fontColor(Color.White)
+      Text('注册').margin({ top: 24 }).fontColor('#5B67CA').fontSize(16).fontWeight(500)
+
     }
     .width('100%')
-    .justifyContent(FlexAlign.Center)
   }
 }
