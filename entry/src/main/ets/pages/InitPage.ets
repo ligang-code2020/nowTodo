@@ -1,3 +1,5 @@
+import { router } from '@kit.ArkUI'
+
 @Component
 @Entry
 export default struct InitPage {
@@ -24,7 +26,16 @@ export default struct InitPage {
         .fontSize(16)
         .fontWeight(500)
         .fontColor(Color.White)
-      Text('注册').margin({ top: 24 }).fontColor('#5B67CA').fontSize(16).fontWeight(500)
+      Text('注册')
+        .margin({ top: 24 })
+        .fontColor('#5B67CA')
+        .fontSize(16)
+        .fontWeight(500)
+        .onClick(() => {
+          router.pushUrl({
+            url: 'pages/LoginPage'
+          })
+        })
 
     }
     .width('100%')

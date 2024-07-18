@@ -1,39 +1,30 @@
+import { router } from '@kit.ArkUI'
+import { CustomInput } from '../component/CustomInput'
+
 @Entry
 @Component
 struct LoginPage {
   build() {
     Column() {
-      Text('Login')
+      Text('登录')
         .fontSize(36)
         .fontWeight(700)
         .fontColor('#5B67CA')
         .margin({ top: 100 })
         .width('100%')
-      Row() {
-        Image($r('app.media.email')).width(24)
-        TextInput({ placeholder: '请输入邮箱或者用户名' })
-          .border({ width: 0 })
-          .borderRadius(0)
-          .placeholderColor('#C6CEDD')
-          .backgroundColor(Color.White)
-      }
-      .margin({ top: 74 })
-      .width('100%')
-      .border({ width: { bottom: 1 }, color: '#E3E8F1' })
 
-      Row() {
-        Image($r('app.media.password')).width(24)
-        TextInput({ placeholder: '请输入密码' })
-          .border({ width: 0 })
-          .borderRadius(0)
-          .placeholderColor('#C6CEDD')
-          .backgroundColor(Color.White)
-          .passwordIcon({ onIconSrc: $r('app.media.show'), offIconSrc: $r('app.media.hide') })
-          .type(InputType.Password)
-      }
-      .margin({ top: 32 })
-      .width('100%')
-      .border({ width: { bottom: 1 }, color: '#E3E8F1' })
+      CustomInput({
+        placeholder: '请输入邮箱或者用户名',
+        preIcon: $r('app.media.email'),
+        inputType: InputType.Normal
+      })
+      CustomInput({
+        placeholder: '请输入密码',
+        preIcon: $r('app.media.password'),
+        onIconSrc: $r('app.media.show'),
+        offIconSrc: $r('app.media.hide'),
+        inputType: InputType.Password
+      })
 
       Row() {
         Text('忘记密码？').fontSize(12).fontColor('#5B67CA')
@@ -42,7 +33,7 @@ struct LoginPage {
       .justifyContent(FlexAlign.End)
       .margin({ top: 16 })
 
-      Button('登录', { type: ButtonType.Normal })
+      Button('确定', { type: ButtonType.Normal })
         .backgroundColor('#5B67CA')
         .fontSize(16)
         .fontWeight(700)
@@ -55,13 +46,16 @@ struct LoginPage {
         Row()
           .height(1)
           .backgroundColor('#E3E8F1')
-        Text('其他登录方式').fontSize(12).fontColor('#C6CEDD')
+          .layoutWeight(1)
+        Text('其他登录方式').fontSize(12).fontColor('#C6CEDD').margin({ left: 15, right: 15 })
         Row()
           .height(1)
           .backgroundColor('#E3E8F1')
+          .layoutWeight(1)
       }
       .width('100%')
       .margin({ top: 64 })
+      .justifyContent(FlexAlign.SpaceAround)
 
 
       Row() {
@@ -88,6 +82,19 @@ struct LoginPage {
       .width(100)
       .justifyContent(FlexAlign.SpaceBetween)
       .margin({ top: 30 })
+
+      Text() {
+        Span('没有账户？')
+        Span('注册').fontWeight(700).onClick(() => {
+          console.log('222')
+          router.pushUrl({
+            url: 'pages/InitPage'
+          })
+        })
+      }
+      .fontColor('#2C406E')
+      .fontSize(14)
+      .margin({ top: 124 })
 
     }
     .width('100%')
