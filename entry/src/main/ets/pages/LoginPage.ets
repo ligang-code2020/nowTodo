@@ -47,7 +47,7 @@ struct LoginPage {
           .height(1)
           .backgroundColor('#E3E8F1')
           .layoutWeight(1)
-        Text('其他登录方式').fontSize(12).fontColor('#C6CEDD').margin({ left: 15, right: 15 })
+        Text('其他方式登录').fontSize(12).fontColor('#C6CEDD').margin({ left: 15, right: 15 })
         Row()
           .height(1)
           .backgroundColor('#E3E8F1')
@@ -81,7 +81,9 @@ struct LoginPage {
       }
       .width(100)
       .justifyContent(FlexAlign.SpaceBetween)
-      .margin({ top: 30 })
+      .margin({ top: 30, bottom: 10 })
+
+      Blank()
 
       Text() {
         Span('没有账户？')
@@ -94,10 +96,11 @@ struct LoginPage {
       }
       .fontColor('#2C406E')
       .fontSize(14)
-      .margin({ top: 124 })
+      .margin({ bottom: 44 })
 
     }
     .width('100%')
+    .height('100%')
     .padding({ left: 35, right: 35 })
     .justifyContent(FlexAlign.Center)
   }

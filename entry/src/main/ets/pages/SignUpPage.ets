@@ -48,7 +48,7 @@ struct SignUpPage {
           .height(1)
           .backgroundColor('#E3E8F1')
           .layoutWeight(1)
-        Text('其他登录注册').fontSize(12).fontColor('#C6CEDD').margin({ left: 15, right: 15 })
+        Text('其他方式注册').fontSize(12).fontColor('#C6CEDD').margin({ left: 15, right: 15 })
         Row()
           .height(1)
           .backgroundColor('#E3E8F1')
@@ -81,12 +81,13 @@ struct SignUpPage {
       }
       .width(100)
       .justifyContent(FlexAlign.SpaceBetween)
-      .margin({ top: 30 })
+      .margin({ top: 30, bottom: 10 })
+
+      Blank()
 
       Text() {
         Span('已有账号？')
         Span('登录').fontWeight(700).onClick(() => {
-          console.log('222')
           router.pushUrl({
             url: 'pages/LoginPage'
           })
@@ -94,9 +95,10 @@ struct SignUpPage {
       }
       .fontColor('#2C406E')
       .fontSize(14)
-      .margin({ top: 124 })
+      .margin({ bottom: 44 })
     }
     .width('100%')
+    .height('100%')
     .padding({ left: 35, right: 35 })
     .justifyContent(FlexAlign.Center)
 
