@@ -6,7 +6,6 @@ struct Index {
   build() {
     Column() {
       InitPage()
-
     }
     .width('100%')
   }
