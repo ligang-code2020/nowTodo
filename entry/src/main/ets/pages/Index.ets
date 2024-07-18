@@ -6,7 +6,7 @@ import InitPage from './InitPage'
 struct Index {
   build() {
     Column() {
-      // InitPage()
+      InitPage()
     }
     .width('100%')
   }

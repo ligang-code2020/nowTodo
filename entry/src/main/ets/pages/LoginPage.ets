@@ -88,7 +88,7 @@ struct LoginPage {
         Span('注册').fontWeight(700).onClick(() => {
           console.log('222')
           router.pushUrl({
-            url: 'pages/InitPage'
+            url: 'pages/SignUpPage'
           })
         })
       }

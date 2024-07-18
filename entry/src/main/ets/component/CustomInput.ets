@@ -1,7 +1,7 @@
 @Component
 export struct CustomInput {
   placeholder: string = ''
-  preIcon: Resource = $r('app.media.password')
+  preIcon?: Resource = $r('app.media.password')
   onIconSrc?: Resource = $r('app.media.show')
   offIconSrc?: Resource = $r('app.media.hide')
   inputType: InputType = InputType.Normal
