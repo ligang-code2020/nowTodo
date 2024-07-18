@@ -52,17 +52,13 @@ struct LoginPage {
         .margin({ top: 55 })
 
       Row() {
-        Line()
-          .startPoint([0, 0])
-          .endPoint([112, 0])
-          .stroke('#E3E8F1')
-          .strokeWidth(1)
-        Text('或者').fontSize(12).fontColor('#C6CEDD').margin({ left: 21, right: 21 })
-        Line()
-          .startPoint([0, 0])
-          .endPoint([112, 0])
-          .stroke('#E3E8F1')
-          .strokeWidth(1)
+        Row()
+          .height(1)
+          .backgroundColor('#E3E8F1')
+        Text('其他登录方式').fontSize(12).fontColor('#C6CEDD')
+        Row()
+          .height(1)
+          .backgroundColor('#E3E8F1')
       }
       .width('100%')
       .margin({ top: 64 })
@@ -91,6 +87,7 @@ struct LoginPage {
       }
       .width(100)
       .justifyContent(FlexAlign.SpaceBetween)
+      .margin({ top: 30 })
 
     }
     .width('100%')
