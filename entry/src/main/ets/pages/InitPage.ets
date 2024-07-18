@@ -1,5 +1,5 @@
 @Component
-
+@Entry
 export default struct InitPage {
   build() {
     Column() {
@@ -19,6 +19,7 @@ export default struct InitPage {
         .borderRadius(14)
         .margin({ top: 65 })
         .width(304)
+        .height(52)
         .backgroundColor('#5B67CA')
         .fontSize(16)
         .fontWeight(500)
