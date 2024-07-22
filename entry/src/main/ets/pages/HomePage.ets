@@ -52,16 +52,34 @@ struct HomePage {
         Row() {
           Column() {
             Column() {
-
+              // Image($r('app.media.computer')).width(92).height(69)
+              Row() {
+                Image($r('app.media.jiantou'))
+                  .width(39)
+                  .height(50)
+                  .position({ left: 55, top: 0 })
+                Image($r('app.media.jiantou1'))
+                  .width(39)
+                  .height(50)
+                  .position({ left: 94, top: 0 })
+                Image($r('app.media.arrow_right'))
+                  .width(12)
+                  .height(12)
+                  .position({ left: 128, top: 15 })
+                  .zIndex(10)
+              }
             }
+            .padding({ left: 14 })
             .height(152)
             .width(155)
-            .border({ width: 1 })
             .borderRadius(14)
             .linearGradient({
-              angle: 135,
-              colors: [['#7DC8E7', 0.11], ['#7DC8E7', 0.69]]
+              repeating: false,
+              direction: GradientDirection.LeftBottom,
+              // angle: 225,
+              colors: [['#7DC8E7', 0.21], ['#7DC8E7', 0]]
             })
+
 
             Column() {
 
