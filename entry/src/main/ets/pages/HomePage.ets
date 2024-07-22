@@ -5,6 +5,7 @@ export default struct HomePage {
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
+
       Scroll() {
         Column() {
           Row() {
@@ -147,20 +148,25 @@ export default struct HomePage {
           // .justifyContent(FlexAlign.SpaceBetween)
         }
         .justifyContent(FlexAlign.Start)
-        .height('100%')
+        .height('1000')
         .width('100%')
+        .padding({ left: 24, right: 24 })
+
       }
 
 
-      Column()
-        .backgroundColor(Color.Blue)
-        .width('100%')
-        .height(40)
-        .align(Alignment.Bottom)
-        .margin({ bottom: 29 })
+      Column() {
+
+      }
+      .backgroundColor(Color.Blue)
+      .width(316)
+      .height(40)
+      .align(Alignment.Bottom)
+      .margin({ bottom: 29 })
     }
+
+
     .height('100%')
     .width('100%')
-    .padding({ left: 24, right: 24 })
   }
 }

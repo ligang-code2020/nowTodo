@@ -7,7 +7,7 @@ import HomePage from  './HomePage'
 struct Index {
   build() {
     Column() {
-      // HomePage()
+      HomePage()
     }
     .width('100%')
   }
