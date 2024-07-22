@@ -1,4 +1,5 @@
 import InitPage from './InitPage'
+import HomePage from  './HomePage'
 
 
 @Component
@@ -6,7 +7,7 @@ import InitPage from './InitPage'
 struct Index {
   build() {
     Column() {
-      InitPage()
+      // HomePage()
     }
     .width('100%')
   }
