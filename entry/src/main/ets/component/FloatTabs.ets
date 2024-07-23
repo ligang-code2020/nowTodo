@@ -5,16 +5,31 @@ export struct FloatTabs {
   build() {
     Column() {
       Row() {
-        Column() {
+        Row() {
           // 主页
           Column() {
-
+            Column() {
+            }
+            .width(24)
+            .aspectRatio(1)
+            .backgroundColor(Color.Black)
           }
+          .layoutWeight(1)
+          .border({ width: 1 })
+          .alignItems(HorizontalAlign.Start)
 
           // 列表
           Column() {
+            Column() {
+            }
+            .width(24)
+            .aspectRatio(1)
+            .backgroundColor(Color.Blue)
 
           }
+          .layoutWeight(1)
+          .border({ width: 1 })
+          .alignItems(HorizontalAlign.Start)
         }
         .layoutWeight(1)
         .height('100%')
@@ -40,6 +55,7 @@ export struct FloatTabs {
         .layoutWeight(1)
         .height('100%')
         .border({ width: 1 })
+        .justifyContent(FlexAlign.Center)
 
       }
       .width('100%')
