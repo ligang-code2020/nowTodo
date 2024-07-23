@@ -5,20 +5,34 @@ export struct FloatTabs {
   build() {
     Column() {
       Row() {
-        Column() {
+        Row() {
           // 主页
           Column() {
-
+            Column() {
+              Image($r("app.media.selected_home"))
+              Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+            }
+            .width(24)
+            .aspectRatio(1)
           }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Start)
 
           // 列表
           Column() {
+            Column() {
+              Image($r("app.media.list"))
+            }
+            .width(24)
+            .aspectRatio(1)
 
           }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Start)
         }
         .layoutWeight(1)
         .height('100%')
-        .border({ width: 1 })
+
 
 
         // new task
@@ -31,15 +45,36 @@ export struct FloatTabs {
             .width('100%')
             .height('100%')
         }
-        .backgroundColor(Color.Blue)
         .height('100%')
 
+        Row() {
+          // 图表
+          Column() {
+            Column() {
+              Image($r("app.media.charts"))
+            }
+            .width(24)
+            .aspectRatio(1)
+          }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.End)
 
-        Column() {
+          // 配置
+          Column() {
+            Column() {
+              Image($r("app.media.profile"))
+            }
+            .width(24)
+            .aspectRatio(1)
+
+          }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.End)
         }
         .layoutWeight(1)
         .height('100%')
-        .border({ width: 1 })
+
+
 
       }
       .width('100%')
@@ -51,11 +86,10 @@ export struct FloatTabs {
       top: 12,
       bottom: 12
     })
-    .backgroundColor('#FFFFFF')
+    .backgroundColor('#FFF')
     .height(74)
-    .width('100%')
+    .width(316)
     .borderRadius(14)
-    .justifyContent(FlexAlign.End)
     .shadow({
       radius: 13,
       color: '#F1F7FF',
