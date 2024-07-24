@@ -95,11 +95,12 @@ export default struct HomePage {
         }
         .justifyContent(FlexAlign.Start)
         .width('100%')
-        .padding({ left: 24, right: 24 })
+        .padding({ left: 24, right: 24})
       }
+      .scrollBar(BarState.Off)
 
       // 悬浮 tabs 栏
-      FloatTabs().align(Alignment.Bottom).margin({ bottom: 30 })
+      FloatTabs().align(Alignment.Bottom).margin({ bottom: 15 })
 
     }
     .height('100%')
