@@ -3,6 +3,7 @@ import { CompletedCard } from '../component/CompletedCard'
 import { CancelCard } from '../component/CanceledCard'
 import { PendingCard } from '../component/PendingCard'
 import { OnGoingCard } from '../component/OnGoingCard'
+import { TaskList } from '../component/TaskList'
 
 @Entry
 @Component
@@ -14,6 +15,7 @@ export default struct HomePage {
 
       Scroll() {
         Column() {
+          // 头部
           Row() {
             Column() {
               Text('你好，橘猫')
@@ -76,6 +78,21 @@ export default struct HomePage {
             .layoutWeight(1)
           }
           .margin({ top: 16 })
+
+          // 任务列表
+          Column() {
+            Row() {
+              Text('今日任务').fontSize(24).fontWeight(FontWeight.Bold).fontColor('#12175E')
+              Text('查看全部').fontSize(12).fontColor('#393F93')
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.SpaceBetween)
+            .margin({ bottom: 24 })
+
+            TaskList()
+          }
+          .margin({ top: 22 })
+
         }
         .justifyContent(FlexAlign.Start)
         .height('1000')
