@@ -12,7 +12,6 @@ export default struct HomePage {
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
-
       Scroll() {
         Column() {
           // 头部
@@ -95,7 +94,6 @@ export default struct HomePage {
 
         }
         .justifyContent(FlexAlign.Start)
-        .height('1200')
         .width('100%')
         .padding({ left: 24, right: 24 })
       }

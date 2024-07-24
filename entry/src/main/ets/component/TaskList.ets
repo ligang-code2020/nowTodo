@@ -35,63 +35,59 @@ const Tasks: Task[] = [
 @Preview
 export struct TaskList {
   build() {
-    Scroll() {
-      Column({ space: 10 }) {
-        ForEach(Tasks, (task: Task, index) => {
+    Column({ space: 10 }) {
+      ForEach(Tasks, (task: Task, index) => {
+        Column() {
+          Line()
+            .startPoint([0, 35])
+            .strokeWidth(2)
+            .strokeLineCap(LineCapStyle.Round)
+            .stroke(PriorityColor[task.priority])
+            .position({ top: 22, left: 15 })
+          Image($r('app.media.more'))
+            .width(14)
+            .aspectRatio(1)
+            .position({ top: 22, right: 15 })
+
           Column() {
-            Line()
-              .startPoint([0, 35])
-              .strokeWidth(2)
-              .strokeLineCap(LineCapStyle.Round)
-              .stroke(PriorityColor[task.priority])
-              .position({ top: 22, left: 15 })
-            Image($r('app.media.more'))
-              .width(14)
-              .aspectRatio(1)
-              .position({ top: 22, right: 15 })
-
-            Column() {
-              Text(task.taskName).fontColor('#2C406E').fontSize(16).fontWeight(600).height(26)
-              Text(task.time).fontSize(14).fontColor('#9AA8C7').height(23)
-            }
-            .alignItems(HorizontalAlign.Start)
-            .margin({ top: 15, left: 25 })
-
-            // tag
-            Row() {
-              ForEach(task.tag, (tag: string, index) => {
-                Column() {
-                  Text(tag)
-                    .height(20)
-                    .fontSize(10)
-                    .fontWeight(600)
-                    .fontColor('#8F99EB')
-                }
-                .backgroundColor('#338f99eb')
-                .borderRadius(3)
-                .margin({ right: 6 })
-                .padding({
-                  left: 7,
-                  right: 7,
-                  top: 2,
-                  bottom: 2
-                })
-              })
-            }
-            .margin({ top: 15 })
-            .padding({ left: 25 })
-            .width('100%')
+            Text(task.taskName).fontColor('#2C406E').fontSize(16).fontWeight(600).height(26)
+            Text(task.time).fontSize(14).fontColor('#9AA8C7').height(23)
           }
-          .padding({ bottom: 15 })
-          .justifyContent(FlexAlign.Start)
           .alignItems(HorizontalAlign.Start)
-          .width('100%')
-          .borderRadius(15)
-          .backgroundColor('#F9FAFD')
-        })
-      }
-      .height(100)
-    }
+          .margin({ top: 15, left: 25 })
 
+          // tag
+          Row() {
+            ForEach(task.tag, (tag: string, index) => {
+              Column() {
+                Text(tag)
+                  .height(20)
+                  .fontSize(10)
+                  .fontWeight(600)
+                  .fontColor('#8F99EB')
+              }
+              .backgroundColor('#338f99eb')
+              .borderRadius(3)
+              .margin({ right: 6 })
+              .padding({
+                left: 7,
+                right: 7,
+                top: 2,
+                bottom: 2
+              })
+            })
+          }
+          .margin({ top: 15 })
+          .padding({ left: 25 })
+          .width('100%')
+        }
+        .padding({ bottom: 15 })
+        .justifyContent(FlexAlign.Start)
+        .alignItems(HorizontalAlign.Start)
+        .width('100%')
+        .borderRadius(15)
+        .backgroundColor('#F9FAFD')
+      })
+    }
   }
 }
