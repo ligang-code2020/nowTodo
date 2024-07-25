@@ -18,6 +18,9 @@ struct Test {
     // .align(Alignment.Top)
     // .margin({ left: 100, top: 100 })
 
+
+
+
     Stack({ alignContent: Alignment.TopStart }) {
       Text('Stack').width('90%').height('100%').backgroundColor('#e1dede').align(Alignment.BottomEnd)
       Image($r('app.media.blur1')).width('70%')

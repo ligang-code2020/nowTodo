@@ -4,6 +4,7 @@
     "pages/InitPage",
     "pages/LoginPage",
     "pages/SignUpPage",
-    "pages/HomePage"
+    "pages/HomePage",
+    "pages/TasksPage"
   ]
 }
