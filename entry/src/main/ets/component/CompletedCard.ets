@@ -4,21 +4,22 @@ export struct CompletedCard {
     Column() {
       Column() {
         Image($r('app.media.computer')).width(92).height(69).zIndex(8).margin({ top: 10, left: 14 })
-        Row() {
+        Image($r('app.media.arrow_right'))
+          .width(12)
+          .height(12)
+          .position({ right: 15, top: 15 })
+          .zIndex(10)
+
           Image($r('app.media.vector8'))
             .width(39)
             .height(50)
-            .position({ left: 55, top: 0 })
+            .position({ right: 61, top: 0 })
           Image($r('app.media.vector9'))
             .width(39)
             .height(50)
-            .position({ left: 94, top: 0 })
-          Image($r('app.media.arrow_right'))
-            .width(12)
-            .height(12)
-            .position({ left: 128, top: 15 })
-            .zIndex(10)
-        }
+            .position({ right: 22, top: 0 })
+
+
 
         Text('已完成')
           .fontSize(16)

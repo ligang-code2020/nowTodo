@@ -4,21 +4,20 @@ export struct PendingCard {
     Column() {
       Column() {
         Image($r('app.media.alarm')).width(28).aspectRatio(1).zIndex(8).margin({ top: 15, left: 15 })
-        Row() {
-          Image($r('app.media.vector2'))
-            .width(39)
-            .height(50)
-            .position({ left: 55, top: 0 })
-          Image($r('app.media.vector3'))
-            .width(39)
-            .height(50)
-            .position({ left: 94, top: 0 })
-          Image($r('app.media.arrow_right1'))
-            .width(12)
-            .height(12)
-            .position({ left: 128, top: 15 })
-            .zIndex(10)
-        }
+        Image($r('app.media.arrow_right1'))
+          .width(12)
+          .height(12)
+          .position({ right: 18, top: 15 })
+          .zIndex(10)
+        Image($r('app.media.vector2'))
+          .width(39)
+          .height(50)
+          .position({ right: 61, top: 0 })
+        Image($r('app.media.vector3'))
+          .width(39)
+          .height(50)
+          .position({ right: 22, top: 0 })
+
 
         Text('暂停中')
           .fontSize(16)
