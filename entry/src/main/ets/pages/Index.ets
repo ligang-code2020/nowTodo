@@ -1,7 +1,7 @@
 import InitPage from './InitPage'
 import HomePage from  './HomePage'
 import TasksPage from './TasksPage'
-import {TabsExample} from './test1'
+
 
 
 @Component
@@ -9,7 +9,7 @@ import {TabsExample} from './test1'
 struct Index {
   build() {
     Column() {
-      TabsExample()
+      TasksPage()
     }
     .width('100%')
   }
