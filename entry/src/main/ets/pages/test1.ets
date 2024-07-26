@@ -1,129 +1,126 @@
-// xxx.ets
-import { ComponentUtils } from '@kit.ArkUI'
+import { curves } from '@kit.ArkUI';
 
-@Entry
-@Component
-export struct TabsExample {
-  @State currentIndex: number = 0
-  @State animationDuration: number = 300
-  @State indicatorLeftMargin: number = 0
-  @State indicatorWidth: number = 0
-  private tabsWidth: number = 0
-  private componentUtils: ComponentUtils = this.getUIContext().getComponentUtils()
+interface WeekRange {
+  weekName: string,
+  date: number
+}
 
-  @Builder
-  tabBuilder(index: number, name: string) {
-    Column() {
-      Text(name)
-        .fontSize(16)
-        .fontColor(this.currentIndex === index ? '#007DFF' : '#182431')
-        .fontWeight(this.currentIndex === index ? 500 : 400)
-        .id(index.toString())
-        .onAreaChange((oldValue: Area, newValue: Area) => {
-          if (this.currentIndex === index && (this.indicatorLeftMargin === 0 || this.indicatorWidth === 0)) {
-            if (newValue.position.x != undefined) {
-              let positionX = Number.parseFloat(newValue.position.x.toString())
-              this.indicatorLeftMargin = Number.isNaN(positionX) ? 0 : positionX
-            }
-            let width = Number.parseFloat(newValue.width.toString())
-            this.indicatorWidth = Number.isNaN(width) ? 0 : width
-          }
-        })
-    }.width('100%')
+const weekRange: WeekRange[] = [
+  {
+    weekName: '一',
+    date: 12
+  },
+  {
+    weekName: '二',
+    date: 13
+  },
+  {
+    weekName: '三',
+    date: 14
+  },
+  {
+    weekName: '四',
+    date: 15
+  },
+  {
+    weekName: '五',
+    date: 16
+  },
+  {
+    weekName: '六',
+    date: 17
+  },
+  {
+    weekName: '日',
+    date: 18
   }
+]
+
+
+@Component
+@Entry
+struct WeeklyTabs {
+  @State animate: boolean = false;
+  // 第一步: 声明相关状态变量
+  @State rotateValue: number = 0; // 组件一旋转角度
+  @State translateX: number = 0; // 组件二偏移量
+  @State opacityValue: number = 1; // 组件二透明度
+  @State offsetNum: number = 50;
 
   build() {
-    Stack({ alignContent: Alignment.TopStart }) {
-      Tabs({ barPosition: BarPosition.Start }) {
-        TabContent() {
-          Column().width('100%').height('100%').backgroundColor('#00CB87')
-        }.tabBar(this.tabBuilder(0, 'green'))
-
-        TabContent() {
-          Column().width('100%').height('100%').backgroundColor('#007DFF')
-        }.tabBar(this.tabBuilder(1, 'blue'))
-
-        TabContent() {
-          Column().width('100%').height('100%').backgroundColor('#FFBF00')
-        }.tabBar(this.tabBuilder(2, 'yellow'))
-
-        TabContent() {
-          Column().width('100%').height('100%').backgroundColor('#E67C92')
-        }.tabBar(this.tabBuilder(3, 'pink'))
+    Column() {
+      Row() {
+        ForEach(weekRange, (weekDay: WeekRange, index: number) => {
+          Column() {
+            Text(weekDay.weekName)
+              .fontColor(index === 3 ? '#FFFFFF' : '#10275A')
+              .fontWeight(600)
+              .fontSize(16)
+              .height(26)
+            Text(weekDay.date.toString())
+              .fontColor(index === 3 ? '#FFFFFF' : '#10275A')
+              .fontSize(14)
+              .margin({ top: 2 })
+              .height(23)
+          }
+          .height(71)
+          .layoutWeight(1)
+          .backgroundColor(index === 3 ? '#5B67CA' : '#FFFFFF')
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Center)
+          .borderRadius(12)
+        })
       }
-      .onAreaChange((oldValue: Area, newValue: Area) => {
-        let width = Number.parseFloat(newValue.width.toString())
-        this.tabsWidth = Number.isNaN(width) ? 0 : width
-      })
-      .barWidth('100%')
-      .barHeight(56)
-      .width('100%')
-      .height(296)
-      .backgroundColor('#F1F3F5')
-      .animationDuration(this.animationDuration)
-      .onChange((index: number) => {
-        this.currentIndex = index // 监听索引index的变化，实现页签内容的切换。
-      })
-      .onAnimationStart((index: number, targetIndex: number, event: TabsAnimationEvent) => {
-        // 切换动画开始时触发该回调。下划线跟着页面一起滑动，同时宽度渐变。
-        this.currentIndex = targetIndex
-        let targetIndexInfo = this.getTextInfo(targetIndex)
-        this.startAnimateTo(this.animationDuration, targetIndexInfo.left, targetIndexInfo.width)
-      })
-      .onAnimationEnd((index: number, event: TabsAnimationEvent) => {
-        // 切换动画结束时触发该回调。下划线动画停止。
-        let currentIndicatorInfo = this.getCurrentIndicatorInfo(index, event)
-        this.startAnimateTo(0, currentIndicatorInfo.left, currentIndicatorInfo.width)
-      })
-      .onGestureSwipe((index: number, event: TabsAnimationEvent) => {
-        // 在页面跟手滑动过程中，逐帧触发该回调。
-        let currentIndicatorInfo = this.getCurrentIndicatorInfo(index, event)
-        this.currentIndex = currentIndicatorInfo.index
-        this.indicatorLeftMargin = currentIndicatorInfo.left
-        this.indicatorWidth = currentIndicatorInfo.width
-      })
+      .margin({ bottom: 50 })
 
-      Column()
-        .height(2)
-        .width(this.indicatorWidth)
-        .margin({ left: this.indicatorLeftMargin, top: 48 })
-        .backgroundColor('#007DFF')
-    }.width('100%')
-  }
 
-  private getTextInfo(index: number): Record<string, number> {
-    let rectangle = this.componentUtils.getRectangleById(index.toString())
-    return { 'left': px2vp(rectangle.windowOffset.x), 'width': px2vp(rectangle.size.width) }
-  }
+      // 组件二
+      Column() {
+      }
+      .width(100)
+      .height(100)
+      .margin({ bottom: 40 })
+      .backgroundColor('#D94838')
+      .borderRadius(30)
+      .translate({ x: this.translateX })
+      .zIndex(10)
 
-  private getCurrentIndicatorInfo(index: number, event: TabsAnimationEvent): Record<string, number> {
-    let nextIndex = index
-    if (index > 0 && event.currentOffset > 0) {
-      nextIndex--
-    } else if (index < 3 && event.currentOffset < 0) {
-      nextIndex++
+      Button('OK', { type: ButtonType.Normal, stateEffect: true })
+        .margin({ bottom: 20 })
+        .borderRadius(8)
+        .backgroundColor(0x317aff)
+        .width(90)
+        .onClick(() => {
+          console.log('12322223')
+          animateTo({ curve: curves.springMotion(0, 0.825), tempo: 1.2 }, () => {
+            this.animate = !this.animate;
+            // 第三步：闭包内通过状态变量改变UI界面
+            // 这里可以写任何能改变UI的逻辑比如数组添加，显隐控制，系统会检测改变后的UI界面与之前的UI界面的差异，对有差异的部分添加动画
+            // 组件一的rotate属性发生变化，所以会给组件一添加rotate旋转动画
+            this.rotateValue = this.animate ? 90 : 0;
+            // 组件二的透明度发生变化，所以会给组件二添加透明度的动画
+            this.opacityValue = this.animate ? 0.6 : 1;
+            // 组件二的offset属性发生变化，所以会给组件二添加offset偏移动画
+            this.offsetNum += 20;
+            this.translateX = this.offsetNum
+          })
+        })
+
+      Button('重置', { type: ButtonType.Normal, stateEffect: true })
+        .margin({ bottom: 20 })
+        .borderRadius(8)
+        .backgroundColor(0x317aff)
+        .width(90)
+        .onClick(() => {
+          animateTo({ curve: curves.springMotion(0, 0.825), tempo: 1.2 }, () => {
+            this.translateX = 0
+            this.offsetNum = 20
+          })
+        })
+
     }
-    let indexInfo = this.getTextInfo(index)
-    let nextIndexInfo = this.getTextInfo(nextIndex)
-    let swipeRatio = Math.abs(event.currentOffset / this.tabsWidth)
-    let currentIndex = swipeRatio > 0.5 ? nextIndex : index // 页面滑动超过一半，tabBar切换到下一页。
-    let currentLeft = indexInfo.left + (nextIndexInfo.left - indexInfo.left) * swipeRatio
-    let currentWidth = indexInfo.width + (nextIndexInfo.width - indexInfo.width) * swipeRatio
-    return { 'index': currentIndex, 'left': currentLeft, 'width': currentWidth }
-  }
+    .width('100%')
+    .alignItems(HorizontalAlign.Start)
 
-  private startAnimateTo(duration: number, leftMargin: number, width: number) {
-    animateTo({
-      duration: duration, // 动画时长
-      curve: Curve.Linear, // 动画曲线
-      iterations: 1, // 播放次数
-      playMode: PlayMode.Normal, // 动画模式
-      onFinish: () => {
-        console.info('play end')
-      }
-    }, () => {
-      this.indicatorLeftMargin = leftMargin
-      this.indicatorWidth = width
-    })
   }
 }
