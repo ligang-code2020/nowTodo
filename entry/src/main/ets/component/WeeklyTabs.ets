@@ -1,7 +1,7 @@
 import { curves } from '@kit.ArkUI';
 import display from '@ohos.display';
-import dayjs from "dayjs";
 import { TimeTools, WeekDay } from '../utils/TimeTools'
+
 
 const weekRange: WeekDay[] = TimeTools.getCurrentWeekRange();
 
@@ -13,11 +13,22 @@ export struct WeeklyTabs {
   @State screenWidth: number = 312;
 
   aboutToAppear(): void {
-    console.log("TimeTools", JSON.stringify(TimeTools.getCurrentWeekRange()))
     // 获取屏幕宽度
-    // this.screenWidth = px2vp(display.getDefaultDisplaySync().width);
-    // console.log("this.screenWidth", this.screenWidth)
+    this.screenWidth = px2vp(display.getDefaultDisplaySync().width) - 48;
+    // 监听屏幕的变化
+    try {
+      display.on('change', () => {
+        this.screenWidth = px2vp(display.getDefaultDisplaySync().width) - 48;
+        this.translateX = this.currentIndex * (this.screenWidth / 7)
+      })
+    } catch (e) {
+      console.error('Failed to register callback. Code: ' + JSON.stringify(e));
+    }
+  }
 
+  aboutToDisappear(): void {
+    // 移除监听
+    display.off('remove')
   }
 
   // todo 字体颜色需要实现渐变
@@ -39,7 +50,7 @@ export struct WeeklyTabs {
               .height(23)
           }
           .height(71)
-          .layoutWeight(1)
+          .width(this.screenWidth / 7)
           .alignItems(HorizontalAlign.Center)
           .justifyContent(FlexAlign.Center)
           .borderRadius(12)
@@ -51,9 +62,7 @@ export struct WeeklyTabs {
                 curve: curves.springMotion(0, 0.89), // 弹簧阻尼效果
                 tempo: 2
               }, () => {
-              console.log('切换')
               this.translateX = this.currentIndex * (this.screenWidth / 7)
-              console.log("this.translateX", this.translateX)
             })
           })
         })
