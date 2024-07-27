@@ -1,4 +1,5 @@
 import { curves } from '@kit.ArkUI';
+import { componentUtils } from '@kit.ArkUI';
 
 interface WeekRange {
   weekName: string,
@@ -101,8 +102,8 @@ struct WeeklyTabs {
         .backgroundColor(0x317aff)
         .width(90)
         .onClick(() => {
-          let father = getInspectorByKey('father')
-          father = JSON.parse(father)
+          let father = componentUtils.getRectangleById('father')
+          console.log("father", JSON.stringify(father))
           console.log('111', JSON.stringify(father['$attrs'].size))
           this.offsetNum = 360 / 7
         })

@@ -2,6 +2,7 @@ import { CommonContainer } from '../style/common'
 import { SearchBar } from '../component/SearchBar'
 import { WeeklyTabs } from '../component/WeeklyTabs'
 
+
 @Entry
 @Component
 export default struct TasksPage {
