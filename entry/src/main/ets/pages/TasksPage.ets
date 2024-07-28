@@ -1,7 +1,7 @@
 import { CommonContainer } from '../style/common'
 import { SearchBar } from '../component/SearchBar'
 import { WeeklyTabs } from '../component/WeeklyTabs'
-
+import { PeriodTaskList } from '../component/PeriodTaskList'
 
 @Entry
 @Component
@@ -28,6 +28,16 @@ export default struct TasksPage {
 
           // 周内选择
           WeeklyTabs().margin({ top: 16 })
+
+          Row() {
+            Text('今天').fontSize(20).fontWeight(600).fontColor('#10275A')
+            Text('9个小时45分钟').fontSize(14).fontWeight(FontWeight.Bold).fontColor('#10275A')
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.SpaceBetween)
+          .margin({ top: 24, bottom: 30 })
+
+          PeriodTaskList()
         }
         .height('100%')
         .attributeModifier(this.commonContainerStyle)
