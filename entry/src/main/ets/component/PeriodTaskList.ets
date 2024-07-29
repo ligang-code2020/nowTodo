@@ -1,23 +1,42 @@
 import { TaskCard } from '../component/TaskCard'
 
-@Component
-  // @Preview
+interface Task {
+  taskName: string,
+  time: string,
+  tag: string[],
+  priority: number
+}
 
+const Tasks: Task[] = [
+  {
+    taskName: '吃饭上上上班班班班班班',
+    time: '07:00 - 7:15',
+    tag: ['必做', '重要'],
+    priority: 2
+  },
+  {
+    taskName: '上班',
+    time: '07:30 - 07:45',
+    tag: ['随意'],
+    priority: 1
+  },
+  {
+    taskName: '下班',
+    time: '07:59',
+    tag: ['必做', '重要'],
+    priority: 2
+  }
+]
+
+@Component
 export struct PeriodTaskList {
   build() {
     Column() {
-      Line()// .width('100%')
+      Line()
         .startPoint([0, 0])
         .endPoint([300, 0])
         .stroke('#E3E8F1')
         .strokeWidth(1)
-
-      // Column() {
-      //
-      // }
-      // .height(1)
-      // .width('100%')
-      // .backgroundColor(Color.Red)
 
       Row() {
         Text('07:00')
@@ -29,27 +48,23 @@ export struct PeriodTaskList {
 
         Scroll() {
           Row({ space: 10 }) {
-            TaskCard()
-            TaskCard()
-            TaskCard()
+            ForEach(Tasks, (task: Task, index: number) => {
+              TaskCard({
+                taskName: task.taskName,
+                time: task.time,
+                tag: task.tag,
+                priority: task.priority
+              })
+            })
           }
           .margin({ top: 16 })
-          .padding({ right: 48 })
+          .padding({ right: 80 })
         }
         .scrollable(ScrollDirection.Horizontal)
         .scrollBar(BarState.Off)
       }
       .alignItems(VerticalAlign.Top)
 
-      Line()// .width('100%')
-        .startPoint([0, 0])
-        .endPoint([300, 0])
-        .stroke('#E3E8F1')
-        .strokeWidth(1)
-        .margin({ top: 20 })
-
-
     }
-    .height(200)
   }
 }

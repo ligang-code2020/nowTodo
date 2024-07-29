@@ -1,24 +1,37 @@
+enum PriorityColor {
+  '#8F99EB' = 1,
+  '#E88B8C' = 2
+}
+
+
 @Component
 @Preview
 export struct TaskCard {
+  @Prop taskName: string
+  @Prop time: string
+  @Prop tag: string[]
+  @Prop priority: number
+
   build() {
     Column() {
       Line()
         .startPoint([0, 38])
         .strokeWidth(2)
         .strokeLineCap(LineCapStyle.Round)
-        .stroke(Color.Red)
+        .stroke(PriorityColor[this.priority])
         .position({ top: 22, left: 15 })
       Row() {
         Column() {
-          Text('吃饭睡觉打游戏')
+          Text(this.taskName)
             .fontColor('#2C406E')
             .fontSize(16)
             .fontWeight(600)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .maxLines(1)
-            .width('70%')
-          Text('08:00-09:00').fontSize(14).fontColor('#9AA8C7').height(23).margin({ top: 5 })
+            .constraintSize({
+              maxWidth: '70%'
+            })
+          Text(this.time).fontSize(14).fontColor('#9AA8C7').height(23).margin({ top: 5 })
         }
         .alignItems(HorizontalAlign.Start)
         .justifyContent(FlexAlign.SpaceBetween)
@@ -35,7 +48,7 @@ export struct TaskCard {
 
       // tag
       Row() {
-        ForEach(['必做', '重要'], (tag: string, index) => {
+        ForEach(this.tag, (tag: string, index) => {
           Column() {
             Text(tag)
               .height(20)

@@ -100,7 +100,7 @@ export default struct HomePage {
       .scrollBar(BarState.Off)
 
       // 悬浮 tabs 栏
-      FloatTabs().align(Alignment.Bottom).margin({ bottom: 15 })
+      FloatTabs().align(Alignment.Bottom)
 
     }
     .height('100%')
