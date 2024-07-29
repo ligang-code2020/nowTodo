@@ -7,9 +7,7 @@ import { TaskList } from '../component/TaskList'
 
 @Entry
 @Component
-export default struct HomePage {
-  @State message: string = 'Hello World';
-
+export struct HomePage {
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
       Scroll() {
@@ -88,19 +86,19 @@ export default struct HomePage {
             .justifyContent(FlexAlign.SpaceBetween)
             .margin({ bottom: 24 })
 
-            TaskList()
+            TaskList().width('100%')
           }
           .margin({ top: 22 })
 
         }
         .justifyContent(FlexAlign.Start)
         .width('100%')
-        .padding({ left: 24, right: 24})
+        .padding({ left: 24, right: 24 })
       }
       .scrollBar(BarState.Off)
 
       // 悬浮 tabs 栏
-      FloatTabs().align(Alignment.Bottom).margin({ bottom: 15 })
+      FloatTabs().align(Alignment.Bottom)
 
     }
     .height('100%')

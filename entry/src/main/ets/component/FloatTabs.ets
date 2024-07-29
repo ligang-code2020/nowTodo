@@ -34,7 +34,6 @@ export struct FloatTabs {
         .height('100%')
 
 
-
         // new task
         Column() {
           Button('+', { type: ButtonType.Circle, stateEffect: false })
@@ -74,8 +73,6 @@ export struct FloatTabs {
         .layoutWeight(1)
         .height('100%')
 
-
-
       }
       .width('100%')
       .height(50)
@@ -96,6 +93,7 @@ export struct FloatTabs {
       offsetX: -3,
       offsetY: 7
     })
+    .margin({ bottom: 15 })
 
   }
 }

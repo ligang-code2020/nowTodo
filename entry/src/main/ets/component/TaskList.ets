@@ -1,3 +1,5 @@
+import { TaskCard } from '../component/TaskCard'
+
 interface Task {
   taskName: string,
   time: string,
