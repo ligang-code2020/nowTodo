@@ -9,19 +9,25 @@ interface Task {
 
 const Tasks: Task[] = [
   {
-    taskName: '吃饭上上上班班班班班班',
+    taskName: '吃饭上上上班班班',
     time: '07:00 - 7:15',
     tag: ['必做', '重要'],
     priority: 2
   },
   {
-    taskName: '上班',
+    taskName: '上班嘻嘻嘻哈哈',
     time: '07:30 - 07:45',
     tag: ['随意'],
     priority: 1
   },
   {
-    taskName: '下班',
+    taskName: '下班3ssd',
+    time: '07:59',
+    tag: ['必做', '重要'],
+    priority: 2
+  },
+  {
+    taskName: '下班3ssd',
     time: '07:59',
     tag: ['必做', '重要'],
     priority: 2
@@ -32,11 +38,12 @@ const Tasks: Task[] = [
 export struct PeriodTaskList {
   build() {
     Column() {
-      Line()
-        .startPoint([0, 0])
-        .endPoint([300, 0])
-        .stroke('#E3E8F1')
-        .strokeWidth(1)
+      // Line()
+      //   .width('100%')
+      //   // .startPoint([0, 0])
+      //   // .endPoint([300, 0])
+      //   .stroke('#E3E8F1')
+      //   .strokeWidth(1)
 
       Row() {
         Text('07:00')
@@ -65,6 +72,10 @@ export struct PeriodTaskList {
         .scrollBar(BarState.Off)
       }
       .alignItems(VerticalAlign.Top)
+      .border({
+        width: { top: 1 },
+        color: '#E3E8F1'
+      })
 
     }
   }

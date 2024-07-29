@@ -1,6 +1,6 @@
 import InitPage from './InitPage'
-import HomePage from './HomePage'
-import TasksPage from './TasksPage'
+import { HomePage } from './HomePage'
+import { TasksPage } from './TasksPage'
 import display from '@ohos.display';
 
 

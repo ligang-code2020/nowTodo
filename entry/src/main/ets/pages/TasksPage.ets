@@ -6,7 +6,7 @@ import { FloatTabs } from '../component/FloatTabs'
 
 @Entry
 @Component
-export default struct TasksPage {
+export struct TasksPage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
 
   build() {

@@ -5,7 +5,7 @@ enum PriorityColor {
 
 
 @Component
-@Preview
+
 export struct TaskCard {
   @Prop taskName: string
   @Prop time: string
