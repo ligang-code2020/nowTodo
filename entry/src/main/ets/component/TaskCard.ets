@@ -11,6 +11,7 @@ export struct TaskCard {
   @Prop time: string
   @Prop tag: string[]
   @Prop priority: number
+  maxWidth: number | string = '70%' // 文本最大宽度，超出省略
 
   build() {
     Column() {
@@ -29,7 +30,7 @@ export struct TaskCard {
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .maxLines(1)
             .constraintSize({
-              maxWidth: '70%'
+              maxWidth: this.maxWidth
             })
           Text(this.time).fontSize(14).fontColor('#9AA8C7').height(23).margin({ top: 5 })
         }

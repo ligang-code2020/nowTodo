@@ -53,7 +53,8 @@ export struct PeriodTaskList {
                 taskName: task.taskName,
                 time: task.time,
                 tag: task.tag,
-                priority: task.priority
+                priority: task.priority,
+                maxWidth: '70%'
               })
             })
           }
