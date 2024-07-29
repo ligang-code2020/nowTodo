@@ -20,14 +20,11 @@ export struct PeriodTaskList {
       // .backgroundColor(Color.Red)
 
       Row() {
-        Column() {
-          Text('07:00')
-            .fontColor('#2C406E')
-            .fontSize(14)
-            .fontWeight(600)
-            .zIndex(10)
-            .margin({ left: 11, top: 24, right: 21 })
-        }
+        Text('07:00')
+          .fontColor('#2C406E')
+          .fontSize(14)
+          .fontWeight(600)
+          .margin({ left: 15, top: 24, right: 21 })
 
 
         Scroll() {
@@ -36,14 +33,13 @@ export struct PeriodTaskList {
             TaskCard()
             TaskCard()
           }
-          .margin({ left: 65, top: 15 })
+          .margin({ top: 16 })
           .padding({ right: 48 })
-          // .border({ width: 1 })
-          .height(100)
         }
         .scrollable(ScrollDirection.Horizontal)
         .scrollBar(BarState.Off)
       }
+      .alignItems(VerticalAlign.Top)
 
       Line()// .width('100%')
         .startPoint([0, 0])

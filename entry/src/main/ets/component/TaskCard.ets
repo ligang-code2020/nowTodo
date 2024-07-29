@@ -4,22 +4,34 @@ export struct TaskCard {
   build() {
     Column() {
       Line()
-        .startPoint([0, 35])
+        .startPoint([0, 38])
         .strokeWidth(2)
         .strokeLineCap(LineCapStyle.Round)
         .stroke(Color.Red)
         .position({ top: 22, left: 15 })
-      Image($r('app.media.more'))
-        .width(14)
-        .aspectRatio(1)
-        .position({ top: 22, right: 15 })
+      Row() {
+        Column() {
+          Text('吃饭睡觉打游戏')
+            .fontColor('#2C406E')
+            .fontSize(16)
+            .fontWeight(600)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+            .maxLines(1)
+            .width('70%')
+          Text('08:00-09:00').fontSize(14).fontColor('#9AA8C7').height(23).margin({ top: 5 })
+        }
+        .alignItems(HorizontalAlign.Start)
+        .justifyContent(FlexAlign.SpaceBetween)
+        .margin({ left: 25, right: 24 })
 
-      Column() {
-        Text('xxxx').fontColor('#2C406E').fontSize(16).fontWeight(600).height(26)
-        Text('08:00-09:00').fontSize(14).fontColor('#9AA8C7').height(23)
+        Image($r('app.media.more'))
+          .width(14)
+          .aspectRatio(1)
+          .margin({ right: 10 })
       }
-      .alignItems(HorizontalAlign.Start)
-      .margin({ top: 15, left: 25 })
+      .margin({ top: 21 })
+      .alignItems(VerticalAlign.Top)
+
 
       // tag
       Row() {
@@ -44,12 +56,10 @@ export struct TaskCard {
       }
       .margin({ top: 15 })
       .padding({ left: 25 })
-      .width('100%')
     }
     .padding({ bottom: 15 })
     .justifyContent(FlexAlign.Start)
     .alignItems(HorizontalAlign.Start)
-    .width('100%')
     .borderRadius(15)
     .backgroundColor('#F9FAFD')
   }
