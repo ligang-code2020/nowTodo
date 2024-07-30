@@ -4,7 +4,7 @@ import { CircularDiagram } from '../component/CircularDiagram'
 
 @Entry
 @Component
-struct GraphicPage {
+export struct GraphicPage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
 
   build() {
@@ -23,12 +23,61 @@ struct GraphicPage {
               Column() {
                 Text('今日')
                   .fontSize(20)
-                  .fontColor('#8586A9')
+                  .fontColor('#10275A')
                   .fontWeight(FontWeight.Bold)
+                  .margin({ bottom: 15 })
 
-                // Text('6个小时54min')
-                // Text('已完成 10')
-                // Text('进行中 2')
+                Column({ space: 20 }) {
+                  Row() {
+                    Line()
+                      .startPoint([0, 7])
+                      .strokeWidth(2)
+                      .strokeLineCap(LineCapStyle.Round)
+                      .stroke('#FE3082')
+                      .margin({ right: 5 })
+                    Text() {
+                      Span('6h 54min')
+                      Span(' / 10h 20min').fontColor('#aaaaaa')
+                    }
+                    .fontSize(11)
+                    .fontWeight(700)
+                  }
+                  .width('100%')
+
+                  Row() {
+                    Line()
+                      .startPoint([0, 7])
+                      .strokeWidth(2)
+                      .strokeLineCap(LineCapStyle.Round)
+                      .stroke('#3EDE00')
+                      .margin({ right: 5 })
+                    Text() {
+                      Span('已完成 10')
+                      Span(' / 20').fontColor('#aaaaaa')
+                    }
+                    .fontSize(11)
+                    .fontWeight(700)
+                  }
+                  .width('100%')
+
+                  Row() {
+                    Line()
+                      .startPoint([0, 7])
+                      .strokeWidth(2)
+                      .strokeLineCap(LineCapStyle.Round)
+                      .stroke('#00BEE0')
+                      .margin({ right: 5 })
+                    Text() {
+                      Span('进行中 4')
+                      Span(' / 8').fontColor('#aaaaaa')
+                    }
+                    .fontSize(11)
+                    .fontWeight(700)
+                  }
+                  .width('100%')
+                }
+                .width('100%')
+
               }
               .padding({ left: 15, top: 15 })
               .alignItems(HorizontalAlign.Start)
