@@ -1,6 +1,7 @@
 import InitPage from './InitPage'
 import { HomePage } from './HomePage'
 import { TasksPage } from './TasksPage'
+import {GraphicPage} from './GraphicPage'
 import display from '@ohos.display';
 
 
@@ -13,7 +14,7 @@ struct Index {
 
   build() {
     Column() {
-      TasksPage()
+      GraphicPage()
     }
     .width('100%')
   }
