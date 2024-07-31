@@ -1,6 +1,10 @@
 import { FloatTabs } from '../component/FloatTabs'
 import { CommonContainer } from '../style/common'
 import { CircularDiagram } from '../component/CircularDiagram'
+import { MCCharts } from '../component/MCCharts'
+import { LineChartComponent } from '../component/MPChart'
+import { CJCalendar } from 'cjcalendar'
+
 
 @Entry
 @Component
@@ -19,81 +23,120 @@ export struct GraphicPage {
 
         Column() {
           Scroll() {
-            Row() {
+            Column() {
+              Row() {
+                Column() {
+                  Text('今日')
+                    .fontSize(20)
+                    .fontColor('#10275A')
+                    .fontWeight(FontWeight.Bold)
+                    .margin({ bottom: 15 })
+
+                  Column({ space: 20 }) {
+                    Row() {
+                      Line()
+                        .startPoint([0, 7])
+                        .strokeWidth(2)
+                        .strokeLineCap(LineCapStyle.Round)
+                        .stroke('#FE3082')
+                        .margin({ right: 5 })
+                      Text() {
+                        Span('6h 54min')
+                        Span(' / 10h 20min').fontColor('#aaaaaa')
+                      }
+                      .fontSize(11)
+                      .fontWeight(700)
+                    }
+                    .width('100%')
+
+                    Row() {
+                      Line()
+                        .startPoint([0, 7])
+                        .strokeWidth(2)
+                        .strokeLineCap(LineCapStyle.Round)
+                        .stroke('#3EDE00')
+                        .margin({ right: 5 })
+                      Text() {
+                        Span('已完成 10')
+                        Span(' / 20').fontColor('#aaaaaa')
+                      }
+                      .fontSize(11)
+                      .fontWeight(700)
+                    }
+                    .width('100%')
+
+                    Row() {
+                      Line()
+                        .startPoint([0, 7])
+                        .strokeWidth(2)
+                        .strokeLineCap(LineCapStyle.Round)
+                        .stroke('#00BEE0')
+                        .margin({ right: 5 })
+                      Text() {
+                        Span('进行中 4')
+                        Span(' / 8').fontColor('#aaaaaa')
+                      }
+                      .fontSize(11)
+                      .fontWeight(700)
+                    }
+                    .width('100%')
+                  }
+                  .width('100%')
+
+                }
+                .padding({ left: 15, top: 15 })
+                .alignItems(HorizontalAlign.Start)
+                .layoutWeight(1)
+
+                // 环形图
+                CircularDiagram()
+              }
+              .width('100%')
+              .alignItems(VerticalAlign.Top)
+              .justifyContent(FlexAlign.SpaceBetween)
+              .backgroundColor('#F9FAFD')
+              .borderRadius(16)
+
               Column() {
-                Text('今日')
+                Text('本周')
                   .fontSize(20)
                   .fontColor('#10275A')
                   .fontWeight(FontWeight.Bold)
-                  .margin({ bottom: 15 })
-
-                Column({ space: 20 }) {
-                  Row() {
-                    Line()
-                      .startPoint([0, 7])
-                      .strokeWidth(2)
-                      .strokeLineCap(LineCapStyle.Round)
-                      .stroke('#FE3082')
-                      .margin({ right: 5 })
-                    Text() {
-                      Span('6h 54min')
-                      Span(' / 10h 20min').fontColor('#aaaaaa')
-                    }
-                    .fontSize(11)
-                    .fontWeight(700)
-                  }
+                  .margin({ left: 15, top: 15 })
                   .width('100%')
 
-                  Row() {
-                    Line()
-                      .startPoint([0, 7])
-                      .strokeWidth(2)
-                      .strokeLineCap(LineCapStyle.Round)
-                      .stroke('#3EDE00')
-                      .margin({ right: 5 })
-                    Text() {
-                      Span('已完成 10')
-                      Span(' / 20').fontColor('#aaaaaa')
-                    }
-                    .fontSize(11)
-                    .fontWeight(700)
-                  }
+                MCCharts()
+              }
+              .width('100%')
+              .margin({ top: 40 })
+              .borderRadius(16)
+              .backgroundColor('#F9FAFD')
+              .alignItems(HorizontalAlign.Start)
+
+              Column() {
+                Text('本周')
+                  .fontSize(20)
+                  .fontColor('#10275A')
+                  .fontWeight(FontWeight.Bold)
+                  .margin({ left: 15, top: 15 })
                   .width('100%')
 
-                  Row() {
-                    Line()
-                      .startPoint([0, 7])
-                      .strokeWidth(2)
-                      .strokeLineCap(LineCapStyle.Round)
-                      .stroke('#00BEE0')
-                      .margin({ right: 5 })
-                    Text() {
-                      Span('进行中 4')
-                      Span(' / 8').fontColor('#aaaaaa')
-                    }
-                    .fontSize(11)
-                    .fontWeight(700)
-                  }
-                  .width('100%')
-                }
-                .width('100%')
+                CJCalendar()
 
               }
-              .padding({ left: 15, top: 15 })
+              .margin({ top: 40 })
+              .borderRadius(16)
+              .backgroundColor('#F9FAFD')
               .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1)
 
-              // 环形图
-              CircularDiagram()
+              Blank().height(220)
+
+
             }
-            .width('100%')
-            .alignItems(VerticalAlign.Top)
-            .justifyContent(FlexAlign.SpaceBetween)
-            .backgroundColor('#F9FAFD')
-            .borderRadius(16)
+
           }
+          .scrollBar(BarState.Off)
         }
-        .height('100%')
 
       }
       .attributeModifier(this.commonContainerStyle)

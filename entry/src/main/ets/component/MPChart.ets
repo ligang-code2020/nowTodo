@@ -111,7 +111,8 @@ export struct LineChartComponent {
     if (legend) {
       legend.setEnabled(true);
       // draw legend entries as lines
-      legend.setForm(LegendForm.LINE);
+      legend.setForm(LegendForm.CIRCLE);
+      legend.setXOffset(50)
     }
 
     // 设置图表数据最大的绘制数，如果超过该数值，则不进行绘制图表的数值标签
