@@ -2,7 +2,8 @@
   "modelVersion": "5.0.0",
   "description": "Please describe the basic information.",
   "dependencies": {
-    "dayjs": "^1.11.7"
+    "dayjs": "^1.11.7",
+    "@ohos/mpchart": "^3.0.9"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.18",
