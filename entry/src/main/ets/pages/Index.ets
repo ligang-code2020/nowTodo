@@ -1,7 +1,8 @@
 import InitPage from './InitPage'
 import { HomePage } from './HomePage'
 import { TasksPage } from './TasksPage'
-import {GraphicPage} from './GraphicPage'
+import { GraphicPage } from './GraphicPage'
+import { CalendarComp } from '../component/CalendarComp'
 import display from '@ohos.display';
 
 
@@ -10,11 +11,13 @@ import display from '@ohos.display';
 struct Index {
   aboutToAppear(): void {
     console.log("屏幕", JSON.stringify(display.getDefaultDisplaySync()))
+    console.log("xxxx", "二〇二四年六月廿七".slice(-2))
   }
 
   build() {
     Column() {
-      GraphicPage()
+      // GraphicPage()
+      CalendarComp()
     }
     .width('100%')
   }

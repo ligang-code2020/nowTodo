@@ -15,7 +15,7 @@ export struct MCCharts {
     },
     yAxis: {
       axisLine: {
-        show: false
+        color: 'transparent'
       }
     },
     series: [

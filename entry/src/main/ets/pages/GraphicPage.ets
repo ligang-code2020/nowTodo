@@ -3,7 +3,7 @@ import { CommonContainer } from '../style/common'
 import { CircularDiagram } from '../component/CircularDiagram'
 import { MCCharts } from '../component/MCCharts'
 import { LineChartComponent } from '../component/MPChart'
-import { CJCalendar } from 'cjcalendar'
+import { CalendarComp } from '../component/CalendarComp'
 
 
 @Entry
@@ -121,7 +121,7 @@ export struct GraphicPage {
                   .margin({ left: 15, top: 15 })
                   .width('100%')
 
-                CJCalendar()
+                CalendarComp()
 
               }
               .margin({ top: 40 })
