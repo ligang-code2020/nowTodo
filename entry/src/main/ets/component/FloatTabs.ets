@@ -93,7 +93,7 @@ export struct FloatTabs {
       offsetX: -3,
       offsetY: 7
     })
-    .margin({ bottom: 15 })
+    .margin({ bottom: 30 })
 
   }
 }
