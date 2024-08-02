@@ -56,7 +56,6 @@ export struct CalendarComp {
         showLunar: true,
         selectedShape: SelectedShape.RECT,
         showFastToday: false,
-        // cjCellStyle: this.cellStyle,
         buildCellBackground: this.BuildCellBackground,
         buildCellBody: this.BuildCellBody,
         buildCellStyle: (item: CJDateItem) => {
