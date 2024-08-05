@@ -36,17 +36,13 @@ const Tasks: Task[] = [
 
 @Component
 export struct PeriodTaskList {
+  period: string = ''
+  taskList: Task[] = []
+
   build() {
     Column() {
-      // Line()
-      //   .width('100%')
-      //   // .startPoint([0, 0])
-      //   // .endPoint([300, 0])
-      //   .stroke('#E3E8F1')
-      //   .strokeWidth(1)
-
       Row() {
-        Text('07:00')
+        Text(this.period)
           .fontColor('#2C406E')
           .fontSize(14)
           .fontWeight(600)
@@ -55,7 +51,7 @@ export struct PeriodTaskList {
 
         Scroll() {
           Row({ space: 10 }) {
-            ForEach(Tasks, (task: Task, index: number) => {
+            ForEach(this.taskList, (task: Task, index: number) => {
               TaskCard({
                 taskName: task.taskName,
                 time: task.time,

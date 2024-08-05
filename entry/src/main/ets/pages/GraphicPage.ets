@@ -3,7 +3,7 @@ import { CommonContainer } from '../style/common'
 import { CircularDiagram } from '../component/CircularDiagram'
 import { MCCharts } from '../component/MCCharts'
 import { LineChartComponent } from '../component/MPChart'
-import { CJCalendar } from 'cjcalendar'
+import { CalendarComp } from '../component/CalendarComp'
 
 
 @Entry
@@ -24,6 +24,7 @@ export struct GraphicPage {
         Column() {
           Scroll() {
             Column() {
+              // 日视图
               Row() {
                 Column() {
                   Text('今日')
@@ -97,31 +98,36 @@ export struct GraphicPage {
               .backgroundColor('#F9FAFD')
               .borderRadius(16)
 
-              Column() {
-                Text('本周')
-                  .fontSize(20)
-                  .fontColor('#10275A')
-                  .fontWeight(FontWeight.Bold)
-                  .margin({ left: 15, top: 15 })
-                  .width('100%')
+              if (false){
+                // 周视图
+                Column() {
+                  Text('本周')
+                    .fontSize(20)
+                    .fontColor('#10275A')
+                    .fontWeight(FontWeight.Bold)
+                    .margin({ left: 15, top: 15 })
+                    .width('100%')
 
-                MCCharts()
+                  MCCharts()
+                }
+                .width('100%')
+                .margin({ top: 40 })
+                .borderRadius(16)
+                .backgroundColor('#F9FAFD')
+                .alignItems(HorizontalAlign.Start)
               }
-              .width('100%')
-              .margin({ top: 40 })
-              .borderRadius(16)
-              .backgroundColor('#F9FAFD')
-              .alignItems(HorizontalAlign.Start)
 
+
+              // 月视图
               Column() {
-                Text('本周')
+                Text('本月')
                   .fontSize(20)
                   .fontColor('#10275A')
                   .fontWeight(FontWeight.Bold)
                   .margin({ left: 15, top: 15 })
                   .width('100%')
 
-                CJCalendar()
+                CalendarComp()
 
               }
               .margin({ top: 40 })

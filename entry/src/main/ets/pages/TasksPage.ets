@@ -4,10 +4,96 @@ import { WeeklyTabs } from '../component/WeeklyTabs'
 import { PeriodTaskList } from '../component/PeriodTaskList'
 import { FloatTabs } from '../component/FloatTabs'
 
+interface Task {
+  taskName: string,
+  time: string,
+  tag: string[],
+  priority: number
+}
+
+interface PeriodTask {
+  periodTime: string,
+  taskList: Task[]
+}
+
+// const periodList: PeriodTask[] = [
+//   {
+//     periodTime: '07:00',
+//     taskList: [
+//       {
+//         taskName: '吃饭上上上班班班',
+//         time: '07:00 - 7:15',
+//         tag: ['必做', '重要'],
+//         priority: 2
+//       },
+//       {
+//         taskName: '上班嘻嘻嘻哈哈',
+//         time: '07:30 - 07:45',
+//         tag: ['随意'],
+//         priority: 1
+//       },
+//       {
+//         taskName: '下班3ssd',
+//         time: '07:59',
+//         tag: ['必做', '重要'],
+//         priority: 2
+//       }
+//     ]
+//   },
+//   {
+//     periodTime: '08:00',
+//     taskList: [
+//       {
+//         taskName: '吃饭上上上班班班',
+//         time: '08:00 - 8:15',
+//         tag: ['必做', '重要'],
+//         priority: 2
+//       },
+//       {
+//         taskName: '上班嘻嘻嘻哈哈',
+//         time: '08:30 - 08:45',
+//         tag: ['随意'],
+//         priority: 1
+//       },
+//       {
+//         taskName: '下班3ssd',
+//         time: '08:59',
+//         tag: ['必做', '重要'],
+//         priority: 2
+//       }
+//     ]
+//   },
+//   {
+//     periodTime: '09:00',
+//     taskList: [
+//       {
+//         taskName: '吃饭上上上班班班',
+//         time: '09:00 - 09:15',
+//         tag: ['必做', '重要'],
+//         priority: 2
+//       },
+//       {
+//         taskName: '上班嘻嘻嘻哈哈',
+//         time: '09:30 - 09:45',
+//         tag: ['随意'],
+//         priority: 1
+//       },
+//       {
+//         taskName: '下班3ssd',
+//         time: '09:59',
+//         tag: ['必做', '重要'],
+//         priority: 2
+//       }
+//     ]
+//   }
+// ]
+const periodList: PeriodTask[] = []
+
 @Entry
 @Component
 export struct TasksPage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
+  @State totalTime: number = 0;
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
@@ -30,32 +116,62 @@ export struct TasksPage {
         // 周内选择
         WeeklyTabs().margin({ top: 16 })
 
+
         Row() {
           Text('今天').fontSize(20).fontWeight(600).fontColor('#10275A')
-          Text('9个小时45分钟').fontSize(14).fontWeight(FontWeight.Bold).fontColor('#10275A')
+          if (this.totalTime) {
+            Text(`${Math.floor(this.totalTime)}个小时${this.totalTime % 1 * 60}分钟`)
+              .fontSize(14)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#10275A')
+          }
+
         }
         .width('100%')
         .justifyContent(FlexAlign.SpaceBetween)
         .margin({ top: 24, bottom: 30 })
 
-        List({ space: 16 }) {
-          ForEach(Array.from({ length: 6 }), () => {
-            ListItem() {
-              PeriodTaskList()
-            }
-          })
+        if (periodList.length) {
+          List({ space: 16 }) {
+            ForEach(periodList, (periodTask: PeriodTask, index: number) => {
+              ListItem() {
+                PeriodTaskList({
+                  period: periodTask.periodTime,
+                  taskList: periodTask.taskList
+                })
+              }
+            })
 
-          // 底部留白
-          ListItem() {
-            Column() {
-              Blank().height(100)
+            // 底部留白
+            ListItem() {
+              Column() {
+                Blank().height(100)
+              }
             }
           }
+          .edgeEffect(EdgeEffect.None)
+          .scrollBar(BarState.Off)
+          .layoutWeight(1)
+          .width('100%')
+        } else {
+          Column() {
+            Image($r('app.media.empty_task_icon'))
+              .width(199)
+              .height(196)
+            Text('当日没有任何任务').fontSize(14).fontColor('#575757').fontWeight(600).margin({ top: 32 })
+            Text('种一棵树最好的时间是十年前,其次是现在.')
+              .width(225)
+              .fontSize(16)
+              .fontColor('#272343')
+              .fontWeight(700)
+              .margin({ top: 15 })
+              .textAlign(TextAlign.Center)
+              .lineHeight(30)
+
+          }
         }
-        .edgeEffect(EdgeEffect.None)
-        .scrollBar(BarState.Off)
-        .layoutWeight(1)
-        .width('100%')
+
+
       }
       .attributeModifier(this.commonContainerStyle)
 

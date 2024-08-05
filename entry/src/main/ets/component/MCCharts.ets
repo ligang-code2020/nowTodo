@@ -16,20 +16,27 @@ export struct MCCharts {
     yAxis: {
       axisLine: {
         show: false
+      },
+      axisTick: {
+        // 刻度线配置
+        show: false, // 是否显示
+        // interval: 3, // 与文本的间隔
+        length: 2 // 刻度的长度
       }
     },
     series: [
       {
         label: {
+          color: 'transparent',
           show: false
         },
-        name: '最高气温',
+        name: '时长统计',
         color: '#5098fe',
         barStyle: {
-          width: 30,
+          width: 35,
           borderRadius: true
         },
-        data: [11, 11, 15, 13, 12, 130, 10]
+        data: [4.5, 5.5, 6, 7, 7.5, 8, 8.2]
       }
     ]
   })
@@ -38,8 +45,8 @@ export struct MCCharts {
     this.defOption.setVal({
       series: [
         {
-          name: '最高气温',
-          data: [110, 110, 150, 130, 102, 130, 210]
+          name: '时长统计',
+          data: [4.5, 5.5, 6, 7, 4, 8, 8.2]
         }
       ]
     })
