@@ -4,9 +4,6 @@ interface Title {
   title: string
 }
 
-interface DateTime {
-  date: Date
-}
 
 @Builder
 function titleFormItem($$: Title) {
@@ -41,9 +38,31 @@ function titleFormItem($$: Title) {
   .padding({ left: 30, right: 30 })
 }
 
+
 @Component
 struct dateFormItem {
-  selectedDate: Date = new Date("2024-08-06")
+  @State selectedDate: Date = new Date(dayjs().format('YYYY-MM-DD'))
+  @State isShow: boolean = false
+  @State sheetHeight: number = 300
+
+  @Builder
+  datePick() {
+    Column() {
+      DatePicker({
+        start: new Date(dayjs().format('YYYY-MM-DD')),
+        end: new Date(dayjs().endOf('year').format('YYYY-MM-DD')),
+        selected: this.selectedDate
+      })
+        .disappearTextStyle({ color: Color.Gray, font: { size: '16fp', weight: FontWeight.Bold } })
+        .textStyle({ color: '#ff182431', font: { size: '18fp', weight: FontWeight.Normal } })
+        .selectedTextStyle({ font: { weight: FontWeight.Bold } })
+        .onDateChange((value: Date) => {
+          this.selectedDate = value
+        })
+
+    }
+    .width('100%')
+  }
 
   build() {
     Column() {
@@ -55,29 +74,27 @@ struct dateFormItem {
       Row() {
         Text(dayjs(this.selectedDate).format('YYYY/MM/DD')).fontSize(16).fontColor('#10275A').fontWeight(600)
         Image($r('app.media.calendar')).width(20).aspectRatio(1)
+          .bindSheet($$this.isShow, this.datePick(), {
+            height: this.sheetHeight,
+            backgroundColor: Color.White,
+            blurStyle: BlurStyle.Thick,
+            showClose: true,
+            title: { title: "选择日期" },
+            onWillAppear: () => {
+              console.log("BindSheet onWillAppear.")
+            },
+            onAppear: () => {
+              console.log("BindSheet onAppear.")
+            },
+            onWillDisappear: () => {
+              console.log("BindSheet onWillDisappear.")
+            },
+            onDisappear: () => {
+              console.log("BindSheet onDisappear.")
+            }
+          })
           .onClick(() => {
-            DatePickerDialog.show({
-              start: new Date(dayjs().format('YYYY-MM-DD')),
-              end: new Date(dayjs().endOf('year').format('YYYY-MM-DD')),
-              selected: this.selectedDate,
-              useMilitaryTime: false,
-              selectedTextStyle: {
-                font: {
-                  weight: FontWeight.Medium
-                }
-              },
-              onDateAccept: (value: Date) => {
-                // 通过Date的setFullYear方法设置按下确定按钮时的日期，这样当弹窗再次弹出时显示选中的是上一次确定的日期
-                this.selectedDate = value
-                console.info("DatePickerDialog:onDateAccept()" + value.toString())
-              },
-              onCancel: () => {
-                console.info("DatePickerDialog:onCancel()")
-              },
-              onDateChange: (value: Date) => {
-                console.info("DatePickerDialog:onDateChange()" + value.toString())
-              }
-            })
+            this.isShow = true
           })
       }
       .padding({ bottom: 7 })
@@ -94,6 +111,12 @@ struct dateFormItem {
     .alignItems(HorizontalAlign.Start)
     .margin({ top: 20 })
     .padding({ left: 30, right: 30 })
+  }
+}
+
+@ComponentV2
+struct timeFormItem {
+  build() {
   }
 }
 
