@@ -4,11 +4,17 @@ interface Title {
   title: string
 }
 
+interface Tmp {
+  time: Date,
+  index: number
+}
+
 
 @Builder
 function titleFormItem($$: Title) {
   Column() {
     Text('标题')
+      .height(23)
       .fontColor('#8A8BB3')
       .fontSize(14)
       .fontWeight(600)
@@ -70,6 +76,7 @@ struct dateFormItem {
         .fontColor('#8A8BB3')
         .fontSize(14)
         .fontWeight(600)
+        .height(23)
         .margin({ bottom: 10 })
       Row() {
         Text(dayjs(this.selectedDate).format('YYYY/MM/DD')).fontSize(16).fontColor('#10275A').fontWeight(600)
@@ -114,9 +121,123 @@ struct dateFormItem {
   }
 }
 
-@ComponentV2
+@Component
 struct timeFormItem {
+  @State startTime: Date = new Date(dayjs().format('YYYY-MM-DD'))
+  @State endTime: Date = new Date(dayjs('2023-10-23').format('YYYY-MM-DD'))
+  @State isShow: boolean = false
+  @State sheetHeight: number = 300
+
+  @Builder
+  timePick() {
+    Column() {
+      DatePicker({
+        start: new Date(dayjs().format('YYYY-MM-DD')),
+        end: new Date(dayjs().endOf('year').format('YYYY-MM-DD')),
+        selected: this.startTime
+      })
+        .disappearTextStyle({ color: Color.Gray, font: { size: '16fp', weight: FontWeight.Bold } })
+        .textStyle({ color: '#ff182431', font: { size: '18fp', weight: FontWeight.Normal } })
+        .selectedTextStyle({ font: { weight: FontWeight.Bold } })
+        .onDateChange((value: Date) => {
+          this.startTime = value
+        })
+
+    }
+    .width('100%')
+  }
+
   build() {
+    Column() {
+      Text('时间')
+        .fontColor('#8A8BB3')
+        .fontSize(14)
+        .fontWeight(600)
+        .height(23)
+        .margin({ bottom: 10 })
+      Row({ space: 15 }) {
+        Row() {
+          Text(dayjs(this.startTime).format('YYYY-MM-DD'))
+            .fontColor('#10275A')
+            .fontSize(16)
+            .fontWeight(600)
+        }
+        .padding({ bottom: 10 })
+        .justifyContent(FlexAlign.Center)
+        .border({
+          color: '#E8E9F3',
+          width: {
+            bottom: 1
+          }
+        })
+        .layoutWeight(1)
+        .bindSheet($$this.isShow, this.timePick(), {
+          height: this.sheetHeight,
+          backgroundColor: Color.White,
+          blurStyle: BlurStyle.Thick,
+          showClose: true,
+          title: { title: "选择日期" },
+          onWillAppear: () => {
+            console.log("BindSheet onWillAppear.")
+          },
+          onAppear: () => {
+            console.log("BindSheet onAppear.")
+          },
+          onWillDisappear: () => {
+            console.log("BindSheet onWillDisappear.")
+          },
+          onDisappear: () => {
+            console.log("BindSheet onDisappear.")
+          }
+        })
+        .onClick(() => {
+          this.isShow = true;
+        })
+
+        Row() {
+          Text(dayjs(this.endTime).format('YYYY-MM-DD'))
+            .fontColor('#10275A')
+            .fontSize(16)
+            .fontWeight(600)
+        }
+        .padding({ bottom: 10 })
+        .justifyContent(FlexAlign.Center)
+        .border({
+          color: '#E8E9F3',
+          width: {
+            bottom: 1
+          }
+        })
+        .layoutWeight(1)
+        .bindSheet($$this.isShow, this.timePick(), {
+          height: this.sheetHeight,
+          backgroundColor: Color.White,
+          blurStyle: BlurStyle.Thick,
+          showClose: true,
+          title: { title: "选择日期" },
+          onWillAppear: () => {
+            console.log("BindSheet onWillAppear.")
+          },
+          onAppear: () => {
+            console.log("BindSheet onAppear.")
+          },
+          onWillDisappear: () => {
+            console.log("BindSheet onWillDisappear.")
+          },
+          onDisappear: () => {
+            console.log("BindSheet onDisappear.")
+          }
+        })
+        .onClick(() => {
+          this.isShow = true;
+        })
+      }
+      .width('100%')
+    }
+    .width('100%')
+    .alignItems(HorizontalAlign.Start)
+    .margin({ top: 20 })
+    .padding({ left: 30, right: 30 })
   }
 }
 
@@ -156,6 +277,7 @@ struct AddTaskPage {
       })
 
       dateFormItem()
+      timeFormItem()
 
 
     }
