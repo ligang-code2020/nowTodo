@@ -126,23 +126,23 @@ struct timeFormItem {
   @State startTime: Date = new Date(dayjs().format('YYYY-MM-DD'))
   @State endTime: Date = new Date(dayjs('2023-10-23').format('YYYY-MM-DD'))
   @State isShow: boolean = false
+  @State endTimeShow: boolean = false
   @State sheetHeight: number = 300
 
   @Builder
-  timePick() {
+  timePick($$: Tmp) {
     Column() {
       DatePicker({
         start: new Date(dayjs().format('YYYY-MM-DD')),
         end: new Date(dayjs().endOf('year').format('YYYY-MM-DD')),
-        selected: this.startTime
+        selected: $$.time
       })
         .disappearTextStyle({ color: Color.Gray, font: { size: '16fp', weight: FontWeight.Bold } })
         .textStyle({ color: '#ff182431', font: { size: '18fp', weight: FontWeight.Normal } })
         .selectedTextStyle({ font: { weight: FontWeight.Bold } })
         .onDateChange((value: Date) => {
-          this.startTime = value
+          $$.index === 1 ? this.startTime = value : this.endTime = value;
         })
-
     }
     .width('100%')
   }
@@ -171,27 +171,31 @@ struct timeFormItem {
           }
         })
         .layoutWeight(1)
-        .bindSheet($$this.isShow, this.timePick(), {
-          height: this.sheetHeight,
-          backgroundColor: Color.White,
-          blurStyle: BlurStyle.Thick,
-          showClose: true,
-          title: { title: "选择日期" },
-          onWillAppear: () => {
-            console.log("BindSheet onWillAppear.")
-          },
-          onAppear: () => {
-            console.log("BindSheet onAppear.")
-          },
-          onWillDisappear: () => {
-            console.log("BindSheet onWillDisappear.")
-          },
-          onDisappear: () => {
-            console.log("BindSheet onDisappear.")
-          }
-        })
+        .bindSheet($$this.isShow,
+          this.timePick({
+            time: this.startTime,
+            index: 1
+          }), {
+            height: this.sheetHeight,
+            backgroundColor: Color.White,
+            blurStyle: BlurStyle.Thick,
+            showClose: true,
+            title: { title: "选择日期" },
+            onWillAppear: () => {
+              console.log("BindSheet onWillAppear.")
+            },
+            onAppear: () => {
+              console.log("BindSheet onAppear.")
+            },
+            onWillDisappear: () => {
+              console.log("BindSheet onWillDisappear.")
+            },
+            onDisappear: () => {
+              console.log("BindSheet onDisappear.")
+            }
+          })
         .onClick(() => {
-          this.isShow = true;
+          this.isShow = true
         })
 
         Row() {
@@ -209,27 +213,31 @@ struct timeFormItem {
           }
         })
         .layoutWeight(1)
-        .bindSheet($$this.isShow, this.timePick(), {
-          height: this.sheetHeight,
-          backgroundColor: Color.White,
-          blurStyle: BlurStyle.Thick,
-          showClose: true,
-          title: { title: "选择日期" },
-          onWillAppear: () => {
-            console.log("BindSheet onWillAppear.")
-          },
-          onAppear: () => {
-            console.log("BindSheet onAppear.")
-          },
-          onWillDisappear: () => {
-            console.log("BindSheet onWillDisappear.")
-          },
-          onDisappear: () => {
-            console.log("BindSheet onDisappear.")
-          }
-        })
+        .bindSheet($$this.endTimeShow,
+          this.timePick({
+            time: this.endTime,
+            index: 2
+          }), {
+            height: this.sheetHeight,
+            backgroundColor: Color.White,
+            blurStyle: BlurStyle.Thick,
+            showClose: true,
+            title: { title: "选择日期" },
+            onWillAppear: () => {
+              console.log("BindSheet onWillAppear.")
+            },
+            onAppear: () => {
+              console.log("BindSheet onAppear.")
+            },
+            onWillDisappear: () => {
+              console.log("BindSheet onWillDisappear.")
+            },
+            onDisappear: () => {
+              console.log("BindSheet onDisappear.")
+            }
+          })
         .onClick(() => {
-          this.isShow = true;
+          this.endTimeShow = true
         })
       }
       .width('100%')
@@ -244,7 +252,7 @@ struct timeFormItem {
 
 @Entry
 @Component
-struct AddTaskPage {
+export struct AddTaskPage {
   @State title: string = ''
   @State selectedDate: Date = new Date("2024-08-06")
 
