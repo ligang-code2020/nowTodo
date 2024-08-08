@@ -3,6 +3,7 @@ import { HomePage } from './HomePage'
 import { TasksPage } from './TasksPage'
 import { GraphicPage } from './GraphicPage'
 import { CalendarComp } from '../component/CalendarComp'
+import { AddTaskPage } from './AddTaskPage'
 import display from '@ohos.display';
 
 
@@ -17,7 +18,7 @@ struct Index {
   build() {
     Column() {
       // GraphicPage()
-      CalendarComp()
+      AddTaskPage()
     }
     .width('100%')
   }

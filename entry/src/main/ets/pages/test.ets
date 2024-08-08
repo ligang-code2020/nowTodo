@@ -1,19 +1,24 @@
-@Component
+class Tmp {
+  paramA1: string = ''
+}
+
+@Builder function overBuilder(params: Tmp) {
+  Row() {
+    Text(`UseStateVarByReference: ${params.paramA1} `)
+  }
+}
 @Entry
-struct Test {
+@Component
+struct Parent {
+  @State label: string = 'Hello';
   build() {
-
-
-
-
-
-    // Stack({ alignContent: Alignment.TopStart }) {
-    //   Text('Stack').width('90%').height('100%').backgroundColor('#e1dede').align(Alignment.BottomEnd)
-    //   Image($r('app.media.blur1')).width('70%')
-    //   Text('Item 1').width('65%').height('90%').backgroundColor(0xd2cab3).align(Alignment.BottomEnd)
-    //   // Text('Item 2').width('70%').height('80%').backgroundColor(0xc1cbac).align(Alignment.BottomEnd)
-    //
-    // }.width('100%').height(150).margin({ top: 5 })
-
+    Column() {
+      // Pass the this.label reference to the overBuilder component when the overBuilder component is called in the Parent component.
+      overBuilder({ paramA1: this.label })
+      Button('Click me').onClick(() => {
+        // After Click me is clicked, the UI text changes from Hello to ArkUI.
+        this.label = 'ArkUI';
+      })
+    }
   }
 }

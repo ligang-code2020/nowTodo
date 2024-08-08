@@ -3,6 +3,7 @@ import { SearchBar } from '../component/SearchBar'
 import { WeeklyTabs } from '../component/WeeklyTabs'
 import { PeriodTaskList } from '../component/PeriodTaskList'
 import { FloatTabs } from '../component/FloatTabs'
+import dayjs from 'dayjs'
 
 interface Task {
   taskName: string,
@@ -92,6 +93,7 @@ const periodList: PeriodTask[] = []
 @Entry
 @Component
 export struct TasksPage {
+  @State private selectedDate: Date = new Date(dayjs().format('YYYY-MM-DD'))
   @State commonContainerStyle: CommonContainer = new CommonContainer()
   @State totalTime: number = 0;
 
@@ -106,7 +108,26 @@ export struct TasksPage {
           Text('任务').fontSize(24).fontWeight(FontWeight.Bold).fontColor('#10275A')
           Row() {
             Image($r('app.media.calendar')).width(14).aspectRatio(1).margin({ right: 5 })
-            Text('2024年7月').fontSize(12).fontColor('#525F77')
+            Text(dayjs(this.selectedDate).format('YYYY年M月'))
+              .fontSize(12)
+              .fontColor('#525F77')
+              .onClick(() => {
+                console.info("CalendarDialog.show")
+                CalendarPickerDialog.show({
+                  selected: this.selectedDate,
+                  onAccept: (value) => {
+                    console.info("calendar onAccept:" + JSON.stringify(value))
+                    console.log("calendar onAccept:1111", dayjs(value).format('YYYY-MM-DD'))
+                    this.selectedDate = value
+                  },
+                  onCancel: () => {
+                    console.info("calendar onCancel")
+                  },
+                  onChange: (value) => {
+                    console.info("calendar onChange:" + JSON.stringify(value))
+                  }
+                })
+              })
           }
         }
         .margin({ top: 30 })
