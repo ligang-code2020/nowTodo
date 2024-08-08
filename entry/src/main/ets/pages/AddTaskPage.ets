@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { text } from '@kit.ArkGraphics2D'
 
 interface Title {
   title: string
@@ -14,11 +15,34 @@ interface Type {
   type: string
 }
 
+interface Tag {
+  tagName: string,
+  tagColor: ResourceColor,
+  bgColor: ResourceColor
+}
+
 const typeList: Type[] = [
   { typeName: '个人', type: 'personal' },
   { typeName: '工作', type: 'work' },
   { typeName: '学习', type: 'study' },
   { typeName: '旅游', type: 'travel' }
+]
+const tagList: Tag[] = [
+  {
+    tagName: '办公',
+    tagColor: '#8F81FE',
+    bgColor: '#ECEAFF'
+  },
+  {
+    tagName: '家庭',
+    tagColor: '#F0A58E',
+    bgColor: '#FFEFEB'
+  },
+  {
+    tagName: '日程',
+    tagColor: '#F57C96',
+    bgColor: '#FFE9ED'
+  }
 ]
 
 @Builder
@@ -302,6 +326,8 @@ struct descriptionFormItem {
 
 @Component
 struct typeFormItem {
+  @State selectedType: string[] = []
+
   build() {
     Column() {
       Text('类型')
@@ -320,7 +346,11 @@ struct typeFormItem {
                   .selectedColor('#5B67CA')
                   .shape(CheckBoxShape.ROUNDED_SQUARE)
                   .onChange((value: boolean) => {
-                    console.info('Checkbox1 change is' + value + '' + type.type)
+                    if (value) {
+                      this.selectedType.push(type.type)
+                    } else {
+                      this.selectedType = this.selectedType.filter(item => item !== type.type)
+                    }
                   })
                   .height(16)
                   .width(16)
@@ -335,8 +365,143 @@ struct typeFormItem {
           })
         }
         .listDirection(Axis.Horizontal)
+        .scrollBar(BarState.Off)
+        .height(26)
       }
       .width('100%')
+    }
+    .alignItems(HorizontalAlign.Start)
+    .margin({ top: 24 })
+    .padding({ left: 30, right: 30 })
+  }
+}
+
+
+@CustomDialog
+struct CreateTagDialog {
+  controller?: CustomDialogController
+  @State tagName: string = ''
+
+  build() {
+    Column() {
+      Text('新标签')
+        .fontSize(22)
+        .fontWeight(700)
+        .fontColor('#10275A')
+        .margin({ top: 25 })
+        .height(36)
+      TextInput({ placeholder: '请输入标签名', text: this.tagName })
+        .placeholderFont({ size: 18, weight: FontWeight.Bold })
+        .borderRadius(10)
+        .placeholderColor('#10275A')
+        .backgroundColor('#F6F6F6')
+        .type(InputType.Normal)
+        .width(281)
+        .margin({ top: 16 })
+      Row() {
+        Row() {
+          Text('取消')
+            .fontSize(14)
+            .fontWeight(600)
+            .fontColor('#5B67CA')
+            .textAlign(TextAlign.Center)
+            .width('100%')
+        }
+        .borderRadius(6)
+        .border({
+          width: 1.5,
+          color: '#5B67CA'
+        })
+        .width(91)
+        .height(35)
+        .backgroundColor(Color.White)
+        .margin({ right: 20 })
+        .onClick(() => {
+          if (this.controller != undefined) {
+            this.controller.close()
+          }
+        })
+
+
+        Button('保存', { type: ButtonType.Normal })
+          .borderRadius(6)
+          .backgroundColor('#5B67CA')
+          .width(91)
+          .height(35)
+          .fontSize(14)
+          .fontWeight(600)
+          .fontColor(Color.White)
+          .onClick(() => {
+          })
+      }
+      .margin({ top: 32, bottom: 30 })
+    }
+  }
+}
+
+@Component
+struct tagFormItem {
+  dialogController: CustomDialogController | null = new CustomDialogController({
+    builder: CreateTagDialog(),
+    alignment: DialogAlignment.Center,
+    onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
+      console.info("reason=" + JSON.stringify(dismissDialogAction.reason))
+      console.log("dialog onWillDismiss")
+      if (dismissDialogAction.reason == DismissReason.PRESS_BACK) {
+        dismissDialogAction.dismiss()
+      }
+      if (dismissDialogAction.reason == DismissReason.TOUCH_OUTSIDE) {
+        dismissDialogAction.dismiss()
+      }
+    }
+  })
+
+  build() {
+    Column() {
+      Text('标签')
+        .height(23)
+        .fontColor('#8A8BB3')
+        .fontSize(14)
+        .fontWeight(600)
+        .margin({ bottom: 10 })
+      Row() {
+        List({ space: 6 }) {
+          ForEach(tagList, (tag: Tag, index: number) => {
+            ListItem() {
+              Row() {
+                Text(tag.tagName).fontSize(14).fontWeight(600).fontColor(tag.tagColor)
+              }
+              .padding({
+                left: 20,
+                right: 20,
+                top: 6,
+                bottom: 6
+              })
+              .backgroundColor(tag.bgColor)
+              .borderRadius(22)
+            }
+          })
+        }
+        .height(34)
+        .listDirection(Axis.Horizontal)
+        .scrollBar(BarState.Off)
+      }
+      .width('100%')
+
+
+      Text('+ 添加标签')
+        .width('100%')
+        .fontWeight(600)
+        .fontSize(12)
+        .fontColor('#A8AEDF')
+        .margin({ top: 16 })
+        .textAlign(TextAlign.Center)
+        .onClick(() => {
+          if (this.dialogController != null) {
+            this.dialogController.open()
+          }
+        })
+
     }
     .alignItems(HorizontalAlign.Start)
     .margin({ top: 24 })
@@ -383,6 +548,19 @@ export struct AddTaskPage {
       timeFormItem()
       descriptionFormItem()
       typeFormItem()
+      tagFormItem()
+
+      Button('创建', { type: ButtonType.Normal })
+        .margin({ top: 38 })
+        .borderRadius(14)
+        .width(327)
+        .height(56)
+        .backgroundColor('#5B67CA')
+        .fontSize(18)
+        .fontWeight(600)
+        .fontColor(Color.White)
+        .onClick(() => {
+        })
 
 
     }
