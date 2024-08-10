@@ -48,10 +48,93 @@ const profileList: Profile[] = [
 ]
 
 
+@CustomDialog
+struct Logout {
+  controller?: CustomDialogController
+
+  build() {
+    Column() {
+      Text('退出')
+        .height(36)
+        .fontColor('#10275A')
+        .fontSize(22)
+        .fontWeight(700)
+        .margin({ top: 25 })
+      Text('您确定要退出这个账户吗？')
+        .width(225)
+        .fontSize(18)
+        .fontColor('#10275A')
+        .fontWeight(500)
+        .margin({ top: 16 })
+        .textAlign(TextAlign.Center)
+        .height(58)
+      Row() {
+        Row() {
+          Text('取消')
+            .fontSize(14)
+            .fontWeight(600)
+            .fontColor('#5B67CA')
+            .textAlign(TextAlign.Center)
+            .width('100%')
+        }
+        .borderRadius(6)
+        .border({
+          width: 1.5,
+          color: '#5B67CA'
+        })
+        .width(91)
+        .height(35)
+        .backgroundColor(Color.White)
+        .margin({ right: 20 })
+        .onClick(() => {
+          if (this.controller != undefined) {
+            this.controller.close()
+          }
+        })
+
+
+        Button('确定', { type: ButtonType.Normal })
+          .borderRadius(6)
+          .backgroundColor('#5B67CA')
+          .width(91)
+          .height(35)
+          .fontSize(14)
+          .fontWeight(600)
+          .fontColor(Color.White)
+          .onClick(() => {
+          })
+      }
+      .margin({ top: 24, bottom: 25 })
+    }
+  }
+}
+
+
 @Entry
 @Component
 struct ProfilePage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
+  dialogController: CustomDialogController | null = new CustomDialogController({
+    builder: Logout(),
+    alignment: DialogAlignment.Center,
+    customStyle: false,
+    cornerRadius: 20,
+  })
+
+  @Builder
+  MyMenu() {
+    Menu() {
+      MenuItem({ startIcon: $r("app.media.setting"), content: "设置" })
+      MenuItem({ startIcon: $r("app.media.logout"), content: "退出" })
+        .onClick(() => {
+          if (this.dialogController != null) {
+            this.dialogController.open()
+          }
+        })
+    }
+    .width(144)
+    .radius(10)
+  }
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
@@ -73,6 +156,7 @@ struct ProfilePage {
           offsetY: 7,
           color: '#F1F7FF'
         })
+        .bindMenu(this.MyMenu())
 
         // 头像
         Column() {
