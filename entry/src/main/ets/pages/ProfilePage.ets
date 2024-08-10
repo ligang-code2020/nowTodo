@@ -109,6 +109,84 @@ struct Logout {
   }
 }
 
+@CustomDialog
+struct CreateBoard {
+  controller?: CustomDialogController
+  @State boardName: string = ''
+
+  build() {
+    Column() {
+      Text('创建面板')
+        .height(36)
+        .fontColor('#10275A')
+        .fontSize(22)
+        .fontWeight(700)
+        .margin({ top: 25 })
+
+      Column() {
+        Text('面板名称')
+          .fontSize(14)
+          .fontWeight(600)
+          .fontColor('#10275A')
+          .margin({ top: 16 })
+          .height(23)
+          .width('100%')
+
+        TextInput({ placeholder: '请输入面板名称', text: this.boardName })
+          .placeholderFont({ size: 18, weight: FontWeight.Bold })
+          .borderRadius(10)
+          .placeholderColor('#10275A')
+          .backgroundColor('#F6F6F6')
+          .type(InputType.Normal)
+          .width(281)
+          .margin({ top: 16, bottom: 25 })
+
+        Row() {
+          Row() {
+            Text('取消')
+              .fontSize(14)
+              .fontWeight(600)
+              .fontColor('#5B67CA')
+              .textAlign(TextAlign.Center)
+              .width('100%')
+          }
+          .borderRadius(6)
+          .border({
+            width: 1.5,
+            color: '#5B67CA'
+          })
+          .width(91)
+          .height(35)
+          .backgroundColor(Color.White)
+          .margin({ right: 20 })
+          .onClick(() => {
+            if (this.controller != undefined) {
+              this.controller.close()
+            }
+          })
+
+
+          Button('确定', { type: ButtonType.Normal })
+            .borderRadius(6)
+            .backgroundColor('#5B67CA')
+            .width(91)
+            .height(35)
+            .fontSize(14)
+            .fontWeight(600)
+            .fontColor(Color.White)
+            .onClick(() => {
+            })
+        }
+        .margin({ top: 24, bottom: 25 })
+
+      }
+      .padding({ left: 25, right: 30 })
+
+    }
+    .width('100%')
+  }
+}
+
 
 @Entry
 @Component
@@ -116,6 +194,12 @@ struct ProfilePage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
   dialogController: CustomDialogController | null = new CustomDialogController({
     builder: Logout(),
+    alignment: DialogAlignment.Center,
+    customStyle: false,
+    cornerRadius: 20,
+  })
+  dialogController1: CustomDialogController | null = new CustomDialogController({
+    builder: CreateBoard(),
     alignment: DialogAlignment.Center,
     customStyle: false,
     cornerRadius: 20,
@@ -197,6 +281,10 @@ struct ProfilePage {
                   title: profileBlock.title,
                   taskCount: profileBlock.taskCount,
                   icon: profileBlock.icon
+                }).onClick(() => {
+                  if (this.dialogController1 != null && profileBlock.title === '创建面板') {
+                    this.dialogController1.open()
+                  }
                 })
               }
             })

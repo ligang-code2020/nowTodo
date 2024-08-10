@@ -17,8 +17,8 @@ struct Index {
 
   build() {
     Column() {
-      // GraphicPage()
-      AddTaskPage()
+      GraphicPage()
+      // AddTaskPage()
     }
     .width('100%')
   }
