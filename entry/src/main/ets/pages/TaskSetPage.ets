@@ -1,27 +1,264 @@
 import { SearchBar } from '../component/SearchBar'
-import { CJCalendar, SelectedShape, CJCellStyle, CJDateItem, CellStatus } from 'cjcalendar'
+import { CJCalendar, SelectedShape, CJCellStyle, CJDateItem, CellStatus, OptMode, SelectedStyle } from 'cjcalendar'
 import dayjs from 'dayjs'
 
+
+interface Type {
+  typeName: string,
+  type: string,
+  typeColor: ResourceColor
+}
+
+interface Tag {
+  tagName: string,
+  tagColor: ResourceColor,
+  bgColor: ResourceColor
+}
+
+const typeList: Type[] = [
+  { typeName: '个人', type: 'personal', typeColor: '#8F99EB' },
+  { typeName: '工作', type: 'work', typeColor: '#E88B8C' },
+  { typeName: '学习', type: 'study', typeColor: '#7EC8E7' }
+]
+const tagList: Tag[] = [
+  {
+    tagName: '办公',
+    tagColor: '#8F81FE',
+    bgColor: '#ECEAFF'
+  },
+  {
+    tagName: '家庭',
+    tagColor: '#F0A58E',
+    bgColor: '#FFEFEB'
+  },
+  {
+    tagName: '日程',
+    tagColor: '#F57C96',
+    bgColor: '#FFE9ED'
+  }
+]
+const timeSortList: string[] = ['最新', '最久']
 
 @CustomDialog
 struct DateFilter {
   controller?: CustomDialogController
+  private cjCellStyle: CJCellStyle = new CJCellStyle()
+  private cjDataItem: CJDateItem = new CJDateItem(new Date())
+  cjCellStatus: CellStatus = new CellStatus()
 
   build() {
     Column() {
       CJCalendar({
-        showLunar: true,
-        selectedShape: SelectedShape.RECT,
+        optMode: OptMode.RANGE,
+        showLunar: false,
+        selectedShape: SelectedShape.CIRCLE,
         showFastToday: false,
-        // buildCellBackground: this.BuildCellBackground,
-        // buildCellBody: this.BuildCellBody,
+        selectedStyle: SelectedStyle.CLOSE,
         buildCellStyle: (item: CJDateItem) => {
           let cjCellStyle: CJCellStyle = new CJCellStyle()
-          cjCellStyle.selectFontColor = Color.Black
+          cjCellStyle.selectItemBackgroundColor = '#5B67CA'
+          cjCellStyle.selectFontColor = Color.White
+          cjCellStyle.fontSize = 14
+          cjCellStyle.fontFontWeight = 600
+          cjCellStyle.selectFontSize = 14
           return cjCellStyle
         }
       })
+      Row() {
+        Row() {
+          Text('取消')
+            .fontSize(14)
+            .fontWeight(600)
+            .fontColor('#5B67CA')
+            .textAlign(TextAlign.Center)
+            .width('100%')
+        }
+        .borderRadius(6)
+        .border({
+          width: 1.5,
+          color: '#5B67CA'
+        })
+        .width(91)
+        .height(35)
+        .backgroundColor(Color.White)
+        .margin({ right: 20 })
+        .onClick(() => {
+          if (this.controller != undefined) {
+            this.controller.close()
+          }
+        })
+
+
+        Button('确定', { type: ButtonType.Normal })
+          .borderRadius(6)
+          .backgroundColor('#5B67CA')
+          .width(91)
+          .height(35)
+          .fontSize(14)
+          .fontWeight(600)
+          .fontColor(Color.White)
+          .onClick(() => {
+          })
+      }
+      .margin({ top: 24 })
     }
+    .width(342)
+    .padding({
+      top: 24,
+      bottom: 24,
+      right: 30,
+      left: 30
+    })
+  }
+}
+
+@CustomDialog
+struct OtherFilter {
+  controller?: CustomDialogController
+
+  build() {
+    Column() {
+      Column() {
+        Text('标签排序')
+          .fontSize(15)
+          .fontWeight(600)
+          .fontColor('#000000')
+          .width('100%')
+          .height(24)
+          .margin({ bottom: 16 })
+        Row() {
+          List({ space: 6 }) {
+            ForEach(tagList, (tag: Tag, index: number) => {
+              ListItem() {
+                Row() {
+                  Text(tag.tagName).fontSize(14).fontWeight(600).fontColor(tag.tagColor)
+                }
+                .padding({
+                  left: 18,
+                  right: 19,
+                  top: 6,
+                  bottom: 5
+                })
+                .backgroundColor(tag.bgColor)
+                .borderRadius(22)
+              }
+            })
+          }
+          .height(31)
+          .listDirection(Axis.Horizontal)
+          .scrollBar(BarState.Off)
+        }
+        .width('100%')
+      }
+
+      Column() {
+        Text('类型排序')
+          .fontSize(15)
+          .fontWeight(600)
+          .fontColor('#000000')
+          .width('100%')
+          .height(24)
+          .margin({ bottom: 16 })
+        Row() {
+          List({ space: 6 }) {
+            ForEach(typeList, (tag: Type, index: number) => {
+              ListItem() {
+                Row() {
+                  Text(tag.typeName).fontSize(14).fontWeight(600).fontColor(Color.White)
+                }
+                .padding({
+                  left: 18,
+                  right: 19,
+                  top: 6,
+                  bottom: 5
+                })
+                .backgroundColor(tag.typeColor)
+                .borderRadius(22)
+              }
+            })
+          }
+          .height(31)
+          .listDirection(Axis.Horizontal)
+          .scrollBar(BarState.Off)
+        }
+        .width('100%')
+      }
+      .margin({ top: 32 })
+
+      Column() {
+        Text('时间排序')
+          .fontSize(15)
+          .fontWeight(600)
+          .fontColor('#000000')
+          .width('100%')
+          .height(24)
+          .margin({ bottom: 16 })
+        Row() {
+          List({ space: 6 }) {
+            ForEach(timeSortList, (timeType: string, index: number) => {
+              ListItem() {
+                Row() {
+                  Text(timeType).fontSize(13).fontWeight(500).fontColor('#000000')
+                }
+                .padding({
+                  left: 18,
+                  right: 19,
+                  top: 6,
+                  bottom: 5
+                })
+                .backgroundColor('#F9FAFD')
+                .borderRadius(22)
+              }
+            })
+          }
+          .height(31)
+          .listDirection(Axis.Horizontal)
+          .scrollBar(BarState.Off)
+        }
+        .width('100%')
+      }
+      .margin({ top: 32 })
+
+      Row() {
+        Row() {
+          Text('取消')
+            .fontSize(14)
+            .fontWeight(600)
+            .fontColor('#5B67CA')
+            .textAlign(TextAlign.Center)
+            .width('100%')
+        }
+        .borderRadius(6)
+        .border({
+          width: 1.5,
+          color: '#5B67CA'
+        })
+        .width(91)
+        .height(35)
+        .backgroundColor(Color.White)
+        .margin({ right: 20 })
+        .onClick(() => {
+          if (this.controller != undefined) {
+            this.controller.close()
+          }
+        })
+
+
+        Button('过滤', { type: ButtonType.Normal })
+          .borderRadius(6)
+          .backgroundColor('#5B67CA')
+          .width(91)
+          .height(35)
+          .fontSize(14)
+          .fontWeight(600)
+          .fontColor(Color.White)
+          .onClick(() => {
+          })
+      }
+      .margin({ top: 50 })
+
+    }
+    .padding(20)
   }
 }
 
@@ -32,6 +269,22 @@ struct TaskSetPage {
   dialogController: CustomDialogController | null = new CustomDialogController({
     builder: DateFilter(),
     alignment: DialogAlignment.Center,
+    cornerRadius: 20,
+    onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
+      console.info("reason=" + JSON.stringify(dismissDialogAction.reason))
+      console.log("dialog onWillDismiss")
+      if (dismissDialogAction.reason == DismissReason.PRESS_BACK) {
+        dismissDialogAction.dismiss()
+      }
+      if (dismissDialogAction.reason == DismissReason.TOUCH_OUTSIDE) {
+        dismissDialogAction.dismiss()
+      }
+    }
+  })
+  dialogController1: CustomDialogController | null = new CustomDialogController({
+    builder: OtherFilter(),
+    alignment: DialogAlignment.Center,
+    cornerRadius: 20,
     onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
       console.info("reason=" + JSON.stringify(dismissDialogAction.reason))
       console.log("dialog onWillDismiss")
@@ -80,6 +333,11 @@ struct TaskSetPage {
           .backgroundColor('#F6F6F6')
           .margin({ left: 15 })
           .justifyContent(FlexAlign.Center)
+          .onClick(() => {
+            if (this.dialogController1 != null) {
+              this.dialogController1.open()
+            }
+          })
         }
         .justifyContent(FlexAlign.SpaceBetween)
         .margin({ top: 40 })
@@ -96,7 +354,7 @@ struct TaskSetPage {
                 this.dialogController.open()
               }
             })
-          Text('2024/08/10')
+          Text('2024/08')
             .fontSize(20)
             .fontWeight(600)
             .fontColor('#000000')
