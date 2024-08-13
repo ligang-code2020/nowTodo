@@ -5,7 +5,6 @@ enum PriorityColor {
 
 
 @Component
-
 export struct TaskCard {
   @Prop taskName: string
   @Prop time: string
@@ -45,6 +44,7 @@ export struct TaskCard {
       }
       .margin({ top: 21 })
       .alignItems(VerticalAlign.Top)
+      .justifyContent(FlexAlign.SpaceBetween)
 
 
       // tag
