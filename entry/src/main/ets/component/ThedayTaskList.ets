@@ -36,16 +36,17 @@ const Tasks: Task[] = [
 
 @Component
 export struct TheDayTaskList {
+  dateTime: string = ''
   taskList: Task[] = []
 
   build() {
     Column() {
-      Text('2024/05/01')
+      Text(this.dateTime)
         .fontColor('#525F77')
         .fontSize(14)
         .fontWeight(500)
         .height(23)
-      TaskCard()
+        .margin({ bottom: 16 })
       Scroll() {
         Row({ space: 10 }) {
           ForEach(this.taskList, (task: Task, index: number) => {
@@ -58,9 +59,11 @@ export struct TheDayTaskList {
             })
           })
         }
-        .margin({ top: 16 })
-        .padding({ right: 80 })
+
       }
+      .scrollable(ScrollDirection.Horizontal)
+      .scrollBar(BarState.Off)
     }
+    .alignItems(HorizontalAlign.Start)
   }
 }

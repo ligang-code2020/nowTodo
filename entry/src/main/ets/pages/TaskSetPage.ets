@@ -11,12 +11,12 @@ interface Task {
   priority: number
 }
 
-interface PeriodTask {
+interface TheDayTask {
   dateTime: string,
   taskList: Task[]
 }
 
-const periodList: PeriodTask[] = [
+const theDayTaskList: TheDayTask[] = [
   {
     dateTime: '2024/05/01',
     taskList: [
@@ -85,6 +85,29 @@ const periodList: PeriodTask[] = [
         priority: 2
       }
     ]
+  },
+  {
+    dateTime: '2024/05/01',
+    taskList: [
+      {
+        taskName: '吃饭上上上班班班',
+        time: '09:00 - 09:15',
+        tag: ['必做', '重要'],
+        priority: 2
+      },
+      {
+        taskName: '上班嘻嘻嘻哈哈',
+        time: '09:30 - 09:45',
+        tag: ['随意'],
+        priority: 1
+      },
+      {
+        taskName: '下班3ssd',
+        time: '09:59',
+        tag: ['必做', '重要'],
+        priority: 2
+      }
+    ]
   }
 ]
 
@@ -125,7 +148,7 @@ const tagList: Tag[] = [
 const timeSortList: string[] = ['最新', '最久']
 
 @CustomDialog
-struct DateFilter {
+ struct DateFilter {
   controller?: CustomDialogController
   private cjCellStyle: CJCellStyle = new CJCellStyle()
   private cjDataItem: CJDateItem = new CJDateItem(new Date())
@@ -350,7 +373,7 @@ struct OtherFilter {
 
 @Entry
 @Component
-struct TaskSetPage {
+export  struct TaskSetPage {
   dialogController: CustomDialogController | null = new CustomDialogController({
     builder: DateFilter(),
     alignment: DialogAlignment.Center,
@@ -448,16 +471,28 @@ struct TaskSetPage {
         .margin({ top: 23 })
         .width('100%')
 
-        Column() {
-          List({ space: 16 }) {
-            ForEach(Array.from({ length: 5 }), () => {
-              ListItem() {
-                TheDayTaskList()
-              }
-            })
+        List({ space: 24 }) {
+          ForEach(theDayTaskList, (theDayTask: TheDayTask) => {
+            ListItem() {
+              TheDayTaskList({
+                dateTime: theDayTask.dateTime,
+                taskList: theDayTask.taskList
+              })
+            }
+          })
 
+          // 底部留白
+          ListItem() {
+            Column() {
+              Blank().height(100)
+            }
           }
+
         }
+        .edgeEffect(EdgeEffect.None)
+        .scrollBar(BarState.Off)
+        .layoutWeight(1)
+        .width('100%')
         .margin({ top: 24 })
 
       }
