@@ -5,13 +5,13 @@ enum PriorityColor {
 
 
 @Component
-
 export struct TaskCard {
   @Prop taskName: string
   @Prop time: string
   @Prop tag: string[]
   @Prop priority: number
   maxWidth: number | string = '70%' // 文本最大宽度，超出省略
+  cardWidth: number | string = ''
 
   build() {
     Column() {
@@ -45,6 +45,8 @@ export struct TaskCard {
       }
       .margin({ top: 21 })
       .alignItems(VerticalAlign.Top)
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width(this.cardWidth)
 
 
       // tag
@@ -76,5 +78,6 @@ export struct TaskCard {
     .alignItems(HorizontalAlign.Start)
     .borderRadius(15)
     .backgroundColor('#F9FAFD')
+    .width(this.cardWidth)
   }
 }

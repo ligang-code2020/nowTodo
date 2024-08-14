@@ -1,0 +1,331 @@
+import dayjs from 'dayjs'
+import { SearchBar } from '../component/SearchBar'
+import { TaskCard } from '../component/TaskCard'
+
+interface Type {
+  typeName: string,
+  type: string,
+  typeColor: ResourceColor
+}
+
+interface Tag {
+  tagName: string,
+  tagColor: ResourceColor,
+  bgColor: ResourceColor
+}
+
+const typeList: Type[] = [
+  { typeName: '个人', type: 'personal', typeColor: '#8F99EB' },
+  { typeName: '工作', type: 'work', typeColor: '#E88B8C' },
+  { typeName: '学习', type: 'study', typeColor: '#7EC8E7' }
+]
+const tagList: Tag[] = [
+  {
+    tagName: '办公',
+    tagColor: '#8F81FE',
+    bgColor: '#ECEAFF'
+  },
+  {
+    tagName: '家庭',
+    tagColor: '#F0A58E',
+    bgColor: '#FFEFEB'
+  },
+  {
+    tagName: '日程',
+    tagColor: '#F57C96',
+    bgColor: '#FFE9ED'
+  }
+]
+const timeSortList: string[] = ['最新', '最久']
+
+@CustomDialog
+struct OtherFilter {
+  controller?: CustomDialogController
+
+  build() {
+    Column() {
+      Column() {
+        Text('标签排序')
+          .fontSize(15)
+          .fontWeight(600)
+          .fontColor('#000000')
+          .width('100%')
+          .height(24)
+          .margin({ bottom: 16 })
+        Row() {
+          List({ space: 6 }) {
+            ForEach(tagList, (tag: Tag, index: number) => {
+              ListItem() {
+                Row() {
+                  Text(tag.tagName).fontSize(14).fontWeight(600).fontColor(tag.tagColor)
+                }
+                .padding({
+                  left: 18,
+                  right: 19,
+                  top: 6,
+                  bottom: 5
+                })
+                .backgroundColor(tag.bgColor)
+                .borderRadius(22)
+              }
+            })
+          }
+          .height(31)
+          .listDirection(Axis.Horizontal)
+          .scrollBar(BarState.Off)
+        }
+        .width('100%')
+      }
+
+      Column() {
+        Text('类型排序')
+          .fontSize(15)
+          .fontWeight(600)
+          .fontColor('#000000')
+          .width('100%')
+          .height(24)
+          .margin({ bottom: 16 })
+        Row() {
+          List({ space: 6 }) {
+            ForEach(typeList, (tag: Type, index: number) => {
+              ListItem() {
+                Row() {
+                  Text(tag.typeName).fontSize(14).fontWeight(600).fontColor(Color.White)
+                }
+                .padding({
+                  left: 18,
+                  right: 19,
+                  top: 6,
+                  bottom: 5
+                })
+                .backgroundColor(tag.typeColor)
+                .borderRadius(22)
+              }
+            })
+          }
+          .height(31)
+          .listDirection(Axis.Horizontal)
+          .scrollBar(BarState.Off)
+        }
+        .width('100%')
+      }
+      .margin({ top: 32 })
+
+      Column() {
+        Text('时间排序')
+          .fontSize(15)
+          .fontWeight(600)
+          .fontColor('#000000')
+          .width('100%')
+          .height(24)
+          .margin({ bottom: 16 })
+        Row() {
+          List({ space: 6 }) {
+            ForEach(timeSortList, (timeType: string, index: number) => {
+              ListItem() {
+                Row() {
+                  Text(timeType).fontSize(13).fontWeight(500).fontColor('#000000')
+                }
+                .padding({
+                  left: 18,
+                  right: 19,
+                  top: 6,
+                  bottom: 5
+                })
+                .backgroundColor('#F9FAFD')
+                .borderRadius(22)
+              }
+            })
+          }
+          .height(31)
+          .listDirection(Axis.Horizontal)
+          .scrollBar(BarState.Off)
+        }
+        .width('100%')
+      }
+      .margin({ top: 32 })
+
+      Row() {
+        Row() {
+          Text('取消')
+            .fontSize(14)
+            .fontWeight(600)
+            .fontColor('#5B67CA')
+            .textAlign(TextAlign.Center)
+            .width('100%')
+        }
+        .borderRadius(6)
+        .border({
+          width: 1.5,
+          color: '#5B67CA'
+        })
+        .width(91)
+        .height(35)
+        .backgroundColor(Color.White)
+        .margin({ right: 20 })
+        .onClick(() => {
+          if (this.controller != undefined) {
+            this.controller.close()
+          }
+        })
+
+
+        Button('过滤', { type: ButtonType.Normal })
+          .borderRadius(6)
+          .backgroundColor('#5B67CA')
+          .width(91)
+          .height(35)
+          .fontSize(14)
+          .fontWeight(600)
+          .fontColor(Color.White)
+          .onClick(() => {
+          })
+      }
+      .margin({ top: 50 })
+
+    }
+    .padding(20)
+  }
+}
+
+
+@Component
+@Entry
+struct BoardTaskPage {
+  dialogController1: CustomDialogController | null = new CustomDialogController({
+    builder: OtherFilter(),
+    alignment: DialogAlignment.Center,
+    cornerRadius: 20,
+    onWillDismiss: (dismissDialogAction: DismissDialogAction) => {
+      console.info("reason=" + JSON.stringify(dismissDialogAction.reason))
+      console.log("dialog onWillDismiss")
+      if (dismissDialogAction.reason == DismissReason.PRESS_BACK) {
+        dismissDialogAction.dismiss()
+      }
+      if (dismissDialogAction.reason == DismissReason.TOUCH_OUTSIDE) {
+        dismissDialogAction.dismiss()
+      }
+    }
+  })
+  @State private selectedDate: Date = new Date('2024-04-23')
+
+  build() {
+    Column() {
+      Row() {
+        Image($r('app.media.left_return')).width(24).aspectRatio(1)
+      }
+      .width(48)
+      .height(48)
+      .borderRadius(14)
+      .justifyContent(FlexAlign.Center)
+      .shadow({
+        offsetX: -3,
+        offsetY: 7,
+        radius: 13,
+        color: '#F1F7FF'
+      })
+      .position({ left: 24, top: 45 })
+
+      Text('个人')
+        .height(29)
+        .fontColor('#000000')
+        .fontSize(18)
+        .fontWeight(700)
+        .margin({ top: 55 })
+
+      Column() {
+        Row() {
+          SearchBar().layoutWeight(1)
+          Row() {
+            Image($r('app.media.filter')).width(24).aspectRatio(1)
+          }
+          .borderRadius(15)
+          .height(50)
+          .width(50)
+          .backgroundColor('#F6F6F6')
+          .margin({ left: 15 })
+          .justifyContent(FlexAlign.Center)
+          .onClick(() => {
+            if (this.dialogController1 != null) {
+              this.dialogController1.open()
+            }
+          })
+        }
+        .justifyContent(FlexAlign.SpaceBetween)
+        .margin({ top: 30 })
+        .height(50)
+
+        Row() {
+          Image($r('app.media.calendar'))
+            .width(24)
+            .aspectRatio(1)
+            .margin({ right: 10 })
+            .onClick(() => {
+              CalendarPickerDialog.show({
+                selected: this.selectedDate,
+                onAccept: (value) => {
+                  console.info("calendar onAccept:" + JSON.stringify(value))
+                  this.selectedDate = value
+                },
+                onCancel: () => {
+                  console.info("calendar onCancel")
+                }
+              })
+            })
+          Text(dayjs(this.selectedDate).format('YYYY/MM/DD'))
+            .fontSize(20)
+            .fontWeight(600)
+            .fontColor('#000000')
+            .height(30)
+        }
+        .margin({ top: 23 })
+        .width('100%')
+
+        Column() {
+          List({ space: 18 }) {
+            ForEach(Array.from({ length: 10 }), () => {
+              ListItem() {
+                TaskCard({
+                  taskName: 'xxxxx',
+                  time: '07:00',
+                  tag: ['重要', '哈哈'],
+                  priority: 1,
+                  cardWidth: '100%'
+                })
+              }
+            })
+
+          }
+          .height(400)
+          .scrollBar(BarState.Off)
+        }
+        .margin({ top: 24 })
+
+      }
+      .padding({ left: 24, right: 24 })
+
+      Row() {
+        Image($r('app.media.add1')).width(28).aspectRatio(1)
+      }
+      .position({ bottom: 36, right: 24 })
+      .borderRadius(50)
+      .width(50)
+      .aspectRatio(1)
+      .justifyContent(FlexAlign.Center)
+      .linearGradient({
+        repeating: false,
+        direction: GradientDirection.LeftTop,
+        colors: [['#5B67CA', 0], ['#A3A9D9', 1]]
+      })
+      .shadow({
+        offsetX: -3,
+        offsetY: 7,
+        radius: 13,
+        color: '#F1F7FF'
+      })
+
+    }
+    .height('100%')
+    .width('100%')
+  }
+}

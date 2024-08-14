@@ -8,6 +8,8 @@
     "pages/TasksPage",
     "pages/GraphicPage",
     "pages/ProfilePage",
-    "pages/AddTaskPage"
+    "pages/AddTaskPage",
+    "pages/DetailTaskPage",
+    "pages/TaskSetPage"
   ]
 }

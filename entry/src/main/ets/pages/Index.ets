@@ -4,6 +4,7 @@ import { TasksPage } from './TasksPage'
 import { GraphicPage } from './GraphicPage'
 import { CalendarComp } from '../component/CalendarComp'
 import { AddTaskPage } from './AddTaskPage'
+import {TaskSetPage} from './TaskSetPage'
 import display from '@ohos.display';
 
 
@@ -17,8 +18,8 @@ struct Index {
 
   build() {
     Column() {
-      // GraphicPage()
-      AddTaskPage()
+      TaskSetPage()
+      // AddTaskPage()
     }
     .width('100%')
   }

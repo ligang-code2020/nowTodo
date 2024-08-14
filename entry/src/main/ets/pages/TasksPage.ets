@@ -17,78 +17,78 @@ interface PeriodTask {
   taskList: Task[]
 }
 
-// const periodList: PeriodTask[] = [
-//   {
-//     periodTime: '07:00',
-//     taskList: [
-//       {
-//         taskName: '吃饭上上上班班班',
-//         time: '07:00 - 7:15',
-//         tag: ['必做', '重要'],
-//         priority: 2
-//       },
-//       {
-//         taskName: '上班嘻嘻嘻哈哈',
-//         time: '07:30 - 07:45',
-//         tag: ['随意'],
-//         priority: 1
-//       },
-//       {
-//         taskName: '下班3ssd',
-//         time: '07:59',
-//         tag: ['必做', '重要'],
-//         priority: 2
-//       }
-//     ]
-//   },
-//   {
-//     periodTime: '08:00',
-//     taskList: [
-//       {
-//         taskName: '吃饭上上上班班班',
-//         time: '08:00 - 8:15',
-//         tag: ['必做', '重要'],
-//         priority: 2
-//       },
-//       {
-//         taskName: '上班嘻嘻嘻哈哈',
-//         time: '08:30 - 08:45',
-//         tag: ['随意'],
-//         priority: 1
-//       },
-//       {
-//         taskName: '下班3ssd',
-//         time: '08:59',
-//         tag: ['必做', '重要'],
-//         priority: 2
-//       }
-//     ]
-//   },
-//   {
-//     periodTime: '09:00',
-//     taskList: [
-//       {
-//         taskName: '吃饭上上上班班班',
-//         time: '09:00 - 09:15',
-//         tag: ['必做', '重要'],
-//         priority: 2
-//       },
-//       {
-//         taskName: '上班嘻嘻嘻哈哈',
-//         time: '09:30 - 09:45',
-//         tag: ['随意'],
-//         priority: 1
-//       },
-//       {
-//         taskName: '下班3ssd',
-//         time: '09:59',
-//         tag: ['必做', '重要'],
-//         priority: 2
-//       }
-//     ]
-//   }
-// ]
-const periodList: PeriodTask[] = []
+const periodList: PeriodTask[] = [
+  {
+    periodTime: '07:00',
+    taskList: [
+      {
+        taskName: '吃饭上上上班班班',
+        time: '07:00 - 7:15',
+        tag: ['必做', '重要'],
+        priority: 2
+      },
+      {
+        taskName: '上班嘻嘻嘻哈哈',
+        time: '07:30 - 07:45',
+        tag: ['随意'],
+        priority: 1
+      },
+      {
+        taskName: '下班3ssd',
+        time: '07:59',
+        tag: ['必做', '重要'],
+        priority: 2
+      }
+    ]
+  },
+  {
+    periodTime: '08:00',
+    taskList: [
+      {
+        taskName: '吃饭上上上班班班',
+        time: '08:00 - 8:15',
+        tag: ['必做', '重要'],
+        priority: 2
+      },
+      {
+        taskName: '上班嘻嘻嘻哈哈',
+        time: '08:30 - 08:45',
+        tag: ['随意'],
+        priority: 1
+      },
+      {
+        taskName: '下班3ssd',
+        time: '08:59',
+        tag: ['必做', '重要'],
+        priority: 2
+      }
+    ]
+  },
+  {
+    periodTime: '09:00',
+    taskList: [
+      {
+        taskName: '吃饭上上上班班班',
+        time: '09:00 - 09:15',
+        tag: ['必做', '重要'],
+        priority: 2
+      },
+      {
+        taskName: '上班嘻嘻嘻哈哈',
+        time: '09:30 - 09:45',
+        tag: ['随意'],
+        priority: 1
+      },
+      {
+        taskName: '下班3ssd',
+        time: '09:59',
+        tag: ['必做', '重要'],
+        priority: 2
+      }
+    ]
+  }
+]
+
 
 @Entry
 @Component
