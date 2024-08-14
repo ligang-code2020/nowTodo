@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { SearchBar } from '../component/SearchBar'
 import { TaskCard } from '../component/TaskCard'
 
@@ -206,6 +207,7 @@ struct BoardTaskPage {
       }
     }
   })
+  @State private selectedDate: Date = new Date('2024-04-23')
 
   build() {
     Column() {
@@ -259,9 +261,18 @@ struct BoardTaskPage {
             .aspectRatio(1)
             .margin({ right: 10 })
             .onClick(() => {
-
+              CalendarPickerDialog.show({
+                selected: this.selectedDate,
+                onAccept: (value) => {
+                  console.info("calendar onAccept:" + JSON.stringify(value))
+                  this.selectedDate = value
+                },
+                onCancel: () => {
+                  console.info("calendar onCancel")
+                }
+              })
             })
-          Text('2024/08/01')
+          Text(dayjs(this.selectedDate).format('YYYY/MM/DD'))
             .fontSize(20)
             .fontWeight(600)
             .fontColor('#000000')
@@ -272,22 +283,46 @@ struct BoardTaskPage {
 
         Column() {
           List({ space: 18 }) {
-            ForEach(Array.from({ length: 5 }), () => {
+            ForEach(Array.from({ length: 10 }), () => {
               ListItem() {
                 TaskCard({
                   taskName: 'xxxxx',
                   time: '07:00',
                   tag: ['重要', '哈哈'],
-                  priority: 1
+                  priority: 1,
+                  cardWidth: '100%'
                 })
               }
             })
 
           }
+          .height(400)
+          .scrollBar(BarState.Off)
         }
         .margin({ top: 24 })
+
       }
       .padding({ left: 24, right: 24 })
+
+      Row() {
+        Image($r('app.media.add1')).width(28).aspectRatio(1)
+      }
+      .position({ bottom: 36, right: 24 })
+      .borderRadius(50)
+      .width(50)
+      .aspectRatio(1)
+      .justifyContent(FlexAlign.Center)
+      .linearGradient({
+        repeating: false,
+        direction: GradientDirection.LeftTop,
+        colors: [['#5B67CA', 0], ['#A3A9D9', 1]]
+      })
+      .shadow({
+        offsetX: -3,
+        offsetY: 7,
+        radius: 13,
+        color: '#F1F7FF'
+      })
 
     }
     .height('100%')
