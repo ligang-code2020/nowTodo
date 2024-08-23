@@ -5,7 +5,8 @@
     "dayjs": "^1.11.7",
     "@ohos/mpchart": "^3.0.9",
     "@mcui/mccharts": "^2.0.6",
-    "cjcalendar": "^2.1.1"
+    "cjcalendar": "^2.1.1",
+    "@ohos/axios": "^2.2.2"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.18",
