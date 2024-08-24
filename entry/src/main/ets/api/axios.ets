@@ -19,6 +19,7 @@ import { systemDateTime } from '@kit.BasicServicesKit';
 import { HashMap } from '@kit.ArkTS';
 // import Constant from '../common/Constant';
 import { StringBuilder } from '../utils/StringBuilder';
+import { router } from '@kit.ArkUI'
 
 
 export class ResponseResult {
@@ -41,12 +42,13 @@ const timeout = 20000 // 20s超时
 const baseUrl = '30.128.56.202:3000'
 
 export function httpDefaultSetting() {
+  console.log(TAG, 'xxxx111')
   // default settings
   axios.defaults.baseURL = baseUrl;
   axios.defaults.timeout = timeout;
 
   // default headers
-  axios.defaults.headers.common['Client-Type'] = 'xxx';
+  // axios.defaults.headers.common['Client-Type'] = 'xxx';
   axios.defaults.headers.common['Client-Version'] = '1.0.4';
   axios.defaults.headers.common['Os'] = 'hmos';
   axios.defaults.headers.common['Token'] = 'xxx';
@@ -56,6 +58,7 @@ export function httpDefaultSetting() {
 
   // 添加请求拦截器
   axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+    console.log(TAG, '拦截前:' + JSON.stringify(config))
     return transRequest(config);
   }, (error: AxiosError) => {
     return Promise.reject(error);
@@ -63,6 +66,7 @@ export function httpDefaultSetting() {
 
   // 添加响应拦截器
   axios.interceptors.response.use((response: AxiosResponse) => {
+    console.log(TAG, '拦截后:' + JSON.stringify(response))
     return transResponse(response);
   }, (error: AxiosError) => {
     return Promise.reject(error);
@@ -216,7 +220,27 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
           if (isResultSuccess(response.data)) {
             resolve(response.data.data);
           } else {
-            console.log("失败",'xxxxxx')
+            if (response.data.statusCode === 401) {
+              console.log(TAG, '用户信息失效，请重新登录')
+              AlertDialog.show({
+                title: '重新登录',
+                cornerRadius: 20,
+                message: '用户信息失效，请重新登录',
+                autoCancel: false,
+                alignment: DialogAlignment.Center,
+                height: 200,
+                confirm: {
+                  value: '重新登录',
+                  action: () => {
+                    console.info('Button-clicking callback')
+                    router.pushUrl({
+                      url: 'pages/LoginPage'
+                    })
+                  }
+                },
+              })
+            }
+
             const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
             reject(e);
           }

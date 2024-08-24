@@ -10,6 +10,7 @@
     "pages/ProfilePage",
     "pages/AddTaskPage",
     "pages/DetailTaskPage",
-    "pages/TaskSetPage"
+    "pages/TaskSetPage",
+    "pages/PhoneVerifyPage"
   ]
 }

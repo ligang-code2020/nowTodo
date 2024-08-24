@@ -19,6 +19,6 @@ export class LoginApi {
 
   // 查找用户
   static findUser(findUserParams: FindUser): Promise<ResponseResult> {
-    return httpPost('30.128.56.202:3000/api/user/findUser', false, findUserParams)
+    return httpPost('/api/user/findUser', false, findUserParams)
   }
 }
