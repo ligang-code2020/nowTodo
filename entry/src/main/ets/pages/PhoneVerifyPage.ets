@@ -1,9 +1,33 @@
+import { promptAction, router } from '@kit.ArkUI'
+
 @Entry
 @Component
 struct PhoneVerifyPage {
   @State buttonFontColor: ResourceColor = '#9c9c9c'
-  @State phone: string = ''
-  @State code: string = ''
+  @State phone: string = '' // 手机号
+  @State code: string = '' // 验证码
+  @State count: number = 0 // 倒计时数值
+  private intervalID: number = -1 // 倒计时定时器
+
+  // 开始倒计时
+  startCountDown() {
+    // 初始化倒计时秒数
+    this.count = 60
+    // 关闭旧的定时器
+    clearInterval(this.intervalID)
+    // 开启定时器
+    this.intervalID = setInterval(() => {
+      this.count--
+      if (this.count <= 0) {
+        clearInterval(this.intervalID)
+      }
+    }, 1000)
+  }
+
+  // 页面销毁，停止倒计时，释放资源
+  aboutToDisappear() {
+    clearInterval(this.intervalID)
+  }
 
   build() {
     Column() {
@@ -48,20 +72,50 @@ struct PhoneVerifyPage {
           })
           .width('100%')
 
-        Row() {
+        Stack({ alignContent: Alignment.End }) {
           TextInput({ placeholder: '请输入验证码' })
             .placeholderFont({ size: 18, weight: 600 })
             .border({ width: 0 })
             .borderRadius(0)
+            .maxLength(6)
             .placeholderColor('#C6CEDD')
             .backgroundColor(Color.White)
+            .padding({
+              bottom: 10,
+              top: 0,
+              left: 0,
+              right: 0
+            })
+
+          if (this.count > 0) {
+            Text(this.count + '秒后重发')
+              .fontSize(14)
+              .fontColor('#C6CEDD')
+              .fontWeight(600)
+              .margin({ bottom: 5 })
+          } else {
+            Text('获取验证码')
+              .fontSize(14)
+              .fontWeight(600)
+              .fontColor('#409eff')
+              .enabled(this.phone.length > 0)
+              .margin({ bottom: 5 })
+              .onClick(() => {
+                console.log("xxx", "kkaishi")
+                // 用户提醒
+                promptAction.showToast({ message: '短信发送到手机上，请注意查收' })
+                // 界面更新倒计时
+                this.startCountDown()
+              })
+          }
+
         }
         .margin({ top: 32 })
         .width('100%')
         .border({ width: { bottom: 1 }, color: '#E3E8F1' })
 
 
-        Button('获取验证码', { type: ButtonType.Normal })
+        Button('登录', { type: ButtonType.Normal })
           .margin({ top: 50 })
           .width('100%')
           .borderRadius(50)
@@ -88,7 +142,25 @@ struct PhoneVerifyPage {
         Text() {
           Span('已阅读并同意')
           Span('《隐私协议》').fontColor('#3274f6')
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/ProtocolPage',
+                params: {
+                  title: '隐私协议',
+                  protocolKey: 'privacyAgreement'
+                }
+              })
+            })
           Span('《用户服务协议》').fontColor('#3274f6')
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/ProtocolPage',
+                params: {
+                  title: '用户服务协议',
+                  protocolKey: 'userServiceAgreement'
+                }
+              })
+            })
         }.fontSize(14).fontColor('#666').lineHeight(22)
       }
       .alignItems(VerticalAlign.Top)

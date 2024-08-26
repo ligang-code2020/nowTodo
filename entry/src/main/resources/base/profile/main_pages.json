@@ -11,6 +11,7 @@
     "pages/AddTaskPage",
     "pages/DetailTaskPage",
     "pages/TaskSetPage",
-    "pages/PhoneVerifyPage"
+    "pages/PhoneVerifyPage",
+    "pages/ProtocolPage"
   ]
 }
