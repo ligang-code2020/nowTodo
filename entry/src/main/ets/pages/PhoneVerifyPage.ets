@@ -1,5 +1,6 @@
 import { promptAction, router } from '@kit.ArkUI'
 
+
 @Entry
 @Component
 struct PhoneVerifyPage {
@@ -7,7 +8,70 @@ struct PhoneVerifyPage {
   @State phone: string = '' // 手机号
   @State code: string = '' // 验证码
   @State count: number = 0 // 倒计时数值
+  @State isShow: boolean = false // 协议同意弹窗
+  @State isChecked: boolean = false // 是否勾选s
+  @State sheetHeight: number = 200
   private intervalID: number = -1 // 倒计时定时器
+
+  @Builder
+  ProtocolSheet() {
+    Column() {
+      Text('请阅读并同意以下条款')
+        .fontSize(16)
+        .fontWeight(600)
+        .height(50)
+        .width('100%')
+        .textAlign(TextAlign.Center)
+        .border({
+          color: '#E8E9F3',
+          width: {
+            bottom: 1
+          }
+        })
+      Column() {
+        Text() {
+          Span('《隐私协议》').fontColor('#3274f6')
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/ProtocolPage',
+                params: {
+                  title: '隐私协议',
+                  protocolKey: 'privacyAgreement'
+                }
+              })
+            })
+          Span('《用户服务协议》').fontColor('#3274f6')
+            .onClick(() => {
+              router.pushUrl({
+                url: 'pages/ProtocolPage',
+                params: {
+                  title: '用户服务协议',
+                  protocolKey: 'userServiceAgreement'
+                }
+              })
+            })
+        }.fontSize(14).fontColor('#666').lineHeight(22).margin({ top: 20, bottom: 50 })
+
+        Blank()
+
+        Button('同意并继续', { type: ButtonType.Normal })
+          .width('70%')
+          .borderRadius(50)
+          .height(45)
+          .fontSize(16)
+          .fontWeight(600)
+          .fontColor(Color.White)
+          .backgroundColor('#f82314')
+          .onClick(() => {
+            this.isChecked = true
+            this.isShow = false
+          })
+          .margin({ bottom: 10 })
+      }
+    }
+    .gesture(PanGesture({ direction: PanDirection.Up | PanDirection.Down }))
+    .height('100%')
+  }
 
   // 开始倒计时
   startCountDown() {
@@ -64,7 +128,7 @@ struct PhoneVerifyPage {
           .placeholderColor('#C6CEDD')
           .backgroundColor(Color.White)
           .type(InputType.Number)
-          .maxLength(13)
+          .maxLength(11)
           .inputFilter('[0-9 ]', (e) => {
             console.log(JSON.stringify(e))
           })
@@ -73,11 +137,13 @@ struct PhoneVerifyPage {
           .width('100%')
 
         Stack({ alignContent: Alignment.End }) {
-          TextInput({ placeholder: '请输入验证码' })
+          TextInput({ placeholder: '请输入验证码', text: $$this.code })
             .placeholderFont({ size: 18, weight: 600 })
             .border({ width: 0 })
             .borderRadius(0)
             .maxLength(6)
+            .fontSize(18)
+            .fontWeight(600)
             .placeholderColor('#C6CEDD')
             .backgroundColor(Color.White)
             .padding({
@@ -122,13 +188,31 @@ struct PhoneVerifyPage {
           .height(50)
           .fontSize(18)
           .fontWeight(600)
-          .fontColor(this.phone !== '' ? Color.White : this.buttonFontColor)
+          .fontColor(this.phone !== '' && this.code !== '' ? Color.White : this.buttonFontColor)
           .linearGradient({
             repeating: false,
             direction: GradientDirection.LeftBottom,
-            colors: this.phone !== '' ? [['#686DE0', 0], ['#4834D4', 1]] : [['#e5e5e5', 0], ['#e5e5e5', 1]]
+            colors: this.phone !== '' && this.code !== '' ? [['#686DE0', 0], ['#4834D4', 1]] :
+              [['#e5e5e5', 0], ['#e5e5e5', 1]]
+          })
+          .bindSheet($$this.isShow, this.ProtocolSheet(), {
+            height: this.sheetHeight,
+            backgroundColor: Color.White,
+            blurStyle: BlurStyle.Thick,
+            showClose: false
           })
           .onClick(() => {
+            if (this.phone === '' || this.code === '') {
+              return
+            } else {
+              console.log('xxxxx')
+              // 如果登录前没有勾选，则弹出
+              if (!this.isChecked) {
+                this.isShow = true
+              }
+            }
+
+
           })
 
 
@@ -138,7 +222,14 @@ struct PhoneVerifyPage {
       Blank()
 
       Row() {
-        Checkbox().width(14).margin({ top: 5 })
+        Checkbox()
+          .select(this.isChecked)
+          .width(14)
+          .margin({ top: 5 })
+          .onChange((value: boolean) => {
+            this.isChecked = value
+          })
+
         Text() {
           Span('已阅读并同意')
           Span('《隐私协议》').fontColor('#3274f6')
