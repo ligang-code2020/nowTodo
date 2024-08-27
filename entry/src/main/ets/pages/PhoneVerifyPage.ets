@@ -93,6 +93,12 @@ struct PhoneVerifyPage {
     clearInterval(this.intervalID)
   }
 
+  validatePhone(phone: string): boolean {
+    const reg =
+      new RegExp('^(?:\\+?86)?1(?:3\\d{3}|5[^4\\D]\\d{2}|8\\d{3}|7(?:[235-8]\\d{2}|4(?:0\\d|1[0-2]|9\\d))|9[0-35-9]\\d{2}|66\\d{2})\\d{6}$')
+    return reg.test(phone)
+  }
+
   build() {
     Column() {
       Row() {
@@ -100,6 +106,9 @@ struct PhoneVerifyPage {
       }
       .width('100%')
       .padding(20)
+      .onClick(() => {
+        router.back()
+      })
 
       Column() {
         Text('验证码登录')
@@ -167,11 +176,14 @@ struct PhoneVerifyPage {
               .enabled(this.phone.length > 0)
               .margin({ bottom: 5 })
               .onClick(() => {
-                console.log("xxx", "kkaishi")
-                // 用户提醒
-                promptAction.showToast({ message: '短信发送到手机上，请注意查收' })
-                // 界面更新倒计时
-                this.startCountDown()
+                if (!this.validatePhone(this.phone)) {
+                  promptAction.showToast({ message: '手机号格式错误' })
+                } else {
+                  // 用户提醒
+                  promptAction.showToast({ message: '短信发送到手机上，请注意查收' })
+                  // 界面更新倒计时
+                  this.startCountDown()
+                }
               })
           }
 

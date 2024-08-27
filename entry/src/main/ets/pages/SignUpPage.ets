@@ -1,9 +1,27 @@
 import { CustomInput } from '../component/CustomInput'
-import { router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
 
 @Entry
 @Component
 struct SignUpPage {
+  @State username: string = ''
+  @State password: string = ''
+  @State rePassword: string = ''
+  @State passwordError: boolean = false
+  @State passwordErrorTxt: string = ''
+
+  validateUsername(username: string): boolean {
+    const reg =
+      new RegExp('^[\u4e00-\u9fa5a-zA-Z0-9]{6,12}$')
+    return reg.test(username)
+  }
+
+  validatePassword(password: string): boolean {
+    const reg =
+      new RegExp('^.{8,}$') // 至少一个字母，一个数字，长度大于8
+    return reg.test(password)
+  }
+
   build() {
     Column() {
       Text('注册')
@@ -15,24 +33,46 @@ struct SignUpPage {
 
       Column() {
         CustomInput({
-          placeholder: '请输入用户名',
+          text: this.username,
+          placeholder: '请输入用户名 (6-12个字符)',
           preIcon: $r('app.media.username'),
           inputType: InputType.Normal
         })
-        // CustomInput({
-        //   placeholder: '请输入邮箱',
-        //   preIcon: $r('app.media.email'),
-        //   inputType: InputType.Normal
-        // })
         CustomInput({
-          placeholder: '请输入密码',
+          text: this.password,
+          placeholder: '密码（至少8个字符）',
+          preIcon: $r('app.media.password'),
+          inputType: InputType.Password,
+          onIconSrc: $r('app.media.show'),
+          offIconSrc: $r('app.media.hide')
+        })
+        CustomInput({
+          text: this.rePassword,
+          placeholder: '确认密码',
           preIcon: $r('app.media.password'),
           inputType: InputType.Password,
           onIconSrc: $r('app.media.show'),
           offIconSrc: $r('app.media.hide'),
         })
+        if (this.passwordError) {
+          Text('两次输入密码不一致！')
+            .width('100%')
+            .fontSize(14)
+            .fontColor(Color.Red)
+            .margin({ top: 10 })
+            .textAlign(TextAlign.End)
+            .height(16)
+        } else {
+          Row()
+            .height(16)
+            .width('100%')
+            .margin({ top: 10 })
+            .backgroundColor(Color.White)
+
+        }
+
       }
-      .margin({ top: 65 })
+      .margin({ top: 60 })
 
       Button('创建', { type: ButtonType.Normal })
         .backgroundColor('#5B67CA')
@@ -42,6 +82,30 @@ struct SignUpPage {
         .width(304)
         .height(52)
         .margin({ top: 55 })
+        .onClick(() => {
+          console.log("sksksks", this.password, this.rePassword)
+          if (!this.validateUsername(this.username)) {
+            promptAction.showToast({ message: '用户名格式错误' })
+            return
+          }
+
+          if (!this.validatePassword(this.password)) {
+            promptAction.showToast({ message: '设置密码不符合格式' })
+            return
+          }
+
+          if (this.password !== this.rePassword) {
+            this.passwordError = true
+          } else {
+            this.passwordError = false
+            // 调整登录页
+            router.pushUrl({
+              url: 'pages/PhoneVerifyPage'
+            })
+          }
+
+
+        })
 
       Row() {
         Row()

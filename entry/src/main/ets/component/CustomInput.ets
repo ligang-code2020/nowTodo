@@ -1,5 +1,6 @@
 @Component
 export struct CustomInput {
+  @Link text: string
   placeholder: string = ''
   preIcon?: Resource = $r('app.media.password')
   onIconSrc?: Resource = $r('app.media.show')
@@ -9,7 +10,7 @@ export struct CustomInput {
   build() {
     Row() {
       Image(this.preIcon).width(24)
-      TextInput({ placeholder: this.placeholder })
+      TextInput({ placeholder: this.placeholder, text: $$this.text })
         .border({ width: 0 })
         .borderRadius(0)
         .placeholderColor('#C6CEDD')

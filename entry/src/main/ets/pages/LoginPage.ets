@@ -4,6 +4,9 @@ import { CustomInput } from '../component/CustomInput'
 @Entry
 @Component
 struct LoginPage {
+  @State username: string = ''
+  @State password: string = ''
+
   build() {
     Column() {
       Text('登录')
@@ -14,11 +17,13 @@ struct LoginPage {
         .width('100%')
 
       CustomInput({
+        text: this.username,
         placeholder: '请输入邮箱或者用户名',
         preIcon: $r('app.media.email'),
         inputType: InputType.Normal
       })
       CustomInput({
+        text: this.password,
         placeholder: '请输入密码',
         preIcon: $r('app.media.password'),
         onIconSrc: $r('app.media.show'),
