@@ -1,5 +1,9 @@
 import { CustomInput } from '../component/CustomInput'
 import { promptAction, router } from '@kit.ArkUI'
+import { LoginApi } from '../api/login'
+import { CryptoJS } from '@ohos/crypto-js'
+import { secret } from '../utils/Secret'
+import { systemDateTime } from '@kit.BasicServicesKit'
 
 @Entry
 @Component
@@ -9,6 +13,7 @@ struct SignUpPage {
   @State rePassword: string = ''
   @State passwordError: boolean = false
   @State passwordErrorTxt: string = ''
+  @State usernameExist: boolean = false
 
   validateUsername(username: string): boolean {
     const reg =
@@ -20,6 +25,15 @@ struct SignUpPage {
     const reg =
       new RegExp('^.{8,}$') // 至少一个字母，一个数字，长度大于8
     return reg.test(password)
+  }
+
+  async validateUsernameExist(username: string): Promise<boolean> {
+    let user = await LoginApi.findUser({ username })
+    if (user) {
+      return true
+    } else {
+      return false
+    }
   }
 
   build() {
@@ -38,13 +52,32 @@ struct SignUpPage {
           preIcon: $r('app.media.username'),
           inputType: InputType.Normal
         })
+        if (this.usernameExist) {
+          Text('用户名已经存在')
+            .width('100%')
+            .fontSize(14)
+            .fontColor(Color.Red)
+            .margin({ top: 10 })
+            .textAlign(TextAlign.End)
+            .height(16)
+        } else {
+          Row()
+            .height(16)
+            .width('100%')
+            .margin({ top: 10 })
+            .backgroundColor(Color.White)
+
+        }
+
+
         CustomInput({
           text: this.password,
           placeholder: '密码（至少8个字符）',
           preIcon: $r('app.media.password'),
           inputType: InputType.Password,
           onIconSrc: $r('app.media.show'),
-          offIconSrc: $r('app.media.hide')
+          offIconSrc: $r('app.media.hide'),
+          marginValue: 6
         })
         CustomInput({
           text: this.rePassword,
@@ -82,8 +115,20 @@ struct SignUpPage {
         .width(304)
         .height(52)
         .margin({ top: 55 })
-        .onClick(() => {
-          console.log("sksksks", this.password, this.rePassword)
+        .onClick(async () => {
+          LoginApi.getPhoneCode({
+            phone: '13874848',
+            code: '23244'
+          }).then(res => {
+            console.log("res", JSON.stringify(res))
+          })
+          return
+          this.usernameExist = await this.validateUsernameExist(this.username)
+          if (this.usernameExist) {
+            return
+          }
+
+          console.log("xxx", this.password, this.rePassword)
           if (!this.validateUsername(this.username)) {
             promptAction.showToast({ message: '用户名格式错误' })
             return

@@ -197,7 +197,7 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
   Logger.debug(TAG, "httpPost: ");
   return new Promise<D>((resolve: Function, reject: Function) => {
     let startTime = systemDateTime.getTime()
-    axios.post(url, isFormUrlencoded ? getRequestFormData(data) : data, {
+    axios.post(`${baseUrl}${url}`, isFormUrlencoded ? getRequestFormData(data) : data, {
       headers: buildPostRequestHeader(isFormUrlencoded, headers),
       // 指定请求超时的毫秒数(0 表示无超时时间)
       timeout: timeout, // 超时

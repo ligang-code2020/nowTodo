@@ -1,4 +1,7 @@
+import CryptoJS from '@ohos/crypto-js'
 import { httpGet, httpPost, ResponseResult } from './axios'
+import { secret } from '../utils/Secret'
+import { systemDateTime } from '@kit.BasicServicesKit'
 
 
 interface Login {
@@ -8,6 +11,11 @@ interface Login {
 
 interface FindUser {
   username: string
+}
+
+interface PhoneCode {
+  phone: string,
+  code: string
 }
 
 
@@ -20,5 +28,19 @@ export class LoginApi {
   // 查找用户
   static findUser(findUserParams: FindUser): Promise<ResponseResult> {
     return httpPost('/api/user/findUser', false, findUserParams)
+  }
+
+  // 获取手机验证码
+  static getPhoneCode(getPhoneCode: PhoneCode): Promise<ResponseResult> {
+    const hex: string = CryptoJS.HmacSHA256('1724831029000' + '\n' + secret, secret).toString()
+    let word: string = CryptoJS.enc.Hex.parse(hex)
+    let signature: string = CryptoJS.enc.Base64.stringify(word)
+
+    console.log("xxxx", signature)
+
+    return httpPost('/api/user/getPhoneCode', false, getPhoneCode, {}, {
+      timestamp: 1724831029000,
+      signature
+    })
   }
 }

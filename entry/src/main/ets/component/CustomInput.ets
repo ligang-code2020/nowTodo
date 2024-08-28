@@ -6,6 +6,7 @@ export struct CustomInput {
   onIconSrc?: Resource = $r('app.media.show')
   offIconSrc?: Resource = $r('app.media.hide')
   inputType: InputType = InputType.Normal
+  marginValue: number = 32
 
   build() {
     Row() {
@@ -18,7 +19,7 @@ export struct CustomInput {
         .passwordIcon({ onIconSrc: this.onIconSrc, offIconSrc: this.offIconSrc })
         .type(this.inputType)
     }
-    .margin({ top: 32 })
+    .margin({ top: this.marginValue })
     .width('100%')
     .border({ width: { bottom: 1 }, color: '#E3E8F1' })
   }
