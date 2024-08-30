@@ -1,31 +1,34 @@
 import InitPage from './InitPage'
 import { HomePage } from './HomePage'
-import { TasksPage } from './TasksPage'
-import { GraphicPage } from './GraphicPage'
-import { CalendarComp } from '../component/CalendarComp'
-import { AddTaskPage } from './AddTaskPage'
-import { TaskSetPage } from './TaskSetPage'
+import { LoginPage } from './LoginPage'
 import display from '@ohos.display';
 import { Logger } from '../utils/Logger'
-import { LoginApi } from '../api/login'
+
+
 
 
 @Component
 @Entry
 struct Index {
-  aboutToAppear(): void {
-    console.log("屏幕", JSON.stringify(display.getDefaultDisplaySync()))
-    console.log("xxxx", "二〇二四年六月廿七".slice(-2))
-    LoginApi.findUser({
-      username: "xxxx"
-    })
+  pathStack: NavPathStack = new NavPathStack()
 
+  aboutToAppear(): void {
+    AppStorage.setOrCreate("PathStack", this.pathStack) // 定义全局页面栈
+    console.log("屏幕", JSON.stringify(display.getDefaultDisplaySync()))
   }
 
   build() {
-    Column() {
-      TasksPage()
+    Navigation(this.pathStack) {
+      Column() {
+        LoginPage()
+      }
+      .width('100%')
+      .height('100%')
     }
-    .width('100%')
+    .height('100%')
+    .hideTitleBar(true)
+    .mode(NavigationMode.Stack)
+
   }
 }
+

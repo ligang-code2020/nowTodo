@@ -8,7 +8,7 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
 
     // 初始化 axios 配置
-    httpDefaultSetting()
+    // httpDefaultSetting()
   }
 
   onDestroy(): void {

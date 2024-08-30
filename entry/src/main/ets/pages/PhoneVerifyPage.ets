@@ -1,9 +1,23 @@
-import { promptAction, router } from '@kit.ArkUI'
+import { promptAction } from '@kit.ArkUI'
+import { LoginApi } from '../api/login'
+
+class ParamWithOp {
+  constructor(protocolKey: string, title: string) {
+    this.protocolKey = protocolKey
+    this.title = title
+  }
+
+  protocolKey: string
+  title: string
+}
 
 
 @Entry
 @Component
 struct PhoneVerifyPage {
+  pathStack: NavPathStack = AppStorage.get("PathStack") as NavPathStack
+  private generateCode: string = '' // 随机生成验证码
+  private intervalID: number = -1 // 倒计时定时器
   @State buttonFontColor: ResourceColor = '#9c9c9c'
   @State phone: string = '' // 手机号
   @State code: string = '' // 验证码
@@ -11,7 +25,6 @@ struct PhoneVerifyPage {
   @State isShow: boolean = false // 协议同意弹窗
   @State isChecked: boolean = false // 是否勾选s
   @State sheetHeight: number = 200
-  private intervalID: number = -1 // 倒计时定时器
 
   @Builder
   ProtocolSheet() {
@@ -32,22 +45,21 @@ struct PhoneVerifyPage {
         Text() {
           Span('《隐私协议》').fontColor('#3274f6')
             .onClick(() => {
-              router.pushUrl({
-                url: 'pages/ProtocolPage',
-                params: {
-                  title: '隐私协议',
-                  protocolKey: 'privacyAgreement'
-                }
+              this.isShow = false
+              this.pathStack.pushPath({
+                name: 'ProtocolPage',
+                param: new ParamWithOp('privacyAgreement', '隐私协议')
               })
+
+
+
             })
           Span('《用户服务协议》').fontColor('#3274f6')
             .onClick(() => {
-              router.pushUrl({
-                url: 'pages/ProtocolPage',
-                params: {
-                  title: '用户服务协议',
-                  protocolKey: 'userServiceAgreement'
-                }
+              this.isShow = false
+              this.pathStack.pushPath({
+                name: 'ProtocolPage',
+                param: new ParamWithOp('userServiceAgreement', '用户服务协议')
               })
             })
         }.fontSize(14).fontColor('#666').lineHeight(22).margin({ top: 20, bottom: 50 })
@@ -100,177 +112,195 @@ struct PhoneVerifyPage {
   }
 
   build() {
-    Column() {
-      Row() {
-        Image($r('app.media.cancel_icon')).width(24).aspectRatio(1)
-      }
-      .width('100%')
-      .padding(20)
-      .onClick(() => {
-        router.back()
-      })
-
+    NavDestination() {
       Column() {
-        Text('验证码登录')
-          .fontSize(28)
-          .fontWeight(600)
-          .width('100%')
-          .margin({ top: 30, bottom: 30 })
+        Row() {
+          Image($r('app.media.cancel_icon')).width(24).aspectRatio(1)
+        }
+        .width('100%')
+        .padding(20)
+        .onClick(() => {
+          this.pathStack.pop()
+        })
 
-        TextInput({ placeholder: '请输入手机号码', text: $$this.phone })
-          .placeholderFont({ size: 18, weight: 600 })
-          .padding({
-            bottom: 10,
-            top: 0,
-            left: 0,
-            right: 0
-          })
-          .fontSize(18)
-          .fontWeight(600)
-          .border({
-            color: '#E8E9F3',
-            width: {
-              bottom: 1
-            }
-          })
-          .borderRadius(0)
-          .placeholderColor('#C6CEDD')
-          .backgroundColor(Color.White)
-          .type(InputType.Number)
-          .maxLength(11)
-          .inputFilter('[0-9 ]', (e) => {
-            console.log(JSON.stringify(e))
-          })
-          .onChange((value: string) => {
-          })
-          .width('100%')
-
-        Stack({ alignContent: Alignment.End }) {
-          TextInput({ placeholder: '请输入验证码', text: $$this.code })
-            .placeholderFont({ size: 18, weight: 600 })
-            .border({ width: 0 })
-            .borderRadius(0)
-            .maxLength(6)
-            .fontSize(18)
+        Column() {
+          Text('验证码登录')
+            .fontSize(28)
             .fontWeight(600)
-            .placeholderColor('#C6CEDD')
-            .backgroundColor(Color.White)
+            .width('100%')
+            .margin({ top: 30, bottom: 30 })
+
+          TextInput({ placeholder: '请输入手机号码', text: $$this.phone })
+            .placeholderFont({ size: 18, weight: 600 })
             .padding({
               bottom: 10,
               top: 0,
               left: 0,
               right: 0
             })
-
-          if (this.count > 0) {
-            Text(this.count + '秒后重发')
-              .fontSize(14)
-              .fontColor('#C6CEDD')
-              .fontWeight(600)
-              .margin({ bottom: 5 })
-          } else {
-            Text('获取验证码')
-              .fontSize(14)
-              .fontWeight(600)
-              .fontColor('#409eff')
-              .enabled(this.phone.length > 0)
-              .margin({ bottom: 5 })
-              .onClick(() => {
-                if (!this.validatePhone(this.phone)) {
-                  promptAction.showToast({ message: '手机号格式错误' })
-                } else {
-                  // 用户提醒
-                  promptAction.showToast({ message: '短信发送到手机上，请注意查收' })
-                  // 界面更新倒计时
-                  this.startCountDown()
-                }
-              })
-          }
-
-        }
-        .margin({ top: 32 })
-        .width('100%')
-        .border({ width: { bottom: 1 }, color: '#E3E8F1' })
-
-
-        Button('登录', { type: ButtonType.Normal })
-          .margin({ top: 50 })
-          .width('100%')
-          .borderRadius(50)
-          .height(50)
-          .fontSize(18)
-          .fontWeight(600)
-          .fontColor(this.phone !== '' && this.code !== '' ? Color.White : this.buttonFontColor)
-          .linearGradient({
-            repeating: false,
-            direction: GradientDirection.LeftBottom,
-            colors: this.phone !== '' && this.code !== '' ? [['#686DE0', 0], ['#4834D4', 1]] :
-              [['#e5e5e5', 0], ['#e5e5e5', 1]]
-          })
-          .bindSheet($$this.isShow, this.ProtocolSheet(), {
-            height: this.sheetHeight,
-            backgroundColor: Color.White,
-            blurStyle: BlurStyle.Thick,
-            showClose: false
-          })
-          .onClick(() => {
-            if (this.phone === '' || this.code === '') {
-              return
-            } else {
-              console.log('xxxxx')
-              // 如果登录前没有勾选，则弹出
-              if (!this.isChecked) {
-                this.isShow = true
+            .fontSize(18)
+            .fontWeight(600)
+            .border({
+              color: '#E8E9F3',
+              width: {
+                bottom: 1
               }
+            })
+            .borderRadius(0)
+            .placeholderColor('#C6CEDD')
+            .backgroundColor(Color.White)
+            .type(InputType.Number)
+            .maxLength(11)
+            .inputFilter('[0-9 ]', (e) => {
+              console.log(JSON.stringify(e))
+            })
+            .onChange((value: string) => {
+            })
+            .width('100%')
+
+          Stack({ alignContent: Alignment.End }) {
+            TextInput({ placeholder: '请输入验证码', text: $$this.code })
+              .placeholderFont({ size: 18, weight: 600 })
+              .border({ width: 0 })
+              .borderRadius(0)
+              .maxLength(6)
+              .fontSize(18)
+              .fontWeight(600)
+              .placeholderColor('#C6CEDD')
+              .backgroundColor(Color.White)
+              .padding({
+                bottom: 10,
+                top: 0,
+                left: 0,
+                right: 0
+              })
+
+            if (this.count > 0) {
+              Text(this.count + '秒后重发')
+                .fontSize(14)
+                .fontColor('#C6CEDD')
+                .fontWeight(600)
+                .margin({ bottom: 5 })
+            } else {
+              Text('获取验证码')
+                .fontSize(14)
+                .fontWeight(600)
+                .fontColor('#409eff')
+                .enabled(this.phone.length > 0)
+                .margin({ bottom: 5 })
+                .onClick(() => {
+                  if (!this.validatePhone(this.phone)) {
+                    promptAction.showToast({ message: '手机号格式错误' })
+                  } else {
+                    // 用户提醒
+                    promptAction.showToast({ message: '短信发送到手机上，请注意查收' })
+                    // 界面更新倒计时
+                    this.startCountDown()
+                    this.generateCode = (Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString();
+                    console.log("this.generateCode", this.generateCode)
+                    LoginApi.getPhoneCode({
+                      phone: this.phone,
+                      code: this.generateCode
+                    }).then(res => {
+                      console.log("res", JSON.stringify(res))
+                    })
+                  }
+                })
             }
 
+          }
+          .margin({ top: 32 })
+          .width('100%')
+          .border({ width: { bottom: 1 }, color: '#E3E8F1' })
 
-          })
 
+          Button('登录', { type: ButtonType.Normal })
+            .margin({ top: 50 })
+            .width('100%')
+            .borderRadius(50)
+            .height(50)
+            .fontSize(18)
+            .fontWeight(600)
+            .fontColor(this.phone !== '' && this.code !== '' ? Color.White : this.buttonFontColor)
+            .linearGradient({
+              repeating: false,
+              direction: GradientDirection.LeftBottom,
+              colors: this.phone !== '' && this.code !== '' ? [['#686DE0', 0], ['#4834D4', 1]] :
+                [['#e5e5e5', 0], ['#e5e5e5', 1]]
+            })
+            .bindSheet($$this.isShow, this.ProtocolSheet(), {
+              height: this.sheetHeight,
+              backgroundColor: Color.White,
+              blurStyle: BlurStyle.Thick,
+              showClose: false
+            })
+            .onClick(() => {
+              if (this.phone === '' || this.code === '') {
+                return
+              } else {
+                // 如果登录前没有勾选，则弹出
+                if (!this.isChecked) {
+                  this.isShow = true
+                  return
+                } else {
+                  if (this.code !== this.generateCode) {
+                    promptAction.showToast({ message: '手机验证码错误', bottom: '200vp' })
+                  } else {
+                    // router.replaceUrl({
+                    //   url: 'pages/TasksPage'
+                    // })
+                  }
+                }
+
+
+              }
+            })
+
+
+        }
+        .padding(30)
+
+        Blank()
+
+        Row() {
+          Checkbox()
+            .select(this.isChecked)
+            .width(14)
+            .margin({ top: 5 })
+            .onChange((value: boolean) => {
+              this.isChecked = value
+            })
+
+          Text() {
+            Span('已阅读并同意')
+            Span('《隐私协议》').fontColor('#3274f6')
+              .onClick(() => {
+                this.pathStack.pushPath({
+                  name: 'ProtocolPage',
+                  param: new ParamWithOp('privacyAgreement', '隐私协议')
+                })
+              })
+            Span('《用户服务协议》').fontColor('#3274f6')
+              .onClick(() => {
+                this.pathStack.pushPath({
+                  name: 'ProtocolPage',
+                  param: new ParamWithOp('userServiceAgreement', '用户服务协议')
+                })
+              })
+          }.fontSize(14).fontColor('#666').lineHeight(22)
+        }
+        .alignItems(VerticalAlign.Top)
+        .margin({ bottom: 30 })
 
       }
-      .padding(30)
-
-      Blank()
-
-      Row() {
-        Checkbox()
-          .select(this.isChecked)
-          .width(14)
-          .margin({ top: 5 })
-          .onChange((value: boolean) => {
-            this.isChecked = value
-          })
-
-        Text() {
-          Span('已阅读并同意')
-          Span('《隐私协议》').fontColor('#3274f6')
-            .onClick(() => {
-              router.pushUrl({
-                url: 'pages/ProtocolPage',
-                params: {
-                  title: '隐私协议',
-                  protocolKey: 'privacyAgreement'
-                }
-              })
-            })
-          Span('《用户服务协议》').fontColor('#3274f6')
-            .onClick(() => {
-              router.pushUrl({
-                url: 'pages/ProtocolPage',
-                params: {
-                  title: '用户服务协议',
-                  protocolKey: 'userServiceAgreement'
-                }
-              })
-            })
-        }.fontSize(14).fontColor('#666').lineHeight(22)
-      }
-      .alignItems(VerticalAlign.Top)
-      .margin({ bottom: 30 })
-
+      .height('100%')
+      .width('100%')
     }
-    .height('100%')
-    .width('100%')
+    .hideTitleBar(true)
   }
+}
+
+@Builder
+export function PhoneVerifyBuilder(): void {
+  PhoneVerifyPage();
 }
