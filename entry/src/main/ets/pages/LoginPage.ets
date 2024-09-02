@@ -1,6 +1,7 @@
 import { CustomInput } from '../component/CustomInput'
 
 
+
 @Component
 export struct LoginPage {
   pathStack: NavPathStack = AppStorage.get("PathStack") as NavPathStack
@@ -98,9 +99,16 @@ export struct LoginPage {
         Text() {
           Span('没有账户？')
           Span('注册').fontWeight(700).onClick(() => {
+            class TmpClass {
+              count: number = 10
+            }
+
+            let tmp = new TmpClass()
+
             console.log("3xxxxx", this.pathStack)
             this.pathStack.pushPath({
-              name: 'SignUpPage'
+              name: 'SignUpPage',
+              param: tmp
             })
             // this.pathStack.pop()
           })
@@ -116,7 +124,8 @@ export struct LoginPage {
       .justifyContent(FlexAlign.Center)
     }
     .hideTitleBar(true)
-    .onReady((context: NavDestinationContext) => {})
+    .onReady((context: NavDestinationContext) => {
+    })
   }
 }
 

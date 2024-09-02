@@ -13,6 +13,15 @@ struct SignUpPage {
   @State passwordErrorTxt: string = ''
   @State usernameExist: boolean = false
 
+  aboutToAppear(): void {
+    console.log("xxx1注册参数", JSON.stringify(this.pathStack.getParamByName('LoginPage')))
+
+    console.log('xx获取index指定的NavDestination页面的参数信息', JSON.stringify(this.pathStack.getParamByIndex(1)))
+    console.log('xx获取全部名为name的NavDestination页面的参数信息',
+      JSON.stringify(this.pathStack.getParamByName('LoginPage')))
+    console.log('xx获取全部名为name的NavDestination页面的位置索引', this.pathStack.getIndexByName('LoginPage'))
+  }
+
   validateUsername(username: string): boolean {
     const reg =
       new RegExp('^[\u4e00-\u9fa5a-zA-Z0-9]{6,12}$')

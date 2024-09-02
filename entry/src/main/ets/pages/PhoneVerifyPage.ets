@@ -26,6 +26,10 @@ struct PhoneVerifyPage {
   @State isChecked: boolean = false // 是否勾选s
   @State sheetHeight: number = 200
 
+  aboutToAppear(): void {
+    console.log("xxxx1pathStack", this.pathStack)
+  }
+
   @Builder
   ProtocolSheet() {
     Column() {
@@ -46,11 +50,16 @@ struct PhoneVerifyPage {
           Span('《隐私协议》').fontColor('#3274f6')
             .onClick(() => {
               this.isShow = false
-              this.pathStack.pushPath({
-                name: 'ProtocolPage',
-                param: new ParamWithOp('privacyAgreement', '隐私协议')
-              })
 
+              this.pathStack.pushPath({ name: "ProtocolPage", param: "PageOne Param" })
+              return
+              this.pathStack.pushPathByName(
+                'ProtocolPage',
+                new ParamWithOp('privacyAgreement', '隐私协议'),
+                (popInfo) => {
+                  console.log("xxpopInfo", JSON.stringify(popInfo))
+                }
+              )
 
 
             })
