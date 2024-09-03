@@ -5,7 +5,7 @@ import { PendingCard } from '../component/PendingCard'
 import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
 
-@Entry
+
 @Component
 export struct HomePage {
   build() {

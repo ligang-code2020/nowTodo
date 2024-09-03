@@ -10,17 +10,12 @@ struct ProtocolPage {
   @State protocolKey: string = ''
 
   aboutToAppear(): void {
-    console.log("xx",JSON.stringify(this.pathStack.getParamByName('PhoneVerifyPage')))
+    console.log("xx",JSON.stringify(this.pathStack.getParamByName('ProtocolPage')))
   }
 
   build() {
     NavDestination() {
       Column() {
-        Button('xxxxx').onClick(()=>{
-          console.log("xx",JSON.stringify(this.pathStack.getParamByName('PhoneVerifyPage')))
-          console.log('xxx1', JSON.stringify(this.pathStack.getIndexByName('PhoneVerifyPage')))
-          console.log('xxx11', JSON.stringify(this.pathStack.getParamByIndex(1)))
-        })
         Row() {
           Image($r('app.media.left_return'))
             .width(30)

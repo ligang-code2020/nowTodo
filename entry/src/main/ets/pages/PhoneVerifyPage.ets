@@ -50,9 +50,6 @@ struct PhoneVerifyPage {
           Span('《隐私协议》').fontColor('#3274f6')
             .onClick(() => {
               this.isShow = false
-
-              this.pathStack.pushPath({ name: "ProtocolPage", param: "PageOne Param" })
-              return
               this.pathStack.pushPathByName(
                 'ProtocolPage',
                 new ParamWithOp('privacyAgreement', '隐私协议'),
@@ -60,8 +57,6 @@ struct PhoneVerifyPage {
                   console.log("xxpopInfo", JSON.stringify(popInfo))
                 }
               )
-
-
             })
           Span('《用户服务协议》').fontColor('#3274f6')
             .onClick(() => {

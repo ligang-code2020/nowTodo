@@ -2,7 +2,6 @@
   "src": [
     "pages/Index",
     "pages/InitPage",
-    "pages/HomePage",
     "pages/TasksPage"
   ]
 }

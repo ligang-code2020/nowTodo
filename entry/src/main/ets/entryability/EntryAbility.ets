@@ -2,6 +2,7 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { httpDefaultSetting } from '../api/axios'
+import { HMRouterMgr } from '@hadss/hmrouter';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -9,6 +10,11 @@ export default class EntryAbility extends UIAbility {
 
     // 初始化 axios 配置
     // httpDefaultSetting()
+
+    // 初始路由 HMRouterMgr 框架
+    HMRouterMgr.init({
+      context: this.context
+    })
   }
 
   onDestroy(): void {
