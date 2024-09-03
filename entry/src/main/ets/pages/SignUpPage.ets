@@ -3,9 +3,9 @@ import { promptAction } from '@kit.ArkUI'
 import { LoginApi } from '../api/login'
 import { HMRouter } from '@hadss/hmrouter'
 
-@HMRouter({ pageUrl: 'SignUpPage'})
+@HMRouter({ pageUrl: 'SignUpPage' })
 @Component
-struct SignUpPage {
+export struct SignUpPage {
   @State username: string = ''
   @State password: string = ''
   @State rePassword: string = ''
@@ -207,9 +207,4 @@ struct SignUpPage {
   }
 }
 
-
-@Builder
-export function SignUpBuilder(): void {
-  SignUpPage();
-}
 
