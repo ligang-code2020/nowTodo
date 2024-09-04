@@ -19,7 +19,8 @@ import { systemDateTime } from '@kit.BasicServicesKit';
 import { HashMap } from '@kit.ArkTS';
 // import Constant from '../common/Constant';
 import { StringBuilder } from '../utils/StringBuilder';
-import { router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
+import { ExceptionPrompt, PromptOptions, MarginType } from '@kit.ArkUI'
 
 
 export class ResponseResult {
@@ -156,6 +157,7 @@ export function httpGet<D>(url: string, params?: ESObject, headers?: ESObject): 
     })
       .catch((reason: AxiosError) => {
         Logger.error(TAG, JSON.stringify(reason));
+
         reject(reason)
       })
   });
@@ -250,6 +252,15 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
         }
       })
       .catch((reason: AxiosError) => {
+        promptAction.showToast({
+          duration: 3000,
+          message: '服务端异常',
+          alignment: Alignment.Top,
+          offset: {
+            dx: '50%',
+            dy: 80
+          }
+        })
         Logger.error(TAG, JSON.stringify(reason));
         reject(reason)
       })

@@ -1,9 +1,10 @@
 import { CustomInput } from '../component/CustomInput'
 import { promptAction } from '@kit.ArkUI'
 import { LoginApi } from '../api/login'
-import { HMRouter } from '@hadss/hmrouter'
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { CustomAnimator } from '../animation/customAnimator'
 
-@HMRouter({ pageUrl: 'SignUpPage' })
+@HMRouter({ pageUrl: 'SignUpPage', animator: 'CustomAnimator' })
 @Component
 export struct SignUpPage {
   @State username: string = ''
@@ -139,9 +140,10 @@ export struct SignUpPage {
           } else {
             this.passwordError = false
             // 跳转手机验证页
-            // this.pathStack.pushPath({
-            //   name: 'PhoneVerifyPage'
-            // })
+            console.log("xxxxx11")
+            HMRouterMgr.push({
+              pageUrl: 'PhoneVerifyPage'
+            })
           }
 
 
@@ -192,7 +194,10 @@ export struct SignUpPage {
       Text() {
         Span('已有账号？')
         Span('登录').fontWeight(700).onClick(() => {
-          // this.pathStack.pushPath({ name: "LoginPage" })
+          HMRouterMgr.replace({
+            pageUrl: 'LoginPage',
+            animator: new CustomAnimator()
+          })
         })
       }
       .fontColor('#2C406E')

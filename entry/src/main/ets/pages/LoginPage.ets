@@ -1,7 +1,8 @@
-import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { HMDefaultGlobalAnimator, HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { CustomInput } from '../component/CustomInput'
+import { promptAction } from '@kit.ArkUI'
 
-@HMRouter({ pageUrl: 'LoginPage' })
+@HMRouter({ pageUrl: 'LoginPage', animator: 'CustomAnimator' })
 @Component
 export struct LoginPage {
   @State username: string = ''
@@ -96,9 +97,8 @@ export struct LoginPage {
       Text() {
         Span('没有账户？')
         Span('注册').fontWeight(700).onClick(() => {
-          HMRouterMgr.push({
-            pageUrl: 'SignUpPage',
-            param: { a: 1, b: 2 }
+          HMRouterMgr.replace({
+            pageUrl: 'SignUpPage'
           })
         })
       }

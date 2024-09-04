@@ -1,16 +1,22 @@
 import { protocol } from '../utils/protocol'
 import { LengthMetrics } from '@kit.ArkUI';
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter';
 
+interface Param {
+  protocolKey: string
+  title: string
+}
 
-@Entry
+@HMRouter({ pageUrl: 'ProtocolPage' })
 @Component
-struct ProtocolPage {
-  pathStack: NavPathStack = AppStorage.get("PathStack") as NavPathStack
+export struct ProtocolPage {
   @State title: string = ''
   @State protocolKey: string = ''
+  @State param: Param = HMRouterMgr.getCurrentParam() as Param
 
   aboutToAppear(): void {
-    console.log("xx",JSON.stringify(this.pathStack.getParamByName('ProtocolPage')))
+    this.title = this.param.title
+    this.protocolKey = this.param.protocolKey
   }
 
   build() {
@@ -25,7 +31,7 @@ struct ProtocolPage {
               left: 10
             })
             .onClick(() => {
-              this.pathStack.pop()
+              HMRouterMgr.pop()
             })
           Text(this.title)
             .fontSize(17)

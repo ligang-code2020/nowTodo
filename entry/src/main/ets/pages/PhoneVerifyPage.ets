@@ -1,3 +1,4 @@
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { promptAction } from '@kit.ArkUI'
 import { LoginApi } from '../api/login'
 
@@ -11,11 +12,9 @@ class ParamWithOp {
   title: string
 }
 
-
-@Entry
+@HMRouter({ pageUrl: 'PhoneVerifyPage' })
 @Component
-struct PhoneVerifyPage {
-  pathStack: NavPathStack = AppStorage.get("PathStack") as NavPathStack
+export struct PhoneVerifyPage {
   private generateCode: string = '' // 随机生成验证码
   private intervalID: number = -1 // 倒计时定时器
   @State buttonFontColor: ResourceColor = '#9c9c9c'
@@ -24,10 +23,10 @@ struct PhoneVerifyPage {
   @State count: number = 0 // 倒计时数值
   @State isShow: boolean = false // 协议同意弹窗
   @State isChecked: boolean = false // 是否勾选s
-  @State sheetHeight: number = 200
+  @State sheetHeight: number = 220
+  @State bottomRectHeight: string = AppStorage.get<number>('bottomRectHeight') + 'px';
 
   aboutToAppear(): void {
-    console.log("xxxx1pathStack", this.pathStack)
   }
 
   @Builder
@@ -50,25 +49,24 @@ struct PhoneVerifyPage {
           Span('《隐私协议》').fontColor('#3274f6')
             .onClick(() => {
               this.isShow = false
-              this.pathStack.pushPathByName(
-                'ProtocolPage',
-                new ParamWithOp('privacyAgreement', '隐私协议'),
-                (popInfo) => {
-                  console.log("xxpopInfo", JSON.stringify(popInfo))
-                }
-              )
+              HMRouterMgr.push({
+                pageUrl: 'ProtocolPage',
+                param: new ParamWithOp('privacyAgreement', '隐私协议')
+              })
+
             })
           Span('《用户服务协议》').fontColor('#3274f6')
             .onClick(() => {
               this.isShow = false
-              this.pathStack.pushPath({
-                name: 'ProtocolPage',
+              HMRouterMgr.push({
+                pageUrl: 'ProtocolPage',
                 param: new ParamWithOp('userServiceAgreement', '用户服务协议')
               })
             })
         }.fontSize(14).fontColor('#666').lineHeight(22).margin({ top: 20, bottom: 50 })
 
         Blank()
+
 
         Button('同意并继续', { type: ButtonType.Normal })
           .width('70%')
@@ -82,8 +80,8 @@ struct PhoneVerifyPage {
             this.isChecked = true
             this.isShow = false
           })
-          .margin({ bottom: 10 })
       }
+      .margin({ bottom: this.bottomRectHeight })
     }
     .gesture(PanGesture({ direction: PanDirection.Up | PanDirection.Down }))
     .height('100%')
@@ -124,7 +122,7 @@ struct PhoneVerifyPage {
         .width('100%')
         .padding(20)
         .onClick(() => {
-          this.pathStack.pop()
+          HMRouterMgr.pop()
         })
 
         Column() {
@@ -194,10 +192,26 @@ struct PhoneVerifyPage {
                 .margin({ bottom: 5 })
                 .onClick(() => {
                   if (!this.validatePhone(this.phone)) {
-                    promptAction.showToast({ message: '手机号格式错误' })
+                    promptAction.showToast({
+                      duration: 3000,
+                      message: '手机号格式错误',
+                      alignment: Alignment.Top,
+                      offset: {
+                        dx: '50%',
+                        dy: 80
+                      }
+                    })
                   } else {
                     // 用户提醒
-                    promptAction.showToast({ message: '短信发送到手机上，请注意查收' })
+                    promptAction.showToast({
+                      duration: 3000,
+                      message: '短信发送到手机上，请注意查收',
+                      alignment: Alignment.Top,
+                      offset: {
+                        dx: '50%',
+                        dy: 80
+                      }
+                    })
                     // 界面更新倒计时
                     this.startCountDown()
                     this.generateCode = (Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString();
@@ -206,7 +220,7 @@ struct PhoneVerifyPage {
                       phone: this.phone,
                       code: this.generateCode
                     }).then(res => {
-                      console.log("res", JSON.stringify(res))
+                      console.log("res1111", JSON.stringify(res))
                     })
                   }
                 })
@@ -248,11 +262,19 @@ struct PhoneVerifyPage {
                   return
                 } else {
                   if (this.code !== this.generateCode) {
-                    promptAction.showToast({ message: '手机验证码错误', bottom: '200vp' })
+                    promptAction.showToast({
+                      duration: 3000,
+                      message: '手机验证码错误',
+                      alignment: Alignment.Top,
+                      offset: {
+                        dx: '50%',
+                        dy: 80
+                      }
+                    })
                   } else {
-                    // router.replaceUrl({
-                    //   url: 'pages/TasksPage'
-                    // })
+                    HMRouterMgr.replace({
+                      pageUrl: 'HomePage'
+                    })
                   }
                 }
 
@@ -279,15 +301,15 @@ struct PhoneVerifyPage {
             Span('已阅读并同意')
             Span('《隐私协议》').fontColor('#3274f6')
               .onClick(() => {
-                this.pathStack.pushPath({
-                  name: 'ProtocolPage',
+                HMRouterMgr.push({
+                  pageUrl: 'ProtocolPage',
                   param: new ParamWithOp('privacyAgreement', '隐私协议')
                 })
               })
             Span('《用户服务协议》').fontColor('#3274f6')
               .onClick(() => {
-                this.pathStack.pushPath({
-                  name: 'ProtocolPage',
+                HMRouterMgr.push({
+                  pageUrl: 'ProtocolPage',
                   param: new ParamWithOp('userServiceAgreement', '用户服务协议')
                 })
               })
