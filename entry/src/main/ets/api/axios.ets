@@ -27,7 +27,7 @@ export class ResponseResult {
   statusCode: number | string | undefined | null;
   success: boolean | null | undefined
   message: string | Resource | undefined | null;
-  data?: string | Object | ArrayBuffer | undefined | null;
+  data?: string | object | ArrayBuffer | ESObject | undefined | null;
 
   constructor() {
     this.success = true;
@@ -220,7 +220,7 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
         Logger.debug(TAG, "--------------------------------------");
         if (isSuccess(response)) {
           if (isResultSuccess(response.data)) {
-            resolve(response.data.data);
+            resolve(response.data);
           } else {
             if (response.data.statusCode === 401) {
               console.log(TAG, '用户信息失效，请重新登录')
@@ -244,11 +244,12 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
             }
 
             const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
-            reject(e);
+            // reject(e);
+            reject(response.data)
           }
         } else {
           const e: Error = { name: `${response.status}`, message: `${response.statusText}` }
-          reject(e);
+          reject(response.data)
         }
       })
       .catch((reason: AxiosError) => {

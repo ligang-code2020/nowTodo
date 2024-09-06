@@ -6,7 +6,7 @@ import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
 import { HMRouter } from '@hadss/hmrouter'
 
-@HMRouter({ pageUrl: 'HomePage' })
+@HMRouter({ pageUrl: 'HomePage', singleton: true, lifecycle: 'ExitAppLifecycle' })
 @Component
 export struct HomePage {
   build() {

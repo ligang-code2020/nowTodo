@@ -1,10 +1,25 @@
-import { HMDefaultGlobalAnimator, HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { HMDefaultGlobalAnimator, HMPopInfo, HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { CustomInput } from '../component/CustomInput'
 import { promptAction } from '@kit.ArkUI'
+import { LoginApi } from '../api/login'
+import { ErrorResponse } from '../types/ErrorResponse'
+import { Logger } from '../utils/Logger'
+import { constants } from '../constants/constants'
+
+PersistentStorage.persistProp<LoginInfo>('LOGIN_INFO', {})
+
+
+interface LoginInfo {
+  userName?: string
+  accessToken?: string
+  refreshToken?: string
+}
 
 @HMRouter({ pageUrl: 'LoginPage', animator: 'CustomAnimator' })
 @Component
 export struct LoginPage {
+  // 用户信息持久化
+  @StorageLink('LOGIN_INFO') loginInfo: LoginInfo = {}
   @State username: string = ''
   @State password: string = ''
 
@@ -50,6 +65,42 @@ export struct LoginPage {
         .width(304)
         .height(52)
         .margin({ top: 55 })
+        .onClick(() => {
+          LoginApi.login({
+            username: this.username,
+            password: this.password
+          }).then(res => {
+            Logger.info(constants.DEVELOP_TAG, "登录res" + JSON.stringify(res));
+            // 缓存token
+            this.loginInfo = {
+              userName: this.username,
+              accessToken: res.data.access_token,
+              refreshToken: res.data.refresh_token
+            }
+            HMRouterMgr.push({
+              pageUrl: 'HomePage'
+            }, {
+              onArrival() {
+                Logger.info(constants.DEVELOP_TAG, "调整完成");
+                // 消除所有页面栈
+                HMRouterMgr.getPathStack('myNavigation')?.clear()
+              }
+            })
+
+
+          }).catch((e: ErrorResponse) => {
+            console.log("xxe", JSON.stringify(e))
+            promptAction.showToast({
+              duration: 3000,
+              message: e.message,
+              alignment: Alignment.Top,
+              offset: {
+                dx: '50%',
+                dy: 80
+              }
+            })
+          })
+        })
 
       Row() {
         Row()
@@ -97,7 +148,7 @@ export struct LoginPage {
       Text() {
         Span('没有账户？')
         Span('注册').fontWeight(700).onClick(() => {
-          HMRouterMgr.replace({
+          HMRouterMgr.push({
             pageUrl: 'SignUpPage'
           })
         })

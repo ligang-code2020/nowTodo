@@ -2,6 +2,8 @@ import CryptoJS from '@ohos/crypto-js'
 import { httpGet, httpPost, ResponseResult } from './axios'
 import { secret } from '../utils/Secret'
 import { systemDateTime } from '@kit.BasicServicesKit'
+import { defer, retry } from 'rxjs'
+import axios from '@ohos/axios'
 
 
 interface Login {
@@ -22,7 +24,7 @@ interface PhoneCode {
 export class LoginApi {
   // 登录接口
   static login(loginParams: Login): Promise<ResponseResult> {
-    return httpPost('xxx', false, loginParams)
+    return httpPost('/api/user/login', false, loginParams)
   }
 
   // 查找用户

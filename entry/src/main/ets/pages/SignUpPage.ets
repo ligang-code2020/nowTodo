@@ -32,7 +32,7 @@ export struct SignUpPage {
 
   async validateUsernameExist(username: string): Promise<boolean> {
     let user = await LoginApi.findUser({ username })
-    if (user) {
+    if (user.data) {
       return true
     } else {
       return false
@@ -141,7 +141,7 @@ export struct SignUpPage {
             this.passwordError = false
             // 跳转手机验证页
             console.log("xxxxx11")
-            HMRouterMgr.push({
+            HMRouterMgr.replace({
               pageUrl: 'PhoneVerifyPage'
             })
           }
