@@ -1,19 +1,38 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { httpDefaultSetting } from '../api/axios'
+import { HMRouterMgr } from '@hadss/hmrouter';
 
 export default class EntryAbility extends UIAbility {
+  private intervalID: ESObject = null
+
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+    // 初始化 axios 配置
+    httpDefaultSetting()
+
+    // 初始路由 HMRouterMgr 框架
+    HMRouterMgr.init({
+      context: this.context
+    })
+
   }
 
   onDestroy(): void {
-    hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
+    hilog.info(0x0000, 'c', '%{public}s', 'Ability onDestroy');
+    clearInterval(this.intervalID);
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
+    let type = window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR;
+    let avoidArea = windowClass.getWindowAvoidArea(type);
+    let bottomRectHeight = avoidArea.bottomRect.height; // 获取到导航条区域的高度[px]
+    AppStorage.setOrCreate('bottomRectHeight', bottomRectHeight);
+
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {

@@ -5,7 +5,11 @@
     "dayjs": "^1.11.7",
     "@ohos/mpchart": "^3.0.9",
     "@mcui/mccharts": "^2.0.6",
-    "cjcalendar": "^2.1.1"
+    "cjcalendar": "^2.1.1",
+    "@ohos/axios": "^2.2.2",
+    "@ohos/crypto-js": "^2.0.3",
+    "@hadss/hmrouter": "^1.0.0-rc.3",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.18",

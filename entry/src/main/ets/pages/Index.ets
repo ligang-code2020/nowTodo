@@ -1,26 +1,89 @@
 import InitPage from './InitPage'
 import { HomePage } from './HomePage'
-import { TasksPage } from './TasksPage'
-import { GraphicPage } from './GraphicPage'
-import { CalendarComp } from '../component/CalendarComp'
-import { AddTaskPage } from './AddTaskPage'
-import {TaskSetPage} from './TaskSetPage'
+import { PhoneVerifyPage } from './PhoneVerifyPage'
+import { LoginPage } from './LoginPage'
 import display from '@ohos.display';
+import { Logger } from '../utils/Logger'
+import { AttributeUpdater } from '@kit.ArkUI';
+import { HMDefaultGlobalAnimator, HMNavigation, HMRouterMgr } from '@hadss/hmrouter'
+import { WelcomeLifecycle } from '../lifecycle/WelcomeLifecycle';
+import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
+import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
+import { ExitAppLifecycle } from '../lifecycle/ExitAppLifecycle'
 
+
+class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
+  initializeModifier(instance: NavigationAttribute): void {
+    instance.mode(NavigationMode.Stack);
+    instance.navBarWidth('100%');
+    instance.hideTitleBar(true);
+    instance.hideToolBar(true);
+    instance.hideNavBar(true)
+  }
+}
 
 @Component
 @Entry
 struct Index {
+  modifier: MyNavModifier = new MyNavModifier()
+  @StorageLink('userLogin') userLogin: boolean = false;
+
   aboutToAppear(): void {
-    console.log("屏幕", JSON.stringify(display.getDefaultDisplaySync()))
-    console.log("xxxx", "二〇二四年六月廿七".slice(-2))
+    console.log('xxxaboutToAppear')
+    // 注册全局拦截器
+    HMRouterMgr.registerGlobalInterceptor({
+      interceptor: new JumpInfoInterceptor(),
+      interceptorName: 'JumpInfo',
+      priority: 5,
+    })
+
+
+    // 注册全局生命周期
+    HMRouterMgr.registerGlobalLifecycle({
+      lifecycle: new WelcomeLifecycle,
+      lifecycleName: 'WelcomeLifecycle',
+      priority: 5,
+    })
+
+    HMRouterMgr.registerGlobalLifecycle({
+      lifecycle: new PageDurationLifecycle(),
+      lifecycleName: 'PageDuration',
+      priority: 5,
+    })
+
+    HMRouterMgr.registerGlobalLifecycle({
+      lifecycle: new ExitAppLifecycle(),
+      lifecycleName: 'ExitAppLifecycle',
+      priority: 5,
+    })
+
+
+  }
+
+  onPageShow(): void {
+    if (!this.userLogin) {
+      HMRouterMgr.replace({
+        pageUrl: 'LoginPage'
+      })
+    }
   }
 
   build() {
     Column() {
-      TaskSetPage()
-      // AddTaskPage()
+      HMNavigation({
+        navigationId: 'myNavigation',
+        // homePageUrl: 'HomePage',
+        options: {
+          standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
+          dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
+          modifier: this.modifier
+        }
+      }) {
+        HomePage()
+      }
     }
     .width('100%')
+    .height('100%')
   }
 }
+

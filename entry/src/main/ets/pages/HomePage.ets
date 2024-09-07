@@ -4,8 +4,13 @@ import { CancelCard } from '../component/CanceledCard'
 import { PendingCard } from '../component/PendingCard'
 import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
+import { HMRouter } from '@hadss/hmrouter'
 
-@Entry
+@HMRouter({
+  pageUrl: 'HomePage',
+  singleton: true,
+  animator: 'CustomAnimator'
+})
 @Component
 export struct HomePage {
   build() {

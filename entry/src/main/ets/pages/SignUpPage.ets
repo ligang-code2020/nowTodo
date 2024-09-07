@@ -1,9 +1,44 @@
 import { CustomInput } from '../component/CustomInput'
-import { router } from '@kit.ArkUI'
+import { promptAction } from '@kit.ArkUI'
+import { LoginApi } from '../api/login'
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { CustomAnimator } from '../animation/customAnimator'
 
-@Entry
+@HMRouter({ pageUrl: 'SignUpPage', animator: 'CustomAnimator' })
 @Component
-struct SignUpPage {
+export struct SignUpPage {
+  @State username: string = ''
+  @State password: string = ''
+  @State rePassword: string = ''
+  @State passwordError: boolean = false
+  @State passwordErrorTxt: string = ''
+  @State usernameExist: boolean = false
+
+  aboutToAppear(): void {
+
+  }
+
+  validateUsername(username: string): boolean {
+    const reg =
+      new RegExp('^[\u4e00-\u9fa5a-zA-Z0-9]{6,12}$')
+    return reg.test(username)
+  }
+
+  validatePassword(password: string): boolean {
+    const reg =
+      new RegExp('^.{8,}$') // 至少一个字母，一个数字，长度大于8
+    return reg.test(password)
+  }
+
+  async validateUsernameExist(username: string): Promise<boolean> {
+    let user = await LoginApi.findUser({ username })
+    if (user.data) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   build() {
     Column() {
       Text('注册')
@@ -15,24 +50,65 @@ struct SignUpPage {
 
       Column() {
         CustomInput({
-          placeholder: '请输入用户名',
+          text: this.username,
+          placeholder: '请输入用户名 (6-12个字符)',
           preIcon: $r('app.media.username'),
           inputType: InputType.Normal
         })
-        // CustomInput({
-        //   placeholder: '请输入邮箱',
-        //   preIcon: $r('app.media.email'),
-        //   inputType: InputType.Normal
-        // })
+        if (this.usernameExist) {
+          Text('用户名已经存在')
+            .width('100%')
+            .fontSize(14)
+            .fontColor(Color.Red)
+            .margin({ top: 10 })
+            .textAlign(TextAlign.End)
+            .height(16)
+        } else {
+          Row()
+            .height(16)
+            .width('100%')
+            .margin({ top: 10 })
+            .backgroundColor(Color.White)
+
+        }
+
+
         CustomInput({
-          placeholder: '请输入密码',
+          text: this.password,
+          placeholder: '密码（至少8个字符）',
+          preIcon: $r('app.media.password'),
+          inputType: InputType.Password,
+          onIconSrc: $r('app.media.show'),
+          offIconSrc: $r('app.media.hide'),
+          marginValue: 6
+        })
+        CustomInput({
+          text: this.rePassword,
+          placeholder: '确认密码',
           preIcon: $r('app.media.password'),
           inputType: InputType.Password,
           onIconSrc: $r('app.media.show'),
           offIconSrc: $r('app.media.hide'),
         })
+        if (this.passwordError) {
+          Text('两次输入密码不一致！')
+            .width('100%')
+            .fontSize(14)
+            .fontColor(Color.Red)
+            .margin({ top: 10 })
+            .textAlign(TextAlign.End)
+            .height(16)
+        } else {
+          Row()
+            .height(16)
+            .width('100%')
+            .margin({ top: 10 })
+            .backgroundColor(Color.White)
+
+        }
+
       }
-      .margin({ top: 65 })
+      .margin({ top: 33 })
 
       Button('创建', { type: ButtonType.Normal })
         .backgroundColor('#5B67CA')
@@ -42,6 +118,36 @@ struct SignUpPage {
         .width(304)
         .height(52)
         .margin({ top: 55 })
+        .onClick(async () => {
+          this.usernameExist = await this.validateUsernameExist(this.username)
+          if (this.usernameExist) {
+            return
+          }
+
+          console.log("xxx", this.password, this.rePassword)
+          if (!this.validateUsername(this.username)) {
+            promptAction.showToast({ message: '用户名格式错误' })
+            return
+          }
+
+          if (!this.validatePassword(this.password)) {
+            promptAction.showToast({ message: '设置密码不符合格式' })
+            return
+          }
+
+          if (this.password !== this.rePassword) {
+            this.passwordError = true
+          } else {
+            this.passwordError = false
+            // 跳转手机验证页
+            console.log("xxxxx11")
+            HMRouterMgr.replace({
+              pageUrl: 'PhoneVerifyPage'
+            })
+          }
+
+
+        })
 
       Row() {
         Row()
@@ -88,8 +194,9 @@ struct SignUpPage {
       Text() {
         Span('已有账号？')
         Span('登录').fontWeight(700).onClick(() => {
-          router.pushUrl({
-            url: 'pages/LoginPage'
+          HMRouterMgr.replace({
+            pageUrl: 'LoginPage',
+            animator: new CustomAnimator()
           })
         })
       }
@@ -104,3 +211,5 @@ struct SignUpPage {
 
   }
 }
+
+

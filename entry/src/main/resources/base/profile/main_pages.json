@@ -2,14 +2,6 @@
   "src": [
     "pages/Index",
     "pages/InitPage",
-    "pages/LoginPage",
-    "pages/SignUpPage",
-    "pages/HomePage",
-    "pages/TasksPage",
-    "pages/GraphicPage",
-    "pages/ProfilePage",
-    "pages/AddTaskPage",
-    "pages/DetailTaskPage",
-    "pages/TaskSetPage"
+    "pages/TasksPage"
   ]
 }

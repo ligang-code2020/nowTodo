@@ -1,6 +1,4 @@
 @Component
-@Preview
-@Entry
 export struct FloatTabs {
   build() {
     Column() {
@@ -93,7 +91,7 @@ export struct FloatTabs {
       offsetX: -3,
       offsetY: 7
     })
-    .margin({ bottom: 30 })
+    .margin({ bottom: 10 })
 
   }
 }
