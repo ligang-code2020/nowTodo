@@ -5,9 +5,10 @@ import { httpDefaultSetting } from '../api/axios'
 import { HMRouterMgr } from '@hadss/hmrouter';
 
 export default class EntryAbility extends UIAbility {
+  private intervalID: ESObject = null
+
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
-
     // 初始化 axios 配置
     httpDefaultSetting()
 
@@ -15,10 +16,12 @@ export default class EntryAbility extends UIAbility {
     HMRouterMgr.init({
       context: this.context
     })
+
   }
 
   onDestroy(): void {
     hilog.info(0x0000, 'c', '%{public}s', 'Ability onDestroy');
+    clearInterval(this.intervalID);
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {

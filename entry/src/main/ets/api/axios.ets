@@ -21,6 +21,7 @@ import { HashMap } from '@kit.ArkTS';
 import { StringBuilder } from '../utils/StringBuilder';
 import { promptAction, router } from '@kit.ArkUI'
 import { ExceptionPrompt, PromptOptions, MarginType } from '@kit.ArkUI'
+import { addRequest, getAccessToken, removeAccessToken } from './token';
 
 
 export class ResponseResult {
@@ -43,16 +44,15 @@ const timeout = 20000 // 20s超时
 const baseUrl = '30.128.56.202:3000'
 
 export function httpDefaultSetting() {
-  console.log(TAG, 'xxxx111')
   // default settings
   axios.defaults.baseURL = baseUrl;
   axios.defaults.timeout = timeout;
 
   // default headers
   // axios.defaults.headers.common['Client-Type'] = 'xxx';
-  axios.defaults.headers.common['Client-Version'] = '1.0.4';
+  // axios.defaults.headers.common['Client-Version'] = '1.0.4';
   axios.defaults.headers.common['Os'] = 'hmos';
-  axios.defaults.headers.common['Token'] = 'xxx';
+  axios.defaults.headers.common['Authorization'] = getAccessToken();
 
   // for post
   axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -68,7 +68,19 @@ export function httpDefaultSetting() {
   // 添加响应拦截器
   axios.interceptors.response.use((response: AxiosResponse) => {
     console.log(TAG, '拦截后:' + JSON.stringify(response))
-    return transResponse(response);
+    return new Promise((resolve, reject) => {
+      if (response.data.statusCode === 401) {
+        // 移除失效的短token
+        removeAccessToken()
+        // todo 可以用 rxjs 做重试
+        // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
+        addRequest(() => resolve(axios(response.config)))
+
+      } else {
+        resolve(transResponse(response))
+      }
+    })
+    // return transResponse(response);
   }, (error: AxiosError) => {
     return Promise.reject(error);
   });
@@ -199,7 +211,7 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
   Logger.debug(TAG, "httpPost: ");
   return new Promise<D>((resolve: Function, reject: Function) => {
     let startTime = systemDateTime.getTime()
-    axios.post(`${baseUrl}${url}`, isFormUrlencoded ? getRequestFormData(data) : data, {
+    axios.post(url, isFormUrlencoded ? getRequestFormData(data) : data, {
       headers: buildPostRequestHeader(isFormUrlencoded, headers),
       // 指定请求超时的毫秒数(0 表示无超时时间)
       timeout: timeout, // 超时
@@ -222,27 +234,6 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
           if (isResultSuccess(response.data)) {
             resolve(response.data);
           } else {
-            if (response.data.statusCode === 401) {
-              console.log(TAG, '用户信息失效，请重新登录')
-              AlertDialog.show({
-                title: '重新登录',
-                cornerRadius: 20,
-                message: '用户信息失效，请重新登录',
-                autoCancel: false,
-                alignment: DialogAlignment.Center,
-                height: 200,
-                confirm: {
-                  value: '重新登录',
-                  action: () => {
-                    console.info('Button-clicking callback')
-                    router.pushUrl({
-                      url: 'pages/LoginPage'
-                    })
-                  }
-                },
-              })
-            }
-
             const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
             // reject(e);
             reject(response.data)

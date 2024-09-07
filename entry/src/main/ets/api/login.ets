@@ -4,6 +4,7 @@ import { secret } from '../utils/Secret'
 import { systemDateTime } from '@kit.BasicServicesKit'
 import { defer, retry } from 'rxjs'
 import axios from '@ohos/axios'
+import { getRefreshToken } from './token'
 
 
 interface Login {
@@ -20,11 +21,22 @@ interface PhoneCode {
   code: string
 }
 
+interface RefreshTokenParams {
+  // refreshToken: string
+}
+
 
 export class LoginApi {
   // 登录接口
   static login(loginParams: Login): Promise<ResponseResult> {
     return httpPost('/api/user/login', false, loginParams)
+  }
+
+  // 刷新 refreshToken
+  static refreshToken(): Promise<ResponseResult> {
+    return httpGet('/api/user/refreshToken', null, {
+      'R-Authorization': getRefreshToken()
+    })
   }
 
   // 查找用户

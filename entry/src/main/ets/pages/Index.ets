@@ -9,6 +9,7 @@ import { HMDefaultGlobalAnimator, HMNavigation, HMRouterMgr } from '@hadss/hmrou
 import { WelcomeLifecycle } from '../lifecycle/WelcomeLifecycle';
 import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
+import { ExitAppLifecycle } from '../lifecycle/ExitAppLifecycle'
 
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
@@ -49,6 +50,13 @@ struct Index {
       lifecycleName: 'PageDuration',
       priority: 5,
     })
+
+    HMRouterMgr.registerGlobalLifecycle({
+      lifecycle: new ExitAppLifecycle(),
+      lifecycleName: 'ExitAppLifecycle',
+      priority: 5,
+    })
+
 
   }
 
