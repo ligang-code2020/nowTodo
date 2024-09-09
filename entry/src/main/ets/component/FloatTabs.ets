@@ -1,5 +1,14 @@
+import { HMRouterMgr } from '@hadss/hmrouter'
+import { CustomAnimator } from '../animation/customAnimator'
+
 @Component
 export struct FloatTabs {
+  @State @Watch('onCurrentIndexUpdate') currentIndex: number = 2
+
+  onCurrentIndexUpdate(changedPropertyName: string) {
+    console.log("xxx变化", this.currentIndex)
+  }
+
   build() {
     Column() {
       Row() {
@@ -8,21 +17,38 @@ export struct FloatTabs {
           Column() {
             Column() {
               Image($r("app.media.selected_home"))
-              Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              if (this.currentIndex === 1) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
           }
           .layoutWeight(1)
           .alignItems(HorizontalAlign.Start)
+          .onClick(() => {
+            this.currentIndex === 1
+            HMRouterMgr.replace({
+              pageUrl: 'HomePage'
+            })
+          })
 
           // 列表
           Column() {
             Column() {
               Image($r("app.media.list"))
+              if (this.currentIndex === 2) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
+            .onClick(() => {
+              this.currentIndex = 2
+              HMRouterMgr.replace({
+                pageUrl: 'TasksPage'
+              })
+            })
 
           }
           .layoutWeight(1)
@@ -41,17 +67,33 @@ export struct FloatTabs {
             .width(50)
             .width('100%')
             .height('100%')
+            .onClick(() => {
+              HMRouterMgr.push({
+                pageUrl: 'AddTaskPage',
+                animator: new CustomAnimator()
+              })
+            })
         }
         .height('100%')
+
 
         Row() {
           // 图表
           Column() {
             Column() {
               Image($r("app.media.charts"))
+              if (this.currentIndex === 3) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
+            .onClick(() => {
+              this.currentIndex = 3
+              HMRouterMgr.replace({
+                pageUrl: 'GraphicPage'
+              })
+            })
           }
           .layoutWeight(1)
           .alignItems(HorizontalAlign.End)
@@ -60,10 +102,18 @@ export struct FloatTabs {
           Column() {
             Column() {
               Image($r("app.media.profile"))
+              if (this.currentIndex === 4) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
-
+            .onClick(() => {
+              this.currentIndex = 4
+              HMRouterMgr.replace({
+                pageUrl: 'ProfilePage'
+              })
+            })
           }
           .layoutWeight(1)
           .alignItems(HorizontalAlign.End)
@@ -90,6 +140,10 @@ export struct FloatTabs {
       color: '#F1F7FF',
       offsetX: -3,
       offsetY: 7
+    })
+    .border({
+      width: 1,
+      color: Color.Red
     })
     .margin({ bottom: 10 })
 

@@ -16,7 +16,7 @@ interface LoginInfo {
   refreshToken?: string
 }
 
-@HMRouter({ pageUrl: 'LoginPage', animator: 'CustomAnimator' })
+@HMRouter({ pageUrl: 'LoginPage', animator: 'CustomAnimator', singleton: true })
 @Component
 export struct LoginPage {
   // 用户信息持久化
@@ -111,7 +111,7 @@ export struct LoginPage {
               }
               await this.waitLoading()
               clearTimeout(this.timerId)
-              HMRouterMgr.push({
+              HMRouterMgr.replace({
                 pageUrl: 'HomePage',
                 animator: new CustomAnimator()
               })

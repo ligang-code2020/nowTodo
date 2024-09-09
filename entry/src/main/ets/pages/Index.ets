@@ -10,6 +10,7 @@ import { WelcomeLifecycle } from '../lifecycle/WelcomeLifecycle';
 import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
 import { ExitAppLifecycle } from '../lifecycle/ExitAppLifecycle'
+import { FloatTabs } from '../component/FloatTabs'
 
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
@@ -17,7 +18,7 @@ class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
     instance.mode(NavigationMode.Stack);
     instance.navBarWidth('100%');
     instance.hideTitleBar(true);
-    instance.hideToolBar(true);
+    // instance.hideToolBar(true);
     instance.hideNavBar(true)
   }
 }
@@ -51,12 +52,6 @@ struct Index {
       priority: 5,
     })
 
-    HMRouterMgr.registerGlobalLifecycle({
-      lifecycle: new ExitAppLifecycle(),
-      lifecycleName: 'ExitAppLifecycle',
-      priority: 5,
-    })
-
 
   }
 
@@ -68,18 +63,26 @@ struct Index {
     }
   }
 
+  @Builder
+  customToolBar() {
+    FloatTabs()
+  }
+
   build() {
     Column() {
       HMNavigation({
         navigationId: 'myNavigation',
-        // homePageUrl: 'HomePage',
         options: {
           standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
           dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
-          modifier: this.modifier
+          modifier: this.modifier,
+          toolbar: this.customToolBar()
         }
       }) {
-        HomePage()
+        Stack({ alignContent: Alignment.Bottom }) {
+          HomePage()
+        }
+
       }
     }
     .width('100%')

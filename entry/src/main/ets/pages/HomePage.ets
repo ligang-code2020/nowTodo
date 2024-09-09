@@ -4,15 +4,20 @@ import { CancelCard } from '../component/CanceledCard'
 import { PendingCard } from '../component/PendingCard'
 import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
-import { HMRouter } from '@hadss/hmrouter'
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 
 @HMRouter({
   pageUrl: 'HomePage',
-  singleton: true,
-  animator: 'CustomAnimator'
+  animator: 'CustomAnimator',
+  lifecycle: 'ExitAppLifecycle',
+  singleton: true
 })
 @Component
 export struct HomePage {
+  aboutToAppear(): void {
+    console.log("xxxxxx12113", JSON.stringify(HMRouterMgr.getPathStack('myNavigation')))
+  }
+
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
       Scroll() {
@@ -51,6 +56,11 @@ export struct HomePage {
               color: '#F1F7FF',
               offsetX: -3,
               offsetY: 7
+            })
+            .onClick(() => {
+              HMRouterMgr.push({
+                pageUrl: 'ProfilePage'
+              })
             })
 
           }
@@ -103,7 +113,7 @@ export struct HomePage {
       .scrollBar(BarState.Off)
 
       // 悬浮 tabs 栏
-      FloatTabs().align(Alignment.Bottom)
+      // FloatTabs().align(Alignment.Bottom)
 
     }
     .height('100%')

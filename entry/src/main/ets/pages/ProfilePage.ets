@@ -1,6 +1,7 @@
 import { CommonContainer } from '../style/common'
 import { FloatTabs } from '../component/FloatTabs'
 import { ProfileBlock } from '../component/ProfileBlock'
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 
 interface Profile {
   backgroundColorValue: ResourceColor,
@@ -188,9 +189,13 @@ struct CreateBoard {
 }
 
 
-@Entry
+@HMRouter({
+  pageUrl: 'ProfilePage',
+  animator: 'CustomAnimator',
+  singleton: true
+})
 @Component
-struct ProfilePage {
+export struct ProfilePage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
   dialogController: CustomDialogController | null = new CustomDialogController({
     builder: Logout(),
@@ -204,6 +209,10 @@ struct ProfilePage {
     customStyle: false,
     cornerRadius: 20,
   })
+
+  aboutToAppear(): void {
+    console.log("xxxxxx1211", JSON.stringify(HMRouterMgr.getPathStack('myNavigation')))
+  }
 
   @Builder
   MyMenu() {
@@ -306,7 +315,7 @@ struct ProfilePage {
 
 
       // 悬浮 tabs 栏
-      FloatTabs().align(Alignment.Bottom)
+      // FloatTabs().align(Alignment.Bottom)
     }
     .height('100%')
     .width('100%')
