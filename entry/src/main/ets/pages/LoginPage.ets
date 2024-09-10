@@ -8,8 +8,6 @@ import { constants } from '../common/constants/constants'
 import { CustomAnimator } from '../animation/customAnimator'
 
 
-
-
 export interface LoginInfo {
   userName?: string
   accessToken?: string
@@ -21,6 +19,8 @@ export interface LoginInfo {
 export struct LoginPage {
   // 用户信息持久化
   @StorageLink('LOGIN_INFO') loginInfo: LoginInfo = {}
+  @StorageLink('ACCESS_TOKEN') accessToken: string = ''
+  @StorageLink('REFRESH_TOKEN') refreshToken: string = ''
   @State username: string = ''
   @State password: string = ''
   @State isLoading: Boolean = false;
@@ -109,6 +109,8 @@ export struct LoginPage {
                 accessToken: res.data.access_token,
                 refreshToken: res.data.refresh_token
               }
+              this.accessToken = res.data.access_token;
+              this.refreshToken = res.data.refresh_token;
               await this.waitLoading()
               clearTimeout(this.timerId)
               HMRouterMgr.replace({

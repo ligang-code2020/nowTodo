@@ -1,42 +1,46 @@
 import { HMRouterMgr } from '@hadss/hmrouter'
 import { ResponseResult } from './axios'
 import { LoginApi } from './login'
+import { LoginInfo } from '../pages/LoginPage';
 
 
 /**
  * @description 获取长token
  */
-export const getRefreshToken = () => AppStorage.get<string>('refreshToken');
+export const getRefreshToken = () => AppStorage.get<string>('REFRESH_TOKEN')
 
 /**
  * @description 获取短token
  */
-export const getAccessToken = () => AppStorage.get<string>('accessToken');
+export const getAccessToken = () => AppStorage.get<string>('ACCESS_TOKEN')
 
 /**
  * @param accessToken
  * @description 存储短token
  */
-export const setAccessToken = (accessToken: string) => PersistentStorage.persistProp('accessToken', accessToken);
+export const setAccessToken =
+  (accessToken: string) => PersistentStorage.persistProp<string>('ACCESS_TOKEN', accessToken);
 
 /**
  * @param refreshToken
  * @description 存储长token
  */
-export const setRefreshToken = (refreshToken: string) => PersistentStorage.persistProp('refreshToken', refreshToken);
+export const setRefreshToken =
+  (refreshToken: string) => PersistentStorage.persistProp<string>('REFRESH_TOKEN', refreshToken);
 
 
 /**
- * @param accessToken
  * @description 删除短token
  */
-export const removeAccessToken = () => PersistentStorage.persistProp('accessToken', undefined);
+export const removeAccessToken =  () => {
+  console.log("AxiosRequest3242343")
+  PersistentStorage.persistProp<string>('ACCESS_TOKEN', '')
+}
 
 /**
- * @param c
  * @description 删除长token
  */
-export const removeRefreshToken = () => PersistentStorage.persistProp('refreshToken', undefined);
+export const removeRefreshToken = () => PersistentStorage.persistProp<string>('REFRESH_TOKEN', '');
 
 
 // let subsequent: Promise<ResponseResult> [] = []

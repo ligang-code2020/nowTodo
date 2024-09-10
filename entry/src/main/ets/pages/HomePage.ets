@@ -6,6 +6,7 @@ import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
 import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { LoginApi } from '../api/login'
+import { removeAccessToken } from '../api/token'
 
 @HMRouter({
   pageUrl: 'HomePage',
@@ -15,7 +16,8 @@ import { LoginApi } from '../api/login'
 })
 @Component
 export struct HomePage {
-  aboutToAppear(): void {}
+  aboutToAppear(): void {
+  }
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
@@ -57,9 +59,10 @@ export struct HomePage {
               offsetY: 7
             })
             .onClick(() => {
-              LoginApi.findUser({ username: 'ligang2024' }).then(res => {
-
-              })
+              removeAccessToken()
+              // LoginApi.findUser({ username: 'ligang20241' }).then(res => {
+              //   console.log("AxiosRequestxx", JSON.stringify(res))
+              // })
 
             })
 

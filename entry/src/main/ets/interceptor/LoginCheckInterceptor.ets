@@ -9,9 +9,9 @@ interface LoginInfo {
 @HMInterceptor({ interceptorName: 'LoginCheckInterceptor' })
 export class LoginCheckInterceptor implements IHMInterceptor {
   handle(info: HMInterceptorInfo): HMInterceptorAction {
-    let loginInfo = AppStorage.get<LoginInfo>('LOGIN_INFO')
-    console.log("xxxx",JSON.stringify(loginInfo))
-    if (loginInfo?.accessToken) {
+    let loginInfo = AppStorage.get<string>('ACCESS_TOKEN')
+    console.log("xxxx", JSON.stringify(loginInfo))
+    if (loginInfo !== '') {
       console.log("xxnologin")
       return HMInterceptorAction.DO_NEXT;
     } else {

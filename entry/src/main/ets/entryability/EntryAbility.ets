@@ -42,6 +42,8 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
       PersistentStorage.persistProp<LoginInfo>('LOGIN_INFO', {})
+      PersistentStorage.persistProp<string>('ACCESS_TOKEN', '')
+      PersistentStorage.persistProp<string>('REFRESH_TOKEN', '')
     });
   }
 
