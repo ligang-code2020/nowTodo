@@ -7,16 +7,16 @@ import { Logger } from '../utils/Logger'
 import { constants } from '../common/constants/constants'
 import { CustomAnimator } from '../animation/customAnimator'
 
-PersistentStorage.persistProp<LoginInfo>('LOGIN_INFO', {})
 
 
-interface LoginInfo {
+
+export interface LoginInfo {
   userName?: string
   accessToken?: string
   refreshToken?: string
 }
 
-@HMRouter({ pageUrl: 'LoginPage', animator: 'CustomAnimator', singleton: true })
+@HMRouter({ pageUrl: 'LoginPage', singleton: true })
 @Component
 export struct LoginPage {
   // 用户信息持久化

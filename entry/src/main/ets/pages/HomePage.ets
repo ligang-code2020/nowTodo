@@ -5,18 +5,17 @@ import { PendingCard } from '../component/PendingCard'
 import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
 import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { LoginApi } from '../api/login'
 
 @HMRouter({
   pageUrl: 'HomePage',
-  animator: 'CustomAnimator',
+  // animator: 'CustomAnimator',
   lifecycle: 'ExitAppLifecycle',
   singleton: true
 })
 @Component
 export struct HomePage {
-  aboutToAppear(): void {
-    console.log("xxxxxx12113", JSON.stringify(HMRouterMgr.getPathStack('myNavigation')))
-  }
+  aboutToAppear(): void {}
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
@@ -58,9 +57,10 @@ export struct HomePage {
               offsetY: 7
             })
             .onClick(() => {
-              HMRouterMgr.push({
-                pageUrl: 'ProfilePage'
+              LoginApi.findUser({ username: 'ligang2024' }).then(res => {
+
               })
+
             })
 
           }

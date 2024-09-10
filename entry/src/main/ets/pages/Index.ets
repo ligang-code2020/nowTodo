@@ -11,7 +11,14 @@ import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
 import { ExitAppLifecycle } from '../lifecycle/ExitAppLifecycle'
 import { FloatTabs } from '../component/FloatTabs'
+import { LoginCheckInterceptor } from '../interceptor/LoginCheckInterceptor'
 
+
+interface LoginInfo {
+  userName: string,
+  accessToken: string,
+  refreshToken: string
+}
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
   initializeModifier(instance: NavigationAttribute): void {
@@ -30,11 +37,16 @@ struct Index {
   @StorageLink('userLogin') userLogin: boolean = false;
 
   aboutToAppear(): void {
-    console.log('xxxaboutToAppear')
     // 注册全局拦截器
     HMRouterMgr.registerGlobalInterceptor({
       interceptor: new JumpInfoInterceptor(),
       interceptorName: 'JumpInfo',
+      priority: 5,
+    })
+
+    HMRouterMgr.registerGlobalInterceptor({
+      interceptor: new LoginCheckInterceptor(),
+      interceptorName: 'LoginCheck',
       priority: 5,
     })
 
@@ -52,16 +64,15 @@ struct Index {
       priority: 5,
     })
 
-
   }
 
-  onPageShow(): void {
-    if (!this.userLogin) {
-      HMRouterMgr.replace({
-        pageUrl: 'LoginPage'
-      })
-    }
-  }
+  // onPageShow(): void {
+  //   if (!this.userLogin) {
+  //     HMRouterMgr.replace({
+  //       pageUrl: 'LoginPage'
+  //     })
+  //   }
+  // }
 
   @Builder
   customToolBar() {
@@ -72,6 +83,7 @@ struct Index {
     Column() {
       HMNavigation({
         navigationId: 'myNavigation',
+        homePageUrl:'HomePage',
         options: {
           standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
           dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
@@ -79,10 +91,7 @@ struct Index {
           toolbar: this.customToolBar()
         }
       }) {
-        Stack({ alignContent: Alignment.Bottom }) {
-          HomePage()
-        }
-
+        // HomePage()
       }
     }
     .width('100%')

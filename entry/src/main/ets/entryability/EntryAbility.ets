@@ -3,6 +3,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { httpDefaultSetting } from '../api/axios'
 import { HMRouterMgr } from '@hadss/hmrouter';
+import { LoginInfo } from '../pages/LoginPage';
 
 export default class EntryAbility extends UIAbility {
   private intervalID: ESObject = null
@@ -40,6 +41,7 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
+      PersistentStorage.persistProp<LoginInfo>('LOGIN_INFO', {})
     });
   }
 
