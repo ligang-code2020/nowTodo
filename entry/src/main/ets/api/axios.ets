@@ -21,7 +21,7 @@ import { HashMap } from '@kit.ArkTS';
 import { StringBuilder } from '../utils/StringBuilder';
 import { promptAction, router } from '@kit.ArkUI'
 import { ExceptionPrompt, PromptOptions, MarginType } from '@kit.ArkUI'
-import { addRequest, getAccessToken, removeAccessToken } from './token';
+import { addRequest, getAccessToken, refreshToken, removeAccessToken } from './token';
 
 
 export class ResponseResult {
@@ -41,7 +41,7 @@ export class ResponseResult {
 
 const TAG: string = "AxiosRequest"
 const timeout = 20000 // 20s超时
-const baseUrl = '30.128.56.202:3000'
+const baseUrl = '192.168.0.107:3000'
 
 export function httpDefaultSetting() {
   // default settings
@@ -75,8 +75,11 @@ export function httpDefaultSetting() {
         console.log("AxiosRequestgetAccessToken()11", getAccessToken())
         // todo 可以用 rxjs 做重试
         // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
-        addRequest(() => resolve(axios(response.config)))
 
+        // addRequest(() => resolve(axios(response)))
+        addRequest(() => 1)
+        refreshToken()
+        // resolve(response)
       } else {
         resolve(transResponse(response))
       }
@@ -159,14 +162,15 @@ export function httpGet<D>(url: string, params?: ESObject, headers?: ESObject): 
       Logger.debug(TAG, "--------------------------------------");
       if (isSuccess(response)) {
         if (isResultSuccess(response.data)) {
-          resolve(response.data.data);
+          resolve(response.data);
         } else {
+          // const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
           const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
           reject(e);
         }
       } else {
         const e: Error = { name: `${response.status}`, message: `${response.statusText}` }
-        reject(e);
+        reject(response.data)
       }
     })
       .catch((reason: AxiosError) => {

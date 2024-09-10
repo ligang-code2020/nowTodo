@@ -16,6 +16,8 @@ import { removeAccessToken } from '../api/token'
 })
 @Component
 export struct HomePage {
+  @StorageLink('ACCESS_TOKEN') accessToken: string = ''
+
   aboutToAppear(): void {
   }
 
@@ -59,10 +61,9 @@ export struct HomePage {
               offsetY: 7
             })
             .onClick(() => {
-              removeAccessToken()
-              // LoginApi.findUser({ username: 'ligang20241' }).then(res => {
-              //   console.log("AxiosRequestxx", JSON.stringify(res))
-              // })
+              LoginApi.findUser({ username: 'ligang20241' }).then(res => {
+                console.log("AxiosRequestxx", JSON.stringify(res))
+              })
 
             })
 

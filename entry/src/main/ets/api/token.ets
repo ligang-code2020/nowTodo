@@ -19,28 +19,26 @@ export const getAccessToken = () => AppStorage.get<string>('ACCESS_TOKEN')
  * @description 存储短token
  */
 export const setAccessToken =
-  (accessToken: string) => PersistentStorage.persistProp<string>('ACCESS_TOKEN', accessToken);
+  (accessToken: string) => AppStorage.setOrCreate<string>('ACCESS_TOKEN', accessToken)
 
 /**
  * @param refreshToken
  * @description 存储长token
  */
 export const setRefreshToken =
-  (refreshToken: string) => PersistentStorage.persistProp<string>('REFRESH_TOKEN', refreshToken);
+  (refreshToken: string) => AppStorage.setOrCreate<string>('REFRESH_TOKEN', refreshToken)
 
 
 /**
  * @description 删除短token
  */
-export const removeAccessToken =  () => {
-  console.log("AxiosRequest3242343")
-  PersistentStorage.persistProp<string>('ACCESS_TOKEN', '')
-}
+export const removeAccessToken = () => AppStorage.setOrCreate<string>('ACCESS_TOKEN', '')
+
 
 /**
  * @description 删除长token
  */
-export const removeRefreshToken = () => PersistentStorage.persistProp<string>('REFRESH_TOKEN', '');
+export const removeRefreshToken = () => AppStorage.setOrCreate<string>('REFRESH_TOKEN', '')
 
 
 // let subsequent: Promise<ResponseResult> [] = []
@@ -52,6 +50,7 @@ let flag = false // 设置开关，保证一次只能请求一次短token，防�
 export const addRequest = (request: () => ESObject) => {
   console.log('AxiosRequest', JSON.stringify(request))
   subsequent.push(request)
+  console.log('AxiosRequestsubsequent', JSON.stringify(subsequent))
 }
 
 
@@ -71,6 +70,7 @@ export const refreshToken = () => {
     let refreshToken = getRefreshToken() // 获取长token
     if (refreshToken) {
       LoginApi.refreshToken().then((res) => {
+        console.log("res-Axios",JSON.stringify(res))
         if (res.statusCode === 4001) {
           flag = false
           // 删除 token
@@ -99,7 +99,7 @@ export const refreshToken = () => {
           setRefreshToken(res.data.refresh_token)
           flag = false
           // 重新请求数据
-          retryRequest()
+          // retryRequest()
         }
 
       })
