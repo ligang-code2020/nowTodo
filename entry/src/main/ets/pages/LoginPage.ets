@@ -21,6 +21,7 @@ export struct LoginPage {
   @StorageLink('LOGIN_INFO') loginInfo: LoginInfo = {}
   @StorageLink('ACCESS_TOKEN') accessToken: string = ''
   @StorageLink('REFRESH_TOKEN') refreshToken: string = ''
+  @LocalStorageLink('onCurrentIndexUpdate') currentIndex: number = 1;
   @State username: string = ''
   @State password: string = ''
   @State isLoading: Boolean = false;
@@ -109,8 +110,9 @@ export struct LoginPage {
                 accessToken: res.data.access_token,
                 refreshToken: res.data.refresh_token
               }
-              this.accessToken = res.data.access_token;
-              this.refreshToken = res.data.refresh_token;
+              this.accessToken = res.data.access_token
+              this.refreshToken = res.data.refresh_token
+              this.currentIndex = 1
               await this.waitLoading()
               clearTimeout(this.timerId)
               HMRouterMgr.replace({

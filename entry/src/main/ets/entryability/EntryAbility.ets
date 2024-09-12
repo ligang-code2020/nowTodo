@@ -44,6 +44,11 @@ export default class EntryAbility extends UIAbility {
       PersistentStorage.persistProp<LoginInfo>('LOGIN_INFO', {})
       PersistentStorage.persistProp<string>('ACCESS_TOKEN', '')
       PersistentStorage.persistProp<string>('REFRESH_TOKEN', '')
+
+      let para: Record<string, number> = {
+        'onCurrentIndexUpdate': 1
+      };
+      let storage: LocalStorage = new LocalStorage(para);
     });
   }
 

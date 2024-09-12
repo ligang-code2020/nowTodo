@@ -2,6 +2,7 @@ import { CommonContainer } from '../style/common'
 import { FloatTabs } from '../component/FloatTabs'
 import { ProfileBlock } from '../component/ProfileBlock'
 import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { removeAccessToken, removeRefreshToken } from '../api/token'
 
 interface Profile {
   backgroundColorValue: ResourceColor,
@@ -103,6 +104,14 @@ struct Logout {
           .fontWeight(600)
           .fontColor(Color.White)
           .onClick(() => {
+            this.controller?.close()
+            // 移除 token，跳转登录页
+            removeAccessToken()
+            removeRefreshToken()
+            HMRouterMgr.replace({
+              pageUrl: 'LoginPage',
+              skipAllInterceptor: true
+            })
           })
       }
       .margin({ top: 24, bottom: 25 })

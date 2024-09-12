@@ -3,7 +3,7 @@ import { CustomAnimator } from '../animation/customAnimator'
 
 @Component
 export struct FloatTabs {
-  @State @Watch('onCurrentIndexUpdate') currentIndex: number = 1
+  @LocalStorageLink('onCurrentIndexUpdate') currentIndex: number = 1;
 
   onCurrentIndexUpdate(changedPropertyName: string) {
     console.log("xxx变化", this.currentIndex)

@@ -1,7 +1,3 @@
-import InitPage from './InitPage'
-import { HomePage } from './HomePage'
-import { PhoneVerifyPage } from './PhoneVerifyPage'
-import { LoginPage } from './LoginPage'
 import display from '@ohos.display';
 import { Logger } from '../utils/Logger'
 import { AttributeUpdater } from '@kit.ArkUI';
@@ -9,16 +5,9 @@ import { HMDefaultGlobalAnimator, HMNavigation, HMRouterMgr } from '@hadss/hmrou
 import { WelcomeLifecycle } from '../lifecycle/WelcomeLifecycle';
 import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
-import { ExitAppLifecycle } from '../lifecycle/ExitAppLifecycle'
 import { FloatTabs } from '../component/FloatTabs'
 import { LoginCheckInterceptor } from '../interceptor/LoginCheckInterceptor'
 
-
-interface LoginInfo {
-  userName: string,
-  accessToken: string,
-  refreshToken: string
-}
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
   initializeModifier(instance: NavigationAttribute): void {
@@ -65,14 +54,6 @@ struct Index {
     })
 
   }
-
-  // onPageShow(): void {
-  //   if (!this.userLogin) {
-  //     HMRouterMgr.replace({
-  //       pageUrl: 'LoginPage'
-  //     })
-  //   }
-  // }
 
   @Builder
   customToolBar() {
