@@ -41,7 +41,7 @@ export class ResponseResult {
 
 const TAG: string = "AxiosRequest"
 const timeout = 20000 // 20s超时
-const baseUrl = '192.168.0.107:3000'
+const baseUrl = '30.128.56.202:3000'
 
 export function httpDefaultSetting() {
   // default settings
@@ -72,14 +72,10 @@ export function httpDefaultSetting() {
       if (response.data.statusCode === 401) {
         // 移除失效的短token
         removeAccessToken()
-        console.log("AxiosRequestgetAccessToken()11", getAccessToken())
         // todo 可以用 rxjs 做重试
         // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
-
-        // addRequest(() => resolve(axios(response)))
-        addRequest(() => 1)
+        addRequest(() => resolve(axios(response.config)))
         refreshToken()
-        // resolve(response)
       } else {
         resolve(transResponse(response))
       }
@@ -98,7 +94,7 @@ function transRequest(config: InternalAxiosRequestConfig): InternalAxiosRequestC
     let millis = systemDateTime.getTime();
     // config.headers['t'] = millis - Constant.offsetTime; // 同步时间
     config.headers['Authorization'] = `Bearer ${getAccessToken()}` // 写入token
-    console.log("AxiosRequestgetAccessToken()", getAccessToken())
+
 
     // 增加验签逻辑
     // 验签可以仅在需要的请求中增加验签，通过增加特定的header属性来区分
@@ -166,7 +162,7 @@ export function httpGet<D>(url: string, params?: ESObject, headers?: ESObject): 
         } else {
           // const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
           const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
-          reject(e);
+          reject(response.data);
         }
       } else {
         const e: Error = { name: `${response.status}`, message: `${response.statusText}` }
@@ -241,7 +237,6 @@ export function httpPost<D>(url: string, isFormUrlencoded: boolean = false, data
             resolve(response.data);
           } else {
             const e: Error = { name: `${response.data.statusCode}`, message: `${response.data.message}` }
-            // reject(e);
             reject(response.data)
           }
         } else {

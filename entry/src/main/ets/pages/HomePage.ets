@@ -63,6 +63,8 @@ export struct HomePage {
             .onClick(() => {
               LoginApi.findUser({ username: 'ligang20241' }).then(res => {
                 console.log("AxiosRequestxx", JSON.stringify(res))
+              }).catch((e: ESObject) => {
+                console.log("AxiosRequestxxerror", JSON.stringify(e))
               })
 
             })

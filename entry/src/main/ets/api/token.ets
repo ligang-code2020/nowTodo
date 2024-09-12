@@ -2,6 +2,7 @@ import { HMRouterMgr } from '@hadss/hmrouter'
 import { ResponseResult } from './axios'
 import { LoginApi } from './login'
 import { LoginInfo } from '../pages/LoginPage';
+import { promptAction } from '@kit.ArkUI';
 
 
 /**
@@ -48,9 +49,7 @@ let flag = false // 设置开关，保证一次只能请求一次短token，防�
 
 /*把过期请求添加在数组中*/
 export const addRequest = (request: () => ESObject) => {
-  console.log('AxiosRequest', JSON.stringify(request))
   subsequent.push(request)
-  console.log('AxiosRequestsubsequent', JSON.stringify(subsequent))
 }
 
 
@@ -70,38 +69,31 @@ export const refreshToken = () => {
     let refreshToken = getRefreshToken() // 获取长token
     if (refreshToken) {
       LoginApi.refreshToken().then((res) => {
-        console.log("res-Axios",JSON.stringify(res))
-        if (res.statusCode === 4001) {
-          flag = false
-          // 删除 token
-          removeRefreshToken()
-          // 退出登录
-          AlertDialog.show({
-            title: '重新登录',
-            cornerRadius: 20,
-            message: '用户信息失效，请重新登录',
-            autoCancel: false,
-            alignment: DialogAlignment.Center,
-            height: 200,
-            confirm: {
-              value: '重新登录',
-              action: () => {
-                console.info('Button-clicking callback')
-                HMRouterMgr.push({
-                  pageUrl: 'pages/LoginPage'
-                })
-              }
-            },
-          })
-        } else {
-          // 存储新的 token
-          setAccessToken(res.data.access_token)
-          setRefreshToken(res.data.refresh_token)
-          flag = false
-          // 重新请求数据
-          // retryRequest()
-        }
+        // 存储新的 token
+        setAccessToken(res.data.access_token)
+        setRefreshToken(res.data.refresh_token)
+        flag = false
+        // 重新请求数据
+        retryRequest()
 
+      }).catch((e: ResponseResult) => {
+        flag = false
+        // 删除 token
+        removeRefreshToken()
+        // 退出登录
+        promptAction.showToast({
+          duration: 3000,
+          message: '用户信息失效，请重新登录',
+          alignment: Alignment.Top,
+          offset: {
+            dx: '50%',
+            dy: 80
+          }
+        })
+        HMRouterMgr.replace({
+          pageUrl: 'LoginPage',
+          skipAllInterceptor: true
+        })
       })
     }
   }
