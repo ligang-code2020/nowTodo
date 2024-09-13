@@ -119,7 +119,7 @@ export struct HomePage {
       .scrollBar(BarState.Off)
 
       // 悬浮 tabs 栏
-      // FloatTabs().align(Alignment.Bottom)
+      FloatTabs().align(Alignment.Bottom)
 
     }
     .height('100%')

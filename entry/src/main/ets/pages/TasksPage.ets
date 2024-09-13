@@ -202,8 +202,8 @@ export struct TasksPage {
       .attributeModifier(this.commonContainerStyle)
 
 
-      // // 悬浮 tabs 栏
-      // FloatTabs().align(Alignment.Bottom)
+      // 悬浮 tabs 栏
+      FloatTabs().align(Alignment.Bottom)
     }
     .height('100%')
     .width('100%')

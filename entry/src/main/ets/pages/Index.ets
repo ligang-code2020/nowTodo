@@ -15,8 +15,8 @@ class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
     instance.mode(NavigationMode.Stack);
     instance.navBarWidth('100%');
     instance.hideTitleBar(true);
-    // instance.hideToolBar(false);
-    // instance.hideNavBar(true)
+    instance.hideToolBar(true);
+    instance.hideNavBar(true)
   }
 }
 
@@ -25,22 +25,22 @@ function customToolBar() {
   Row() {
     FloatTabs()
   }
-  .alignItems(VerticalAlign.Center)
   .justifyContent(FlexAlign.Center)
+  .backgroundColor(Color.White)
   .width('100%')
+  .expandSafeArea([SafeAreaType.SYSTEM], [ SafeAreaEdge.BOTTOM])
 
 
 }
 
-// 瀑布流子组件WrappedBuilder对象
-let flowItemWrapper: WrappedBuilder<ESObject> = wrapBuilder<ESObject>(customToolBar);
+
 
 
 @Component
 @Entry
 struct Index {
   modifier: MyNavModifier = new MyNavModifier()
-  @StorageLink('userLogin') userLogin: boolean = false;
+
 
   aboutToAppear(): void {
     // 注册全局拦截器
@@ -53,7 +53,7 @@ struct Index {
     HMRouterMgr.registerGlobalInterceptor({
       interceptor: new LoginCheckInterceptor(),
       interceptorName: 'LoginCheck',
-      priority: 5,
+      priority: 1,
     })
 
 
@@ -76,23 +76,13 @@ struct Index {
     Column() {
       HMNavigation({
         navigationId: 'myNavigation',
-        // homePageUrl:'HomePage',
+        homePageUrl:'HomePage',
         options: {
           standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
           dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
           modifier: this.modifier,
-          toolbar: flowItemWrapper,
-          toolbarOptions: {
-            backgroundColor: Color.White
-          }
         }
-      }) {
-        Row() {
-          HomePage()
-        }
-        .height('100%')
-        .width('100%')
-      }
+      })
     }
     .width('100%')
     .height('100%')

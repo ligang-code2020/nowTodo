@@ -153,7 +153,7 @@ export struct c {
 
 
       // 悬浮 tabs 栏
-      // FloatTabs().align(Alignment.Bottom)
+      FloatTabs().align(Alignment.Bottom)
     }
     .height('100%')
     .width('100%')
