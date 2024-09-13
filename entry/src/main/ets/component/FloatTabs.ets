@@ -141,10 +141,6 @@ export struct FloatTabs {
       offsetX: -3,
       offsetY: 7
     })
-    .border({
-      width: 1,
-      color: Color.Red
-    })
     .margin({ bottom: 10 })
 
   }

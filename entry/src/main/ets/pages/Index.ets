@@ -7,6 +7,7 @@ import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
 import { FloatTabs } from '../component/FloatTabs'
 import { LoginCheckInterceptor } from '../interceptor/LoginCheckInterceptor'
+import { HomePage } from './HomePage';
 
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
@@ -14,10 +15,26 @@ class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
     instance.mode(NavigationMode.Stack);
     instance.navBarWidth('100%');
     instance.hideTitleBar(true);
-    // instance.hideToolBar(true);
-    instance.hideNavBar(true)
+    // instance.hideToolBar(false);
+    // instance.hideNavBar(true)
   }
 }
+
+@Builder
+function customToolBar() {
+  Row() {
+    FloatTabs()
+  }
+  .alignItems(VerticalAlign.Center)
+  .justifyContent(FlexAlign.Center)
+  .width('100%')
+
+
+}
+
+// 瀑布流子组件WrappedBuilder对象
+let flowItemWrapper: WrappedBuilder<ESObject> = wrapBuilder<ESObject>(customToolBar);
+
 
 @Component
 @Entry
@@ -55,24 +72,26 @@ struct Index {
 
   }
 
-  @Builder
-  customToolBar() {
-    FloatTabs()
-  }
-
   build() {
     Column() {
       HMNavigation({
         navigationId: 'myNavigation',
-        homePageUrl:'HomePage',
+        // homePageUrl:'HomePage',
         options: {
           standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
           dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
           modifier: this.modifier,
-          toolbar: this.customToolBar()
+          toolbar: flowItemWrapper,
+          toolbarOptions: {
+            backgroundColor: Color.White
+          }
         }
       }) {
-        // HomePage()
+        Row() {
+          HomePage()
+        }
+        .height('100%')
+        .width('100%')
       }
     }
     .width('100%')
