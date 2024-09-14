@@ -1,5 +1,14 @@
+import { HMRouterMgr } from '@hadss/hmrouter'
+import { CustomAnimator } from '../animation/customAnimator'
+
 @Component
 export struct FloatTabs {
+  @LocalStorageLink('onCurrentIndexUpdate') currentIndex: number = 1;
+
+  onCurrentIndexUpdate(changedPropertyName: string) {
+    console.log("xxx变化", this.currentIndex)
+  }
+
   build() {
     Column() {
       Row() {
@@ -7,9 +16,17 @@ export struct FloatTabs {
           // 主页
           Column() {
             Column() {
-              Image($r("app.media.selected_home"))
-              Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              Image($r(this.currentIndex === 1 ? "app.media.selected_home" : "app.media.not_select_home"))
+              if (this.currentIndex === 1) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
+            .onClick(() => {
+              this.currentIndex = 1
+              HMRouterMgr.replace({
+                pageUrl: 'HomePage'
+              })
+            })
             .width(24)
             .aspectRatio(1)
           }
@@ -19,10 +36,19 @@ export struct FloatTabs {
           // 列表
           Column() {
             Column() {
-              Image($r("app.media.list"))
+              Image($r(this.currentIndex === 2 ? "app.media.selected_list" : "app.media.not_select_list"))
+              if (this.currentIndex === 2) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
+            .onClick(() => {
+              this.currentIndex = 2
+              HMRouterMgr.replace({
+                pageUrl: 'TasksPage'
+              })
+            })
 
           }
           .layoutWeight(1)
@@ -41,17 +67,33 @@ export struct FloatTabs {
             .width(50)
             .width('100%')
             .height('100%')
+            .onClick(() => {
+              HMRouterMgr.push({
+                pageUrl: 'AddTaskPage',
+                animator: new CustomAnimator()
+              })
+            })
         }
         .height('100%')
+
 
         Row() {
           // 图表
           Column() {
             Column() {
-              Image($r("app.media.charts"))
+              Image($r(this.currentIndex === 3 ? "app.media.selected_charts" : "app.media.not_select_charts"))
+              if (this.currentIndex === 3) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
+            .onClick(() => {
+              this.currentIndex = 3
+              HMRouterMgr.replace({
+                pageUrl: 'GraphicPage'
+              })
+            })
           }
           .layoutWeight(1)
           .alignItems(HorizontalAlign.End)
@@ -59,11 +101,19 @@ export struct FloatTabs {
           // 配置
           Column() {
             Column() {
-              Image($r("app.media.profile"))
+              Image($r(this.currentIndex === 4 ? "app.media.selected_profile" : "app.media.not_select_profile"))
+              if (this.currentIndex === 4) {
+                Circle({ width: 4, height: 4 }).fill('#5B67CA').margin({ top: 3 })
+              }
             }
             .width(24)
             .aspectRatio(1)
-
+            .onClick(() => {
+              this.currentIndex = 4
+              HMRouterMgr.replace({
+                pageUrl: 'ProfilePage'
+              })
+            })
           }
           .layoutWeight(1)
           .alignItems(HorizontalAlign.End)
@@ -91,7 +141,8 @@ export struct FloatTabs {
       offsetX: -3,
       offsetY: 7
     })
-    .margin({ bottom: 10 })
+    .margin({ bottom: 30 })
+
 
   }
 }

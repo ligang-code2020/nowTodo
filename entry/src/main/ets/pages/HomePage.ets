@@ -4,15 +4,23 @@ import { CancelCard } from '../component/CanceledCard'
 import { PendingCard } from '../component/PendingCard'
 import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
-import { HMRouter } from '@hadss/hmrouter'
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+import { LoginApi } from '../api/login'
+import { removeAccessToken } from '../api/token'
 
 @HMRouter({
   pageUrl: 'HomePage',
-  singleton: true,
-  animator: 'CustomAnimator'
+  // animator: 'CustomAnimator',
+  lifecycle: 'ExitAppLifecycle',
+  singleton: true
 })
 @Component
 export struct HomePage {
+  @StorageLink('ACCESS_TOKEN') accessToken: string = ''
+
+  aboutToAppear(): void {
+  }
+
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
       Scroll() {
@@ -51,6 +59,14 @@ export struct HomePage {
               color: '#F1F7FF',
               offsetX: -3,
               offsetY: 7
+            })
+            .onClick(() => {
+              LoginApi.findUser({ username: 'ligang20241' }).then(res => {
+                console.log("AxiosRequestxx", JSON.stringify(res))
+              }).catch((e: ESObject) => {
+                console.log("AxiosRequestxxerror", JSON.stringify(e))
+              })
+
             })
 
           }

@@ -1,7 +1,3 @@
-import InitPage from './InitPage'
-import { HomePage } from './HomePage'
-import { PhoneVerifyPage } from './PhoneVerifyPage'
-import { LoginPage } from './LoginPage'
 import display from '@ohos.display';
 import { Logger } from '../utils/Logger'
 import { AttributeUpdater } from '@kit.ArkUI';
@@ -9,7 +5,9 @@ import { HMDefaultGlobalAnimator, HMNavigation, HMRouterMgr } from '@hadss/hmrou
 import { WelcomeLifecycle } from '../lifecycle/WelcomeLifecycle';
 import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
-import { ExitAppLifecycle } from '../lifecycle/ExitAppLifecycle'
+import { FloatTabs } from '../component/FloatTabs'
+import { LoginCheckInterceptor } from '../interceptor/LoginCheckInterceptor'
+import { HomePage } from './HomePage';
 
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
@@ -22,19 +20,25 @@ class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
   }
 }
 
+
 @Component
 @Entry
 struct Index {
   modifier: MyNavModifier = new MyNavModifier()
-  @StorageLink('userLogin') userLogin: boolean = false;
+  @StorageProp('topRectHeight') topRectHeight: number = 0;
 
   aboutToAppear(): void {
-    console.log('xxxaboutToAppear')
     // 注册全局拦截器
     HMRouterMgr.registerGlobalInterceptor({
       interceptor: new JumpInfoInterceptor(),
       interceptorName: 'JumpInfo',
       priority: 5,
+    })
+
+    HMRouterMgr.registerGlobalInterceptor({
+      interceptor: new LoginCheckInterceptor(),
+      interceptorName: 'LoginCheck',
+      priority: 1,
     })
 
 
@@ -51,39 +55,23 @@ struct Index {
       priority: 5,
     })
 
-    HMRouterMgr.registerGlobalLifecycle({
-      lifecycle: new ExitAppLifecycle(),
-      lifecycleName: 'ExitAppLifecycle',
-      priority: 5,
-    })
-
-
-  }
-
-  onPageShow(): void {
-    if (!this.userLogin) {
-      HMRouterMgr.replace({
-        pageUrl: 'LoginPage'
-      })
-    }
   }
 
   build() {
     Column() {
       HMNavigation({
         navigationId: 'myNavigation',
-        // homePageUrl: 'HomePage',
+        homePageUrl: 'HomePage',
         options: {
           standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
           dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
-          modifier: this.modifier
+          modifier: this.modifier,
         }
-      }) {
-        HomePage()
-      }
+      })
     }
     .width('100%')
     .height('100%')
+    .padding({ top: this.topRectHeight })
   }
 }
 

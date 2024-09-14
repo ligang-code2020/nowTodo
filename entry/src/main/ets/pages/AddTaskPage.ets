@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { text } from '@kit.ArkGraphics2D'
+import { HMRouter } from '@hadss/hmrouter'
 
 interface Title {
   title: string
@@ -78,6 +79,7 @@ function titleFormItem($$: Title) {
   .margin({ top: 39 })
   .padding({ left: 30, right: 30 })
 }
+
 
 @Component
 struct dateFormItem {
@@ -510,7 +512,10 @@ struct tagFormItem {
 }
 
 
-@Entry
+@HMRouter({
+  pageUrl: 'AddTaskPage',
+  singleton: true
+})
 @Component
 export struct AddTaskPage {
   @State title: string = ''

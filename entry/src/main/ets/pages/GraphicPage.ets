@@ -4,11 +4,15 @@ import { CircularDiagram } from '../component/CircularDiagram'
 import { MCCharts } from '../component/MCCharts'
 import { LineChartComponent } from '../component/MPChart'
 import { CalendarComp } from '../component/CalendarComp'
+import { HMRouter } from '@hadss/hmrouter'
 
 
-@Entry
+@HMRouter({
+  pageUrl: 'GraphicPage',
+  singleton: true
+})
 @Component
-export struct GraphicPage {
+export struct c {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
 
   build() {

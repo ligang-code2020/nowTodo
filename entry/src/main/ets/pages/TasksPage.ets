@@ -4,6 +4,7 @@ import { WeeklyTabs } from '../component/WeeklyTabs'
 import { PeriodTaskList } from '../component/PeriodTaskList'
 import { FloatTabs } from '../component/FloatTabs'
 import dayjs from 'dayjs'
+import { HMRouter } from '@hadss/hmrouter'
 
 interface Task {
   taskName: string,
@@ -90,7 +91,11 @@ const periodList: PeriodTask[] = [
 ]
 
 
-@Entry
+
+@HMRouter({
+  pageUrl: 'TasksPage',
+  singleton: true
+})
 @Component
 export struct TasksPage {
   @State private selectedDate: Date = new Date(dayjs().format('YYYY-MM-DD'))

@@ -7,20 +7,21 @@ import { Logger } from '../utils/Logger'
 import { constants } from '../common/constants/constants'
 import { CustomAnimator } from '../animation/customAnimator'
 
-PersistentStorage.persistProp<LoginInfo>('LOGIN_INFO', {})
 
-
-interface LoginInfo {
+export interface LoginInfo {
   userName?: string
   accessToken?: string
   refreshToken?: string
 }
 
-@HMRouter({ pageUrl: 'LoginPage', animator: 'CustomAnimator' })
+@HMRouter({ pageUrl: 'LoginPage', singleton: true })
 @Component
 export struct LoginPage {
   // 用户信息持久化
   @StorageLink('LOGIN_INFO') loginInfo: LoginInfo = {}
+  @StorageLink('ACCESS_TOKEN') accessToken: string = ''
+  @StorageLink('REFRESH_TOKEN') refreshToken: string = ''
+  @LocalStorageLink('onCurrentIndexUpdate') currentIndex: number = 1;
   @State username: string = ''
   @State password: string = ''
   @State isLoading: Boolean = false;
@@ -109,9 +110,12 @@ export struct LoginPage {
                 accessToken: res.data.access_token,
                 refreshToken: res.data.refresh_token
               }
+              this.accessToken = res.data.access_token
+              this.refreshToken = res.data.refresh_token
+              this.currentIndex = 1
               await this.waitLoading()
               clearTimeout(this.timerId)
-              HMRouterMgr.push({
+              HMRouterMgr.replace({
                 pageUrl: 'HomePage',
                 animator: new CustomAnimator()
               })
@@ -179,7 +183,8 @@ export struct LoginPage {
           Span('没有账户？')
           Span('注册').fontWeight(700).onClick(() => {
             HMRouterMgr.push({
-              pageUrl: 'SignUpPage'
+              pageUrl: 'SignUpPage',
+              skipAllInterceptor: true
             })
           })
         }

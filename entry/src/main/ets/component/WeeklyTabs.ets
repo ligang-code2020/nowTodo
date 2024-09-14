@@ -13,18 +13,18 @@ export struct WeeklyTabs {
   @State screenWidth: number = 312;
 
   aboutToAppear(): void {
-    // // 获取屏幕宽度
-    // this.screenWidth = px2vp(display.getDefaultDisplaySync().width) - 48;
-    //
-    // // 监听屏幕的变化
-    // try {
-    //   display.on('change', () => {
-    //     this.screenWidth = px2vp(display.getDefaultDisplaySync().width) - 48;
-    //     this.translateX = this.currentIndex * (this.screenWidth / 7)
-    //   })
-    // } catch (e) {
-    //   console.error('Failed to register callback. Code: ' + JSON.stringify(e));
-    // }
+    // 获取屏幕宽度
+    this.screenWidth = px2vp(display.getDefaultDisplaySync().width) - 48;
+
+    // 监听屏幕的变化
+    try {
+      display.on('change', () => {
+        this.screenWidth = px2vp(display.getDefaultDisplaySync().width) - 48;
+        this.translateX = this.currentIndex * (this.screenWidth / 7)
+      })
+    } catch (e) {
+      console.error('Failed to register callback. Code: ' + JSON.stringify(e));
+    }
 
     // 获取今天的信息
     this.currentIndex = weekRange.findIndex(item => item.date === Number(dayjs().format('DD')))
