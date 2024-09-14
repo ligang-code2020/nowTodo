@@ -2,6 +2,8 @@ import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { promptAction } from '@kit.ArkUI'
 import { LoginApi } from '../api/login'
 
+// todo 键盘弹起来，看不到确定按钮
+
 class ParamWithOp {
   constructor(protocolKey: string, title: string) {
     this.protocolKey = protocolKey
@@ -12,7 +14,7 @@ class ParamWithOp {
   title: string
 }
 
-@HMRouter({ pageUrl: 'PhoneVerifyPage' })
+@HMRouter({ pageUrl: 'PhoneVerifyPage', singleton: true })
 @Component
 export struct PhoneVerifyPage {
   private generateCode: string = '' // 随机生成验证码
@@ -25,6 +27,8 @@ export struct PhoneVerifyPage {
   @State isChecked: boolean = false // 是否勾选s
   @State sheetHeight: number = 220
   @State bottomRectHeight: string = AppStorage.get<number>('bottomRectHeight') + 'px';
+  @LocalStorageLink('username') localUsername: string = '';
+  @LocalStorageLink('password') localPassword: string = '';
 
   aboutToAppear(): void {
   }
@@ -272,9 +276,27 @@ export struct PhoneVerifyPage {
                       }
                     })
                   } else {
-                    HMRouterMgr.replace({
-                      pageUrl: 'HomePage'
+                    LoginApi.register({
+                      username: this.localUsername,
+                      password: this.localPassword,
+                      mobile: this.phone
+                    }).then(res => {
+                      HMRouterMgr.replace({
+                        pageUrl: 'HomePage'
+                      })
+                    }).catch((e: Error) => {
+                      promptAction.showToast({
+                        duration: 3000,
+                        message: '注册失败',
+                        alignment: Alignment.Top,
+                        offset: {
+                          dx: '50%',
+                          dy: 80
+                        }
+                      })
                     })
+
+
                   }
                 }
 

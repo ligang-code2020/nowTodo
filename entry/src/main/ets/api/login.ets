@@ -21,9 +21,12 @@ interface PhoneCode {
   code: string
 }
 
-interface RefreshTokenParams {
-  // refreshToken: string
+interface Register {
+  username: string;
+  password: string;
+  mobile: string;
 }
+
 
 
 export class LoginApi {
@@ -56,5 +59,10 @@ export class LoginApi {
       timestamp: 1724831029000,
       signature
     })
+  }
+
+  // 注册接口
+  static register(registerParams: Register): Promise<ResponseResult> {
+    return httpPost('/api/user/register', false, registerParams)
   }
 }

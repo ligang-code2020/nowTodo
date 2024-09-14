@@ -4,6 +4,7 @@ import { LoginApi } from '../api/login'
 import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { CustomAnimator } from '../animation/customAnimator'
 
+
 @HMRouter({ pageUrl: 'SignUpPage', animator: 'CustomAnimator' })
 @Component
 export struct SignUpPage {
@@ -13,6 +14,8 @@ export struct SignUpPage {
   @State passwordError: boolean = false
   @State passwordErrorTxt: string = ''
   @State usernameExist: boolean = false
+  @LocalStorageLink('username') localUsername: string = '';
+  @LocalStorageLink('password') localPassword: string = '';
 
   aboutToAppear(): void {
 
@@ -30,13 +33,13 @@ export struct SignUpPage {
     return reg.test(password)
   }
 
-  async validateUsernameExist(username: string): Promise<boolean> {
-    let user = await LoginApi.findUser({ username })
-    if (user.data) {
+  validateUsernameExist(username: string): Promise<boolean> {
+    return LoginApi.findUser({ username }).then(res => {
       return true
-    } else {
+    }).catch((e: Error) => {
       return false
-    }
+    })
+
   }
 
   build() {
@@ -139,10 +142,14 @@ export struct SignUpPage {
             this.passwordError = true
           } else {
             this.passwordError = false
+            // 缓存用户名和密码
+            this.localUsername = this.username
+            this.localPassword = this.password
+
             // 跳转手机验证页
-            console.log("xxxxx11")
-            HMRouterMgr.replace({
-              pageUrl: 'PhoneVerifyPage'
+            HMRouterMgr.push({
+              pageUrl: 'PhoneVerifyPage',
+              skipAllInterceptor: true
             })
           }
 

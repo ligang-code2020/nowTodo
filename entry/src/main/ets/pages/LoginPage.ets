@@ -183,7 +183,8 @@ export struct LoginPage {
           Span('没有账户？')
           Span('注册').fontWeight(700).onClick(() => {
             HMRouterMgr.push({
-              pageUrl: 'SignUpPage'
+              pageUrl: 'SignUpPage',
+              skipAllInterceptor: true
             })
           })
         }

@@ -72,7 +72,6 @@ struct Index {
     .width('100%')
     .height('100%')
     .padding({ top: this.topRectHeight })
-    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

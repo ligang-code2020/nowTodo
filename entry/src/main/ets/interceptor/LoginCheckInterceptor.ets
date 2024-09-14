@@ -16,15 +16,6 @@ export class LoginCheckInterceptor implements IHMInterceptor {
       console.log("xxnologin")
       return HMInterceptorAction.DO_NEXT;
     } else {
-      promptAction.showToast({
-        duration: 3000,
-        message: '用户信息失效，请重新登录',
-        alignment: Alignment.Top,
-        offset: {
-          dx: '50%',
-          dy: 80
-        }
-      })
       HMRouterMgr.replace({
         pageUrl: 'LoginPage',
         skipAllInterceptor: true

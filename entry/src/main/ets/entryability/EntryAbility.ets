@@ -39,8 +39,10 @@ export default class EntryAbility extends UIAbility {
       PersistentStorage.persistProp<string>('ACCESS_TOKEN', '')
       PersistentStorage.persistProp<string>('REFRESH_TOKEN', '')
 
-      let para: Record<string, number> = {
-        'onCurrentIndexUpdate': 1
+      let para: Record<string, number | string> = {
+        'onCurrentIndexUpdate': 1,
+        'username': '',
+        'password': ''
       };
       let storage: LocalStorage = new LocalStorage(para);
 
@@ -57,7 +59,7 @@ export default class EntryAbility extends UIAbility {
       let type = window.AvoidAreaType.TYPE_SYSTEM; // 以状态栏避让为例
       let avoidArea = windowClass.getWindowAvoidArea(type);
       let topRectHeight = px2vp(avoidArea.topRect.height); // 获取状态栏区域高度
-      console.log("topRectHeight",topRectHeight,avoidArea.topRect.height)
+
       AppStorage.setOrCreate('topRectHeight', topRectHeight);
       // 3. 注册监听函数，动态获取避让区域数据
       windowClass.on('avoidAreaChange', (data) => {
