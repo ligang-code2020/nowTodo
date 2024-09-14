@@ -4,6 +4,7 @@ import { window } from '@kit.ArkUI';
 import { httpDefaultSetting } from '../api/axios'
 import { HMRouterMgr } from '@hadss/hmrouter';
 import { LoginInfo } from '../pages/LoginPage';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 export default class EntryAbility extends UIAbility {
   private intervalID: ESObject = null
@@ -28,13 +29,6 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
-    let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
-    let type = window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR;
-    let avoidArea = windowClass.getWindowAvoidArea(type);
-    let bottomRectHeight = avoidArea.bottomRect.height; // 获取到导航条区域的高度[px]
-    AppStorage.setOrCreate('bottomRectHeight', bottomRectHeight);
-
-
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
@@ -49,6 +43,31 @@ export default class EntryAbility extends UIAbility {
         'onCurrentIndexUpdate': 1
       };
       let storage: LocalStorage = new LocalStorage(para);
+
+      // 设置全屏模式和避让区域
+      let windowClass: window.Window = windowStage.getMainWindowSync(); // 获取应用主窗口
+      // 1. 设置窗口全屏
+      let isLayoutFullScreen = true;
+      windowClass.setWindowLayoutFullScreen(isLayoutFullScreen).then(() => {
+        console.info('Succeeded in setting the window layout to full-screen mode.');
+      }).catch((err: BusinessError) => {
+        console.error('Failed to set the window layout to full-screen mode. Cause:' + JSON.stringify(err));
+      });
+      // 2. 获取当前布局避让遮挡的区域
+      let type = window.AvoidAreaType.TYPE_SYSTEM; // 以状态栏避让为例
+      let avoidArea = windowClass.getWindowAvoidArea(type);
+      let topRectHeight = px2vp(avoidArea.topRect.height); // 获取状态栏区域高度
+      console.log("topRectHeight",topRectHeight,avoidArea.topRect.height)
+      AppStorage.setOrCreate('topRectHeight', topRectHeight);
+      // 3. 注册监听函数，动态获取避让区域数据
+      windowClass.on('avoidAreaChange', (data) => {
+        if (data.type === window.AvoidAreaType.TYPE_SYSTEM) {
+          let topRectHeight = data.area.topRect.height;
+          AppStorage.setOrCreate('topRectHeight', topRectHeight);
+        }
+      });
+
+
     });
   }
 

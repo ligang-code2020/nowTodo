@@ -20,27 +20,12 @@ class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
   }
 }
 
-@Builder
-function customToolBar() {
-  Row() {
-    FloatTabs()
-  }
-  .justifyContent(FlexAlign.Center)
-  .backgroundColor(Color.White)
-  .width('100%')
-  .expandSafeArea([SafeAreaType.SYSTEM], [ SafeAreaEdge.BOTTOM])
-
-
-}
-
-
-
 
 @Component
 @Entry
 struct Index {
   modifier: MyNavModifier = new MyNavModifier()
-
+  @StorageProp('topRectHeight') topRectHeight: number = 0;
 
   aboutToAppear(): void {
     // 注册全局拦截器
@@ -76,7 +61,7 @@ struct Index {
     Column() {
       HMNavigation({
         navigationId: 'myNavigation',
-        homePageUrl:'HomePage',
+        homePageUrl: 'HomePage',
         options: {
           standardAnimator: HMDefaultGlobalAnimator.STANDARD_ANIMATOR,
           dialogAnimator: HMDefaultGlobalAnimator.DIALOG_ANIMATOR,
@@ -86,6 +71,8 @@ struct Index {
     }
     .width('100%')
     .height('100%')
+    .padding({ top: this.topRectHeight })
+    // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
   }
 }
 

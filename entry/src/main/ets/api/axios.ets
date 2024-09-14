@@ -41,7 +41,9 @@ export class ResponseResult {
 
 const TAG: string = "AxiosRequest"
 const timeout = 20000 // 20s超时
-const baseUrl = '192.168.0.107:3000'
+// const baseUrl = '192.168.0.107:3000'
+const baseUrl = '30.128.56.202:3000'
+
 
 export function httpDefaultSetting() {
   // default settings
