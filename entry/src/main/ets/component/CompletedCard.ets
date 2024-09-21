@@ -1,24 +1,36 @@
+import { ImageKnifeComponent, ImageKnifeOption } from '@ohos/imageknife'
+
 @Component
 export struct CompletedCard {
+  aboutToAppear(): void {
+
+  }
+
   build() {
     Column() {
       Column() {
-        Image($r('app.media.computer')).width(92).height(69).zIndex(8).margin({ top: 10, left: 14 })
+        Image($r('app.media.iMac')).width(92).height(69).zIndex(8).margin({ top: 10, left: 14 })
+        // ImageKnifeComponent({
+        //   imageKnifeOption: new ImageKnifeOption({
+        //     loadSrc: $r("app.media.iMac"),
+        //     objectFit: ImageFit.Cover
+        //   })
+        // }).width(92).height(69).margin({ top: 10, left: 14 }).zIndex(8)
+
         Image($r('app.media.arrow_right'))
           .width(12)
           .height(12)
           .position({ right: 15, top: 15 })
           .zIndex(10)
 
-          Image($r('app.media.vector8'))
-            .width(39)
-            .height(50)
-            .position({ right: 61, top: 0 })
-          Image($r('app.media.vector9'))
-            .width(39)
-            .height(50)
-            .position({ right: 22, top: 0 })
-
+        Image($r('app.media.vector8'))
+          .width(39)
+          .height(50)
+          .position({ right: 61, top: 0 })
+        Image($r('app.media.vector9'))
+          .width(39)
+          .height(50)
+          .position({ right: 22, top: 0 })
 
 
         Text('已完成')
@@ -27,6 +39,7 @@ export struct CompletedCard {
           .fontWeight(600)
           .margin({ left: 15, bottom: 8, top: 8 })
           .height(21)
+
 
         Text('86 个任务')
           .fontSize(14)
@@ -61,3 +74,4 @@ export struct CompletedCard {
     })
   }
 }
+

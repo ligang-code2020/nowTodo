@@ -1,3 +1,5 @@
+import { CurrentDayData } from '../pages/GraphicPage'
+
 @Component
 @Preview
 export struct CircularDiagram {
@@ -7,6 +9,7 @@ export struct CircularDiagram {
     new LinearGradient([{ color: "#3EDE00", offset: 0.75, }, { color: "#B3FE00", offset: 0.25 }])
   public color3: LinearGradient =
     new LinearGradient([{ color: "#00BEE0", offset: 0.4 }, { color: "#00F3D3", offset: 0.66 }])
+  @Prop currentDayData: CurrentDayData
 
   build() {
     Stack() {
@@ -23,7 +26,11 @@ export struct CircularDiagram {
       //   .fillColor(Color.Black)
       //   .zIndex(1)
 
-      DataPanel({ values: [414], max: 620, type: DataPanelType.Circle }) {
+      DataPanel({
+        values: [this.currentDayData.consumeTime],
+        max: this.currentDayData.totalTime,
+        type: DataPanelType.Circle
+      }) {
       }
       .width(160)
       .aspectRatio(1)
@@ -32,14 +39,22 @@ export struct CircularDiagram {
       .strokeWidth(12)
       .trackBackgroundColor('#12e20117')
 
-      DataPanel({ values: [10], max: 20, type: DataPanelType.Circle })
+      DataPanel({
+        values: [this.currentDayData.completedTasks],
+        max: this.currentDayData.totalTasks,
+        type: DataPanelType.Circle
+      })
         .width(130)
         .aspectRatio(1)
         .valueColors([this.color2])
         .strokeWidth(12)
         .trackBackgroundColor('#123fde00')
 
-      DataPanel({ values: [4], max: 8, type: DataPanelType.Circle })
+      DataPanel({
+        values: [this.currentDayData.onGoingTasks],
+        max: this.currentDayData.totalTasks,
+        type: DataPanelType.Circle
+      })
         .width(100)
         .aspectRatio(1)
         .valueColors([this.color3])
