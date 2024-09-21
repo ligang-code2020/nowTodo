@@ -1,4 +1,4 @@
-import { CJCalendar, SelectedShape, CJCellStyle, CJDateItem, CellStatus } from 'cjcalendar'
+import { CJCalendar, SelectedShape, CJCellStyle, CJDateItem, CellStatus, CJCalendarControl } from 'cjcalendar'
 import dayjs from 'dayjs'
 
 
@@ -9,25 +9,37 @@ interface Time {
 
 const timeList: Time[] = [
   {
-    date: '2024-08-01',
+    date: '2024-09-01',
     time: '5.34h'
   },
   {
-    date: '2024-08-02',
+    date: '2024-09-02',
     time: '5.34h'
   },
   {
-    date: '2024-08-10',
+    date: '2024-09-10',
     time: '4.34h'
   },
   {
-    date: '2024-08-15',
+    date: '2024-09-15',
     time: '6.34h'
   },
   {
-    date: '2024-08-23',
-    time: '9.34h'
+    date: '2024-09-18',
+    time: '5.34h'
   },
+  {
+    date: '2024-09-19',
+    time: '5.34h'
+  },
+  {
+    date: '2024-09-20',
+    time: '6.34h'
+  },
+  {
+    date: '2024-09-21',
+    time: '9.34h'
+  }
 ]
 
 
@@ -39,8 +51,8 @@ const getDayHours = (today: string, timeList: Time[]) => {
 }
 
 @Component
-@Preview
 export struct CalendarComp {
+  @Link selectedDate: string
   private cjCellStyle: CJCellStyle = new CJCellStyle()
   private cjDataItem: CJDateItem = new CJDateItem(new Date())
   cjCellStatus: CellStatus = new CellStatus()
@@ -62,6 +74,10 @@ export struct CalendarComp {
           let cjCellStyle: CJCellStyle = new CJCellStyle()
           cjCellStyle.selectFontColor = Color.Black
           return cjCellStyle
+        },
+        onCellItemClick: (item: CJDateItem) => {
+          console.log("xx点击了：", JSON.stringify(item))
+          this.selectedDate = dayjs(item.time).format('YYYY-MM-DD')
         }
       })
     }
@@ -70,7 +86,17 @@ export struct CalendarComp {
 
   @Builder
   BuildCellBackground() {
-    if (this.cjDataItem.isToday) { // 今天
+    if (this.cjDataItem.isSelected) {
+      Column()
+        .backgroundColor('#286488')
+        .width('90%')
+        .aspectRatio(1)
+        .border({
+          width: this.cjCellStyle.boderWidth,
+          color: this.cjCellStyle.boderColor
+        })
+        .borderRadius(10)
+    } else if (this.cjDataItem.isToday) { // 今天
       Column()
         .backgroundColor(Color.Transparent)
         .width('90%')
@@ -97,17 +123,18 @@ export struct CalendarComp {
   BuildCellBody() {
     Column() {
       Text(this.cjDataItem.date + '')
-        .fontColor(this.cjDataItem.isToday ? '#ff6e6c' : this.cjCellStatus.fontColor)
+        .fontColor(this.cjDataItem.isSelected ? Color.White
+          : this.cjDataItem.isToday ? '#ff6e6c' : this.cjCellStatus.fontColor)
         .fontSize(16)
         .fontWeight(700)
         .height(20)
       Text(getDayHours(dayjs(this.cjDataItem.time).format('YYYY-MM-DD'), timeList))
-        .fontColor('#2cb67d')
+        .fontColor(this.cjDataItem.isSelected ? Color.White : '#286488')
         .fontSize(12)
         .fontWeight(500)
-        .margin({ top: 3 })
     }
-    .height(40)
+    .height(48)
+    .padding({ top: 5, bottom: 6 })
     .justifyContent(FlexAlign.SpaceBetween)
 
   }

@@ -2,18 +2,56 @@ import { FloatTabs } from '../component/FloatTabs'
 import { CommonContainer } from '../style/common'
 import { CircularDiagram } from '../component/CircularDiagram'
 import { MCCharts } from '../component/MCCharts'
-import { LineChartComponent } from '../component/MPChart'
 import { CalendarComp } from '../component/CalendarComp'
 import { HMRouter } from '@hadss/hmrouter'
+import dayjs from 'dayjs'
+import { circularDiagramData } from '../common/constants/circularDiagramData'
 
+export interface CurrentDayData {
+  totalTime: number
+  consumeTime: number
+  totalTasks: number
+  completedTasks: number
+  onGoingTasks: number
+}
 
 @HMRouter({
   pageUrl: 'GraphicPage',
   singleton: true
 })
 @Component
-export struct c {
+@Entry
+export struct GraphicPage {
   @State commonContainerStyle: CommonContainer = new CommonContainer()
+  @State @Watch('onCountUpdated') selectedDate: string = dayjs().format('YYYY-MM-DD')
+  @State currentDayData: CurrentDayData = {
+    totalTime: 0,
+    consumeTime: 0,
+    totalTasks: 0,
+    completedTasks: 0,
+    onGoingTasks: 0
+  }
+
+  aboutToAppear(): void {
+    this.searchCurrentDayData(this.selectedDate)
+  }
+
+  onCountUpdated(changedPropertyName: string) {
+    console.log("xxxparent", this.selectedDate)
+    this.searchCurrentDayData(this.selectedDate)
+  }
+
+  searchCurrentDayData(date: string) {
+    const data = circularDiagramData.find(item => item.date === date)
+    console.log("xxxdata", JSON.stringify(data))
+    if (data) {
+      this.currentDayData.totalTime = data.totalTime
+      this.currentDayData.consumeTime = data.consumeTime
+      this.currentDayData.totalTasks = data.totalTasks
+      this.currentDayData.completedTasks = data.completedTasks
+      this.currentDayData.onGoingTasks = data.onGoingTasks
+    }
+  }
 
   build() {
     Stack({ alignContent: Alignment.Bottom }) {
@@ -94,7 +132,9 @@ export struct c {
                 .layoutWeight(1)
 
                 // 环形图
-                CircularDiagram()
+                CircularDiagram({
+                  currentDayData: this.currentDayData
+                })
               }
               .width('100%')
               .alignItems(VerticalAlign.Top)
@@ -102,7 +142,7 @@ export struct c {
               .backgroundColor('#F9FAFD')
               .borderRadius(16)
 
-              if (false){
+              if (false) {
                 // 周视图
                 Column() {
                   Text('本周')
@@ -131,7 +171,9 @@ export struct c {
                   .margin({ left: 15, top: 15 })
                   .width('100%')
 
-                CalendarComp()
+                CalendarComp({
+                  selectedDate: $selectedDate
+                })
 
               }
               .margin({ top: 40 })
