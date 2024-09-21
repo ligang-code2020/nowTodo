@@ -218,9 +218,10 @@ export struct ProfilePage {
     customStyle: false,
     cornerRadius: 20,
   })
+  private fileDir = getContext().filesDir + "/" + 'computer.svg'
 
   aboutToAppear(): void {
-    console.log("xxxxxx1211", JSON.stringify(HMRouterMgr.getPathStack('myNavigation')))
+    console.log("xxxxxx1211rawfile", this.fileDir)
   }
 
   @Builder
@@ -263,6 +264,7 @@ export struct ProfilePage {
         // 头像
         Column() {
           Image($r('app.media.userIcon'))
+
         }
         .width(86)
         .height(86)

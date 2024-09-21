@@ -5,6 +5,7 @@ import { httpDefaultSetting } from '../api/axios'
 import { HMRouterMgr } from '@hadss/hmrouter';
 import { LoginInfo } from '../pages/LoginPage';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { fileUri } from '@kit.CoreFileKit';
 
 export default class EntryAbility extends UIAbility {
   private intervalID: ESObject = null
@@ -68,6 +69,8 @@ export default class EntryAbility extends UIAbility {
           AppStorage.setOrCreate('topRectHeight', topRectHeight);
         }
       });
+
+
 
 
     });

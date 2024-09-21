@@ -1,13 +1,13 @@
 import display from '@ohos.display';
 import { Logger } from '../utils/Logger'
+import app, { AppResponse } from '@system.app'
 import { AttributeUpdater } from '@kit.ArkUI';
 import { HMDefaultGlobalAnimator, HMNavigation, HMRouterMgr } from '@hadss/hmrouter'
 import { WelcomeLifecycle } from '../lifecycle/WelcomeLifecycle';
 import { PageDurationLifecycle } from '../lifecycle/PageDurationLifecycle'
 import { JumpInfoInterceptor } from '../interceptor/JumpInfoInterceptor'
-import { FloatTabs } from '../component/FloatTabs'
 import { LoginCheckInterceptor } from '../interceptor/LoginCheckInterceptor'
-import { HomePage } from './HomePage';
+
 
 
 class MyNavModifier extends AttributeUpdater<NavigationAttribute> {
@@ -54,6 +54,7 @@ struct Index {
       lifecycleName: 'PageDuration',
       priority: 5,
     })
+
 
   }
 

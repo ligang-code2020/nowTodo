@@ -6,7 +6,7 @@ import { OnGoingCard } from '../component/OnGoingCard'
 import { TaskList } from '../component/TaskList'
 import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
 import { LoginApi } from '../api/login'
-import { removeAccessToken } from '../api/token'
+
 
 @HMRouter({
   pageUrl: 'HomePage',
@@ -17,6 +17,7 @@ import { removeAccessToken } from '../api/token'
 @Component
 export struct HomePage {
   @StorageLink('ACCESS_TOKEN') accessToken: string = ''
+
 
   aboutToAppear(): void {
   }
@@ -61,11 +62,7 @@ export struct HomePage {
               offsetY: 7
             })
             .onClick(() => {
-              LoginApi.findUser({ username: 'ligang20241' }).then(res => {
-                console.log("AxiosRequestxx", JSON.stringify(res))
-              }).catch((e: ESObject) => {
-                console.log("AxiosRequestxxerror", JSON.stringify(e))
-              })
+              let resMgr = getContext().resourceManager
 
             })
 
