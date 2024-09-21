@@ -248,7 +248,7 @@ export struct ProfilePage {
         .width(48)
         .height(48)
         .position({
-          top: 35,
+          top: 20,
           right: 1
         })
         .justifyContent(FlexAlign.Center)
@@ -275,7 +275,7 @@ export struct ProfilePage {
           color: '#F1F7FF'
         })
         .borderRadius(50)
-        .margin({ top: 70 })
+        .margin({ top: 50 })
 
         Text('橘猫不加糖 🐱')
           .height(32)
@@ -312,11 +312,12 @@ export struct ProfilePage {
           .friction(0.6)
           .edgeEffect(EdgeEffect.Spring)
           .rowsGap(10)
-          .margin({ top: 31 })
+          .margin({ top: 31})
           .width('100%')
-          .height(400)
+          .height(440)
           .columnsTemplate('1fr 1fr')
           .scrollBar(BarState.Off)
+
 
           Blank().height(220)
         }

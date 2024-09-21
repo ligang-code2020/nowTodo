@@ -22,6 +22,8 @@ export interface CurrentDayData {
 @Component
 @Entry
 export struct GraphicPage {
+  @State totalTimeMin: string = ''
+  @State consumeTimeMin: string = ''
   @State commonContainerStyle: CommonContainer = new CommonContainer()
   @State @Watch('onCountUpdated') selectedDate: string = dayjs().format('YYYY-MM-DD')
   @State currentDayData: CurrentDayData = {
@@ -34,22 +36,44 @@ export struct GraphicPage {
 
   aboutToAppear(): void {
     this.searchCurrentDayData(this.selectedDate)
+    this.totalTimeMin = this.countTimeStr(this.currentDayData.totalTime)
+    this.consumeTimeMin = this.countTimeStr(this.currentDayData.consumeTime)
   }
 
   onCountUpdated(changedPropertyName: string) {
-    console.log("xxxparent", this.selectedDate)
     this.searchCurrentDayData(this.selectedDate)
+  }
+
+  countTimeStr(min: number) {
+    const hours = Math.floor(min / 60);
+    const remainingMinutes = min % 60;
+    if (remainingMinutes === 0) {
+      return `${hours}h`;
+    } else {
+      return `${hours}h ${remainingMinutes}min`;
+    }
   }
 
   searchCurrentDayData(date: string) {
     const data = circularDiagramData.find(item => item.date === date)
-    console.log("xxxdata", JSON.stringify(data))
     if (data) {
       this.currentDayData.totalTime = data.totalTime
       this.currentDayData.consumeTime = data.consumeTime
       this.currentDayData.totalTasks = data.totalTasks
       this.currentDayData.completedTasks = data.completedTasks
       this.currentDayData.onGoingTasks = data.onGoingTasks
+      this.totalTimeMin = this.countTimeStr(this.currentDayData.totalTime)
+      this.consumeTimeMin = this.countTimeStr(this.currentDayData.consumeTime)
+    } else {
+      this.currentDayData = {
+        totalTime: 0,
+        consumeTime: 0,
+        totalTasks: 0,
+        completedTasks: 0,
+        onGoingTasks: 0
+      }
+      this.totalTimeMin = '0'
+      this.consumeTimeMin = '0'
     }
   }
 
@@ -84,8 +108,8 @@ export struct GraphicPage {
                         .stroke('#FE3082')
                         .margin({ right: 5 })
                       Text() {
-                        Span('6h 54min')
-                        Span(' / 10h 20min').fontColor('#aaaaaa')
+                        Span(this.consumeTimeMin)
+                        Span(` / ${this.totalTimeMin}`).fontColor('#aaaaaa')
                       }
                       .fontSize(11)
                       .fontWeight(700)
@@ -100,8 +124,8 @@ export struct GraphicPage {
                         .stroke('#3EDE00')
                         .margin({ right: 5 })
                       Text() {
-                        Span('已完成 10')
-                        Span(' / 20').fontColor('#aaaaaa')
+                        Span(`已完成 ${this.currentDayData.completedTasks}`)
+                        Span(` / ${this.currentDayData.totalTasks}`).fontColor('#aaaaaa')
                       }
                       .fontSize(11)
                       .fontWeight(700)
@@ -116,8 +140,8 @@ export struct GraphicPage {
                         .stroke('#00BEE0')
                         .margin({ right: 5 })
                       Text() {
-                        Span('进行中 4')
-                        Span(' / 8').fontColor('#aaaaaa')
+                        Span(`进行中 ${this.currentDayData.onGoingTasks}`)
+                        Span(` / ${this.currentDayData.totalTasks}`).fontColor('#aaaaaa')
                       }
                       .fontSize(11)
                       .fontWeight(700)
