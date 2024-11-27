@@ -172,6 +172,12 @@ export struct LoginPage {
           .borderRadius(50)
           .borderColor('#E3E8F1')
           .justifyContent(FlexAlign.Center)
+          .onClick(() => {
+            HMRouterMgr.push({
+              pageUrl: 'PhoneLoginPage',
+              skipAllInterceptor: true
+            })
+          })
         }
         .width(100)
         .justifyContent(FlexAlign.SpaceBetween)

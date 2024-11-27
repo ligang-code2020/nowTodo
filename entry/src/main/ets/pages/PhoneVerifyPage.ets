@@ -118,7 +118,6 @@ export struct PhoneVerifyPage {
   }
 
   build() {
-    NavDestination() {
       Column() {
         Row() {
           Image($r('app.media.cancel_icon')).width(24).aspectRatio(1)
@@ -343,12 +342,7 @@ export struct PhoneVerifyPage {
       }
       .height('100%')
       .width('100%')
-    }
-    .hideTitleBar(true)
+
   }
 }
 
-@Builder
-export function PhoneVerifyBuilder(): void {
-  PhoneVerifyPage();
-}

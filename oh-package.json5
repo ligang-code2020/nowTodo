@@ -8,7 +8,7 @@
     "cjcalendar": "^2.1.6",
     "@ohos/axios": "^2.2.2",
     "@ohos/crypto-js": "^2.0.3",
-    "@hadss/hmrouter": "^1.0.0-rc.4",
+    "@hadss/hmrouter": "^1.0.0-rc.10",
     "rxjs": "^7.8.1",
     "@ohos/imageknife": "^3.1.0"
   },

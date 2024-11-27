@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { text } from '@kit.ArkGraphics2D'
-import { HMRouter } from '@hadss/hmrouter'
+import { HMRouter, HMRouterMgr } from '@hadss/hmrouter'
+
 
 interface Title {
   title: string
@@ -537,6 +538,9 @@ export struct AddTaskPage {
         color: '#F1F7FF'
       })
       .position({ left: 24, top: 45 })
+      .onClick(() => {
+        HMRouterMgr.pop()
+      })
 
       Text('添加任务')
         .fontSize(18)
